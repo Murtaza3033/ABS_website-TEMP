@@ -75,3 +75,13 @@ h1,h2,h3{font-family:var(--font-sans);}
 }
 @media (max-width:560px){.grid6{grid-template-columns:1fr 1fr !important;}}
 @media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important;}.tsec .anim{opacity:1 !important;transform:none !important;}}
+
+/* scene parallax — pure CSS scroll-driven (replaces the runtime's scroll-transform).
+   Uses the independent `translate` property so it never clashes with the float
+   animations on inner elements. Desktop only; degrades to no-parallax elsewhere. */
+@keyframes tmParPortrait{from{translate:0 26px;}to{translate:0 -26px;}}
+@keyframes tmParCards{from{translate:0 52px;}to{translate:0 -52px;}}
+@media (min-width:901px) and (prefers-reduced-motion:no-preference){
+  .tScene .sceneGrid > [data-parallax="portrait"]{animation:tmParPortrait linear both;animation-timeline:view();}
+  .tScene .cardWrap{animation:tmParCards linear both;animation-timeline:view();}
+}

@@ -3,17 +3,18 @@ import { LanguageProvider } from './context/LanguageContext';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import SalesBot from './components/SalesBot';
-import Home from './pages/Home';
-import ContactUs from './pages/ContactUs';
-import AboutUs from './pages/AboutUs';
-import OurTeam from './pages/OurTeam';
-import OurAdvisors from './pages/OurAdvisors';
-import OurPartners from './pages/OurPartners';
-import OurClients from './pages/OurClients';
-import Industries from './pages/Industries';
-import Events from './pages/Events';
-import Careers from './pages/Careers';
+import Home from './pages/Home/Home.jsx';
+import ContactUs from './pages/ContactUs/ContactUs.jsx';
+import AboutUs from './pages/AboutUs/AboutUs.jsx';
+import OurTeam from './pages/OurTeam/OurTeam.jsx';
+import OurAdvisors from './pages/OurAdvisors/OurAdvisors.jsx';
+import OurPartners from './pages/OurPartners/OurPartners.jsx';
+import OurClients from './pages/OurClients/OurClients.jsx';
+import Industries from './pages/Industries/Industries.jsx';
+import Events from './pages/Events/Events.jsx';
+import Careers from './pages/Careers/Careers.jsx';
 import './styles/shared.css';
+import './styles/i18n.css';
 
 // Temporary placeholder until each page component is converted (Step 3, one at a time).
 function Placeholder({ name }) {

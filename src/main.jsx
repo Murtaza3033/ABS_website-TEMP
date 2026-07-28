@@ -1,13 +1,15 @@
+import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App.jsx';
 
-// Note: React.StrictMode is intentionally omitted. Several pages mount ported imperative
-// runtimes (Home's product switcher/dashboards, canvas effects, etc.); StrictMode's dev-only
-// double-invocation of effects would double-initialize that DOM. Effects still clean up fully
-// (each returns a teardown), so this only affects the dev double-mount behavior.
+// React.StrictMode re-enabled: every page is now idiomatic React with effects that
+// clean up fully (intervals/timeouts/rAF/listeners all torn down), so StrictMode's
+// dev-only double-invocation is safe — no double-initialized DOM, no leaked timers.
 createRoot(document.getElementById('root')).render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>,
+  <StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </StrictMode>,
 );

@@ -71,8 +71,14 @@ h1,h2,h3{font-family:var(--font-sans);}
 .card__ic{width:46px;height:46px;border-radius:12px;background:#eef4ff;color:var(--blue);display:grid;place-items:center;}
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;}
-[data-reveal]{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.2,.7,.3,1),transform .7s cubic-bezier(.2,.7,.3,1);}
-[data-reveal].in{opacity:1;transform:none;}
+/* reveal-on-scroll — pure CSS scroll-driven animation (no JS / no DOM mutation).
+   React renders the [data-reveal] attribute; the view() timeline drives the fade
+   as each element scrolls into view. Elements already in view on load render at
+   the animation's end state (revealed). Falls back to fully-visible where the
+   view() timeline is unsupported, and honors reduced-motion below. */
+@keyframes revealIn{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:none;}}
+[data-reveal]{opacity:0;animation:revealIn .7s cubic-bezier(.2,.7,.3,1) both;animation-timeline:view();animation-range:entry 0% cover 32%;}
+@supports not (animation-timeline:view()){[data-reveal]{opacity:1 !important;transform:none !important;animation:none;}}
 .marquee{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);}
 .marquee__track{display:flex;gap:18px;width:max-content;animation:marq 34s linear infinite;}
 .marquee:hover .marquee__track{animation-play-state:paused;}
@@ -84,3 +90,120 @@ h1,h2,h3{font-family:var(--font-sans);}
 @media (max-width:980px){.grid3{grid-template-columns:1fr 1fr;}.grid2{grid-template-columns:1fr;}.section{padding:64px 22px;}.ind-split{grid-template-columns:1fr !important;}}
 @media (max-width:560px){.grid3{grid-template-columns:1fr;}}
 @media (prefers-reduced-motion:reduce){*{animation:none !important;}[data-reveal]{opacity:1;transform:none;}}
+
+/* ---- data-sh hover effects (converted to CSS) ---- */
+[data-hv="hv-0"]:hover{background:#f3f6fc;}
+[data-hv="hv-1"]:hover{color:#1a56db;}
+[data-hv="hv-2"]:hover{border-color:#c9d8f5;background:#f6f9ff;}
+[data-hv="hv-3"]:hover{box-shadow:0 12px 26px -14px rgba(15,23,41,.2);transform:translateY(-2px);}
+[data-hv="hv-4"]:hover{background:#f4f7fd;}
+[data-hv="hv-5"]:hover{color:#1a56db;background:#eef3fc;}
+[data-hv="hv-6"]:hover{opacity:.88;}
+[data-hv="hv-7"]:hover{transform:scale(1.1);box-shadow:0 16px 32px -12px rgba(15,23,41,.24);z-index:5;}
+[data-hv="hv-8"]:hover{background:#18233c;}
+[data-hv="hv-9"]:hover{transform:translateY(-2px);}
+[data-hv="hv-10"]:hover{border-color:#c9d8f5;transform:translateX(5px);}
+[data-hv="hv-11"]:hover{background:#1749bd;}
+[data-hv="hv-12"]:hover{background:#1a2438;}
+[data-hv="hv-13"]:hover{background:#1a56db;color:#fff;border-color:#1a56db;}
+[data-hv="hv-14"]:hover{transform:scale(1.02);}
+[data-hv="hv-15"]:hover{background:#0f1729;color:#fff;border-color:#0f1729;}
+[data-hv="hv-16"]:hover{transform:scale(1.07);box-shadow:0 26px 52px -16px rgba(26,86,219,.42);}
+
+/* ---- §2-7 tab-panel visibility (state -> data-attr on section -> CSS) ----
+   Replaces the runtime's imperative display/opacity toggling. React sets
+   data-active-pg / data-active-ind from reducer state; these rules reveal the
+   matching panel. !important overrides the panels' baked-in inline styles. */
+[data-screen-label="Products"] [data-pg]{display:none !important;}
+[data-screen-label="Products"][data-active-pg="fin"] [data-pg="fin"]{display:block !important;}
+[data-screen-label="Products"][data-active-pg="pen"] [data-pg="pen"]{display:block !important;}
+[data-screen-label="Products"][data-active-pg="fie"] [data-pg="fie"]{display:block !important;}
+
+[data-screen-label="Industries"] [data-indp]{opacity:0 !important;transform:translateY(20px) !important;pointer-events:none !important;transition:opacity .5s ease,transform .5s ease;}
+[data-screen-label="Industries"][data-active-ind="0"] [data-indp="0"],
+[data-screen-label="Industries"][data-active-ind="1"] [data-indp="1"],
+[data-screen-label="Industries"][data-active-ind="2"] [data-indp="2"],
+[data-screen-label="Industries"][data-active-ind="3"] [data-indp="3"],
+[data-screen-label="Industries"][data-active-ind="4"] [data-indp="4"],
+[data-screen-label="Industries"][data-active-ind="5"] [data-indp="5"],
+[data-screen-label="Industries"][data-active-ind="6"] [data-indp="6"]{opacity:1 !important;transform:none !important;pointer-events:auto !important;}
+
+/* clients mosaic logo fade-in (replays on each rotation via React key) */
+@keyframes logoFade{from{opacity:0;}to{opacity:1;}}
+.logo-fade{animation:logoFade .55s ease;}
+
+/* ---- active-state styling (state -> data-attr on section -> CSS) --------
+   Replaces the runtime's imperative setSwitcher/setAiTabs/setPnPills/
+   setPnMenus/setProd/setInd style writes. Base rule = inactive look;
+   the data-attr-matched rule = active look. Values mirror the runtime. */
+
+/* hero product switcher */
+[data-screen-label="Hero"] [data-act="goBiz"],
+[data-screen-label="Hero"] [data-act="goPn"],
+[data-screen-label="Hero"] [data-act="goPff"]{background:transparent !important;color:#5b6472 !important;}
+[data-screen-label="Hero"][data-product="biz"] [data-act="goBiz"],
+[data-screen-label="Hero"][data-product="pn"] [data-act="goPn"],
+[data-screen-label="Hero"][data-product="pff"] [data-act="goPff"]{background:#1a56db !important;color:#ffffff !important;}
+
+/* hero AI tabs */
+[data-screen-label="Hero"] [data-act="setAI"],
+[data-screen-label="Hero"] [data-act="setChats"],
+[data-screen-label="Hero"] [data-act="setTickets"]{color:#8a94a6 !important;border-bottom:2px solid transparent !important;}
+[data-screen-label="Hero"][data-aitab="ai"] [data-act="setAI"],
+[data-screen-label="Hero"][data-aitab="chats"] [data-act="setChats"],
+[data-screen-label="Hero"][data-aitab="tickets"] [data-act="setTickets"]{color:#1a56db !important;border-bottom:2px solid #1a56db !important;}
+
+/* PeopleNest emp/mgmt pills */
+[data-screen-label="Hero"] [data-act="setEmp"],
+[data-screen-label="Hero"] [data-act="setMgmt"]{color:#39404d !important;background:#ffffff !important;border:1px solid #e0e6f0 !important;}
+[data-screen-label="Hero"][data-pnview="emp"] [data-act="setEmp"],
+[data-screen-label="Hero"][data-pnview="mgmt"] [data-act="setMgmt"]{color:#ffffff !important;background:#1a56db !important;border:1px solid #1a56db !important;}
+
+/* PeopleNest menu items */
+[data-screen-label="Hero"] [data-act="pnRec"],
+[data-screen-label="Hero"] [data-act="pnPd"],
+[data-screen-label="Hero"] [data-act="pnTm"],
+[data-screen-label="Hero"] [data-act="pnPay"]{color:#39404d !important;}
+[data-screen-label="Hero"][data-pnmenu="rec"] [data-act="pnRec"],
+[data-screen-label="Hero"][data-pnmenu="pd"] [data-act="pnPd"],
+[data-screen-label="Hero"][data-pnmenu="tm"] [data-act="pnTm"],
+[data-screen-label="Hero"][data-pnmenu="pay"] [data-act="pnPay"]{color:#1a56db !important;}
+
+/* products tabs (data-active-pg fin/pen/fie <-> setProd0/1/2) */
+[data-screen-label="Products"] [data-act="setProd0"],
+[data-screen-label="Products"] [data-act="setProd1"],
+[data-screen-label="Products"] [data-act="setProd2"]{background:rgba(255,255,255,.55) !important;border-color:#e7ecf5 !important;box-shadow:none !important;}
+[data-screen-label="Products"][data-active-pg="fin"] [data-act="setProd0"],
+[data-screen-label="Products"][data-active-pg="pen"] [data-act="setProd1"],
+[data-screen-label="Products"][data-active-pg="fie"] [data-act="setProd2"]{background:#ffffff !important;border-color:#1a56db !important;box-shadow:0 20px 44px -22px rgba(26,86,219,.4) !important;}
+
+/* industries tabs (data-active-ind 0..6 <-> setInd0..6) */
+[data-screen-label="Industries"] [data-act^="setInd"]{background:#ffffff !important;color:#5b6472 !important;border-color:#e4eaf3 !important;}
+[data-screen-label="Industries"][data-active-ind="0"] [data-act="setInd0"],
+[data-screen-label="Industries"][data-active-ind="1"] [data-act="setInd1"],
+[data-screen-label="Industries"][data-active-ind="2"] [data-act="setInd2"],
+[data-screen-label="Industries"][data-active-ind="3"] [data-act="setInd3"],
+[data-screen-label="Industries"][data-active-ind="4"] [data-act="setInd4"],
+[data-screen-label="Industries"][data-active-ind="5"] [data-act="setInd5"],
+[data-screen-label="Industries"][data-active-ind="6"] [data-act="setInd6"]{background:#1a56db !important;color:#ffffff !important;border-color:#1a56db !important;}
+
+/* ---- services orbit visuals (state.orbitStep -> data-orbit -> CSS) ----
+   Replaces the runtime's renderOrbit() imperative card/bars styling. */
+[data-screen-label="Services"] [data-svc-stage] .svc-card{border-color:#eaeef5 !important;box-shadow:0 14px 34px -18px rgba(15,23,41,.22) !important;transform:scale(1) !important;}
+[data-screen-label="Services"][data-orbit="0"] [data-svc-stage="0"] .svc-card,
+[data-screen-label="Services"][data-orbit="1"] [data-svc-stage="1"] .svc-card,
+[data-screen-label="Services"][data-orbit="2"] [data-svc-stage="2"] .svc-card,
+[data-screen-label="Services"][data-orbit="3"] [data-svc-stage="3"] .svc-card,
+[data-screen-label="Services"][data-orbit="4"] [data-svc-stage="4"] .svc-card{border-color:#1a56db !important;box-shadow:0 26px 56px -18px rgba(26,86,219,.5) !important;transform:scale(1.045) !important;}
+[data-screen-label="Services"][data-orbit="0"] [data-svc-stage="0"],
+[data-screen-label="Services"][data-orbit="1"] [data-svc-stage="1"],
+[data-screen-label="Services"][data-orbit="2"] [data-svc-stage="2"],
+[data-screen-label="Services"][data-orbit="3"] [data-svc-stage="3"],
+[data-screen-label="Services"][data-orbit="4"] [data-svc-stage="4"]{z-index:9 !important;}
+
+[data-screen-label="Services"] [data-svc-bars] span{background:#dbe6fb !important;}
+[data-screen-label="Services"][data-orbit="0"] [data-svc-bars] span:nth-child(-n+1),
+[data-screen-label="Services"][data-orbit="1"] [data-svc-bars] span:nth-child(-n+2),
+[data-screen-label="Services"][data-orbit="2"] [data-svc-bars] span:nth-child(-n+3),
+[data-screen-label="Services"][data-orbit="3"] [data-svc-bars] span:nth-child(-n+4),
+[data-screen-label="Services"][data-orbit="4"] [data-svc-bars] span:nth-child(-n+5){background:#1a56db !important;}

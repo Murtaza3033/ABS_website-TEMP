@@ -80,3 +80,6 @@ h1,h2,h3{font-family:var(--font-sans);}
 
 @media (max-width:900px){.sec{padding:64px 22px;}.feat-grid{grid-template-columns:1fr !important;}.thumbs{grid-template-columns:1fr 1fr !important;}.facts{grid-template-columns:1fr 1fr !important;}.why-grid{grid-template-columns:1fr !important;}}
 @media (prefers-reduced-motion:reduce){*{animation:none !important;}[data-reveal]{opacity:1;transform:none;}.hw{opacity:1;transform:none;}}
+
+/* stage crossfade on image change (React re-keys the stage div) */
+@keyframes evFade{from{opacity:0;}to{opacity:1;}}

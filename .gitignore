@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+# Graphify generated output
+graphify-out/
+
+# Local Claude settings and backups
+.claude/settings.json
+.claude/settings.json.graphify-bak

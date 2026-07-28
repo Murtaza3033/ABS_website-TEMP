@@ -1,0 +1,70 @@
+/* Arabic / RTL layer — static CSS (replaces the runtime's JS-injected <style> + font <link>).
+   Activated by html[dir="rtl"], which LanguageContext sets from state. Text translation is
+   now React-driven (t()); this file handles font, shell mirroring and glyph-flip. */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap');
+
+/* Cairo font while Arabic is active */
+html[dir="rtl"] body,
+html[dir="rtl"] button,
+html[dir="rtl"] input,
+html[dir="rtl"] textarea,
+html[dir="rtl"] select { font-family: "Cairo", "Outfit", system-ui, sans-serif !important; }
+
+/* The header/footer shell mirrors naturally from html[dir="rtl"] (flex reverses,
+   nav sits right). But the page bodies are pixel-composed LTR designs — dashboards,
+   orbit diagrams, hand-drawn annotations, absolute-positioned cards — that break if
+   mirrored. Keep them in their designed left-to-right orientation; only the text
+   content is swapped to Arabic (React-driven t()). */
+html[dir="rtl"] main,
+html[dir="rtl"] [data-page-root] { direction: ltr; }
+
+/* Marketing copy still reads right-to-left where it's translated: any element
+   carrying Arabic content can opt in with dir="rtl"/lang, and centered headings
+   are unaffected. */
+html[dir="rtl"] [lang="ar"] { direction: rtl; }
+
+/* Split-word hero headlines (each word in its own span) must flow right-to-left
+   in Arabic so the words read in order, even on inner pages kept otherwise LTR. */
+html[dir="rtl"] [data-headline] { direction: rtl; }
+
+/* Dashboard / card mockups opt back INTO rtl once their inline styles have been
+   converted to CSS logical properties (marginInlineStart, insetInlineStart,
+   textAlign:start/end …). direction:rtl then flips flex order + text + logical
+   insets so the mockup reads right-to-left. Only elements the JSX has made
+   logical-aware carry .rtl-mock. */
+html[dir="rtl"] .rtl-mock { direction: rtl; }
+
+/* Home page: whole page flipped to RTL. All its section inline styles have been
+   converted to logical props, so direction:rtl flips layout accurately. */
+html[dir="rtl"] main.home-rtl { direction: rtl; }
+
+/* …except radial/decorative diagrams whose internal geometry is a fixed LTR
+   composition (the services orbit wheel + its SVG arrows). Keep them LTR so the
+   arrows keep pointing at the right cards; the surrounding column still flips. */
+html[dir="rtl"] main.home-rtl [data-svc-panel] { direction: ltr; }
+
+/* Hand-drawn callout arrows are fixed-path SVGs drawn for the LTR layout; in RTL
+   their targets moved to the mirror side, so flip each arrow to point back at
+   them (text lives in a sibling div, so only the arrow mirrors). */
+html[dir="rtl"] main.home-rtl .anno-arrow { transform: scaleX(-1); }
+/* Approve-on-the-go arrow: tilt slightly toward the right so it points cleanly
+   at the hold/approve/reject actions. */
+html[dir="rtl"] main.home-rtl .anno-approve { transform: scaleX(-1) rotate(-16deg); }
+
+/* Service-card "go" arrows: → should read as ← in RTL. */
+html[dir="rtl"] main.home-rtl .card-arw { display: inline-block; transform: scaleX(-1); }
+
+/* Sections kept in their original left-to-right composition by request
+   (Arabic text is still shown; only the layout stays LTR): the client logo
+   marquee and the "problems we solve" journey diagram. */
+html[dir="rtl"] main.home-rtl [data-screen-label="Clients"],
+html[dir="rtl"] main.home-rtl [data-screen-label="Problems We Solve"] { direction: ltr; }
+
+html[dir="rtl"] .i18n-flip { display: inline-block; transform: scaleX(-1); }
+
+/* Align Assistant widget mirrors to the left in RTL */
+html[dir="rtl"] .ab-launcher,
+html[dir="rtl"] .ab-panel { right: auto !important; left: 24px !important; }
+html[dir="rtl"] .ab-tip { right: auto !important; left: 96px !important; }
+html[dir="rtl"] .ab-root,
+html[dir="rtl"] .ab-root * { font-family: "Cairo", system-ui, sans-serif !important; }
