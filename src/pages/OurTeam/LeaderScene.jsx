@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
+import { getSanityImageUrl } from '../../lib/sanity';
 import CountUp from './CountUp';
 import { DESC } from './teamData';
 
@@ -29,6 +30,8 @@ export default function LeaderScene({ L, i, even, revealed, refCb }) {
     setGlow({ x: e.clientX - r.left, y: e.clientY - r.top, on: true });
   };
 
+  const portraitSrc = getSanityImageUrl(L.sanityPhoto, { width: 600 }) || `/assets/images/team/${L.photo}.png`;
+
   const c1pos = even ? { top: '3%', right: '2%' } : { top: '3%', left: '2%' };
   const c2pos = even ? { bottom: '5%', right: '2%' } : { bottom: '5%', left: '2%' };
   const c3pos = even ? { top: '33%', left: '2%' } : { top: '33%', right: '2%' };
@@ -45,7 +48,7 @@ export default function LeaderScene({ L, i, even, revealed, refCb }) {
         <div data-parallax="portrait" style={{ order: even ? 1 : 2, position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'flex-end', minHeight: '440px' }}>
           <div style={{ position: 'absolute', bottom: '6%', width: '300px', height: '300px', borderRadius: '50%', background: 'radial-gradient(circle,rgba(26,86,219,.4),transparent 68%)', filter: 'blur(6px)' }} />
           <div style={{ position: 'relative', animation: 'tmPortraitFloat 8s ease-in-out infinite' }}>
-            <div className="tPortrait" style={{ backgroundImage: `url(/assets/images/team/${L.photo}.png)` }} />
+            <div className="tPortrait" style={{ backgroundImage: `url(${portraitSrc})` }} />
             <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: '26%', background: 'linear-gradient(to top,#0f1729,transparent)' }} />
           </div>
           <span style={{ position: 'absolute', top: '8px', left: '8px', fontSize: '64px', fontWeight: 800, color: 'rgba(75,139,255,.16)', letterSpacing: '-2px' }}>{L.num}</span>

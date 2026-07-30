@@ -14,11 +14,25 @@ const ROUTES = {
   '/careers.html': '/careers',
 };
 
+// A bare internal path with no ".html" suffix — e.g. "/products",
+// "/products/businessflo" — is routed via <Link> too. Anything whose last
+// path segment contains a dot (e.g. "/favicon.ico") is left as a plain <a>
+// so real static files still load normally; external URLs, mailto:, tel:
+// and "#" links never start with "/" so they're unaffected either way.
+function isBareInternalPath(href) {
+  if (!href.startsWith('/')) return false;
+  const lastSegment = href.split('/').pop().split(/[?#]/)[0];
+  return !lastSegment.includes('.');
+}
+
 // Renders a router <Link> for internal pages, a plain <a> for external / mailto / tel / #.
 // Reproduces the static nav's active-link highlight (data-navlink links only).
 export default function SmartLink({ href, children, style, ...rest }) {
   const location = useLocation();
-  const to = href != null ? ROUTES[href] : undefined;
+  let to = href != null ? ROUTES[href] : undefined;
+  if (to === undefined && href && isBareInternalPath(href)) {
+    to = href;
+  }
 
   if (to !== undefined) {
     const isNav = rest['data-navlink'] !== undefined;

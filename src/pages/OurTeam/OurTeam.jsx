@@ -5,12 +5,51 @@ import SmartLink from '../../components/SmartLink';
 import CountUp from './CountUp';
 import ParticleCanvas from './ParticleCanvas';
 import LeaderScene from './LeaderScene';
+import { useTeam, usePage } from '../../hooks/useCms';
+import { loc } from '../../lib/loc';
+import SEO, { resolveSeo } from '../../components/SEO';
 import { Icon, HERO, LEADERS, WAY, SEN, ROLES, PAL } from './teamData';
 
 const SPINE_PATH = 'M18,12 C70,180 20,340 72,480 C24,620 74,760 30,900 C33,955 46,984 56,1000';
 
+/* Static LEADERS reshaped to look like a Sanity `teamMember` document list —
+   same purpose as OurClients' FALLBACK_CLIENTS: instant placeholderData and
+   the safe fallback if the CMS is unreachable or empty. */
+const FALLBACK_TEAM = LEADERS.map((L, i) => ({
+  _id: `fallback-${i}`,
+  name: L.name,
+  role: L.role,
+  bio: L.quote,
+  photoPath: `/assets/images/team/${L.photo}.png`,
+  order: i + 1,
+}));
+
+/* Adapter: a Sanity teamMember doc (or FALLBACK_TEAM entry, same shape) only
+   covers name/role/bio/photo — LeaderScene also needs caption/tags/c1/c2/c3,
+   which have no CMS equivalent. So this MERGES the CMS fields onto the
+   matching static LEADERS entry (by position — Sanity was seeded in the same
+   order) rather than replacing it outright, keeping LeaderScene untouched. */
+function mergeLeader(doc, i, lang) {
+  const base = LEADERS[i] || LEADERS[0];
+  const photo = doc.photoPath
+    ? doc.photoPath.replace(/^.*\//, '').replace(/\.[a-z0-9]+$/i, '')
+    : base.photo;
+  return {
+    ...base,
+    name: loc(doc.name, lang) || base.name,
+    role: loc(doc.role, lang) || base.role,
+    quote: loc(doc.bio, lang) || base.quote,
+    photo,
+    sanityPhoto: doc.photo,
+  };
+}
+
 export default function OurTeam() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+  const { data: cmsPage } = usePage('our-team');
+  const seo = resolveSeo(cmsPage?.seo, lang);
+  const { data: cmsTeam } = useTeam({ fallbackData: FALLBACK_TEAM });
+  const leaders = (cmsTeam && cmsTeam.length > 0 ? cmsTeam : FALLBACK_TEAM).map((doc, i) => mergeLeader(doc, i, lang));
   const secRefs = useRef([]);
   const fillRef = useRef(null);
   const pathRef = useRef(null);
@@ -83,6 +122,11 @@ export default function OurTeam() {
 
   return (
     <div data-page-root style={{ position: 'relative', overflow: 'hidden', isolation: 'isolate', background: '#0f1729', color: '#eaf0fb' }}>
+      <SEO
+        {...seo}
+        title={seo.title || t('Our Team')}
+        description={seo.description || t('Meet the passionate leaders and talented professionals building powerful enterprise solutions that drive businesses forward.')}
+      />
       {/* drifting glow */}
       <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0, overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: '8%', left: '12%', width: '520px', height: '520px', borderRadius: '50%', background: 'radial-gradient(circle,rgba(26,86,219,.22),transparent 66%)', animation: 'tmGlowDrift 18s ease-in-out infinite' }} />
@@ -124,7 +168,7 @@ export default function OurTeam() {
         </section>
 
         {/* LEADERS */}
-        {LEADERS.map((L, k) => (
+        {leaders.map((L, k) => (
           <LeaderScene key={L.num} L={L} i={k} even={k % 2 === 0} revealed={revealed[k + 1]} refCb={setSec(k + 1)} />
         ))}
 

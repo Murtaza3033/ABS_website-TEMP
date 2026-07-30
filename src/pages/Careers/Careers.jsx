@@ -4,6 +4,8 @@ import '../../styles/careers.css';
 import BaseReveal from '../../components/Reveal';
 import RolesAccordion from './RolesAccordion';
 import { Icon, CULTURE, ROLES, STEPS } from './careersData';
+import SEO, { resolveSeo } from '../../components/SEO';
+import { usePage } from '../../hooks/useCms';
 
 function Reveal({ children, ...props }) {
   return <BaseReveal data-reveal="" baseClass="" shownClass="in" {...props}>{children}</BaseReveal>;
@@ -19,7 +21,9 @@ const accentStyle = {
 };
 
 export default function Careers() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+  const { data: cmsPage } = usePage('careers');
+  const seo = resolveSeo(cmsPage?.seo, lang);
   const rolesRef = useRef(null);
 
   useLayoutEffect(() => {
@@ -30,6 +34,11 @@ export default function Careers() {
 
   return (
     <main>
+      <SEO
+        {...seo}
+        title={seo.title || t('Careers')}
+        description={seo.description || t("We're a small, fast-moving team building the ERP, HR and field-force platforms real businesses run their operations on — not internal tools nobody sees.")}
+      />
       {/* HERO */}
       <section className="sec" style={{ position: 'relative', background: 'linear-gradient(180deg,var(--tint) 0%,#fff 100%)', padding: '80px 32px 56px', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: '-140px', left: '50%', transform: 'translateX(-50%)', width: '920px', height: '520px', background: 'radial-gradient(ellipse at center,rgba(26,86,219,.12),transparent 62%)', pointerEvents: 'none', animation: 'crGlowPulse 6s ease-in-out infinite' }} />

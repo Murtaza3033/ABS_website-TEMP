@@ -1,20 +1,26 @@
-import { useReducer, useState, useEffect } from 'react';
+import { useReducer, useState, useEffect, useRef } from 'react';
 import '../../styles/contact-us.css';
 import Reveal from '../../components/Reveal';
 import { useLanguage } from '../../context/LanguageContext';
 import PhoneField from './PhoneField';
 import PresenceMap from './PresenceMap';
+import Turnstile from '../../components/Turnstile';
 import {
   cc, validEmail, validName, validPhone, phoneErr,
-  REASON_OPTS, PRODUCT_OPTS, Q_TITLES, chatSteps,
+  REASON_OPTS, PRODUCT_OPTS, Q_TITLES, chatSteps, submitContact,
 } from './contactData';
+import SEO, { resolveSeo } from '../../components/SEO';
+import { usePage } from '../../hooks/useCms';
 
 const initialState = {
   view: 'choice', // choice | chat | classic | done
   step: 0,
   name: '', company: '', reason: 'Book a demo', product: 'Not sure yet',
   email: '', phone: '', country: 'PK', message: '',
+  honeypot: '', // hidden field — a real visitor never fills this in
   touched: {},
+  submitting: false,
+  submitError: null,
 };
 
 function reducer(s, a) {
@@ -29,7 +35,9 @@ function reducer(s, a) {
     case 'TOUCH': return { ...s, touched: { ...s.touched, ...Object.fromEntries(a.fields.map((f) => [f, true])) } };
     case 'STEP_NEXT': return { ...s, step: s.step + 1 };
     case 'STEP_BACK': return { ...s, step: Math.max(0, s.step - 1) };
-    case 'SUBMIT': return { ...s, view: 'done' };
+    case 'SUBMIT_START': return { ...s, submitting: true, submitError: null };
+    case 'SUBMIT_SUCCESS': return { ...s, submitting: false, submitError: null, view: 'done' };
+    case 'SUBMIT_ERROR': return { ...s, submitting: false, submitError: a.error };
     default: return s;
   }
 }
@@ -79,6 +87,19 @@ function ContactCard({ icon, title, email, phones }) {
   );
 }
 
+function SubmitErrorBanner({ message, onRetry, mailtoHref, t }) {
+  if (!message) return null;
+  return (
+    <div style={{ marginTop: '16px', padding: '12px 16px', background: '#fdf2f2', border: '1px solid #f5c6c6', borderRadius: '12px', fontSize: '13.5px', color: '#9b2c2c' }}>
+      <div>⚠ {t(message)}</div>
+      <div style={{ display: 'flex', gap: '16px', marginTop: '8px' }}>
+        <button type="button" onClick={onRetry} style={{ cursor: 'pointer', background: 'none', border: 'none', padding: 0, fontSize: '13px', fontWeight: 700, color: '#9b2c2c', textDecoration: 'underline' }}>{t('Try again')}</button>
+        <a href={mailtoHref} style={{ fontSize: '13px', fontWeight: 700, color: '#9b2c2c', textDecoration: 'underline' }}>{t('Email us directly')}</a>
+      </div>
+    </div>
+  );
+}
+
 const ICONS = {
   mail: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="4" width="20" height="16" rx="2" /><path d="m22 7-10 5L2 7" /></svg>,
   support: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 14v-2a9 9 0 0 1 18 0v2" /><path d="M21 14v3a2 2 0 0 1-2 2h-1v-6h1a2 2 0 0 1 2 1z" /><path d="M3 14v3a2 2 0 0 0 2 2h1v-6H5a2 2 0 0 0-2 1z" /></svg>,
@@ -86,24 +107,56 @@ const ICONS = {
 };
 
 export default function ContactUs() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+  const { data: cmsPage } = usePage('contact-us');
+  const seo = resolveSeo(cmsPage?.seo, lang);
   const [state, dispatch] = useReducer(reducer, initialState);
   const [classicErr, setClassicErr] = useState({});
+  const turnstileRef = useRef(null);
 
   const setField = (field, value) => dispatch({ type: 'FIELD', field, value });
 
-  const doSubmit = () => {
+  /* Kept only as the manual fallback link shown when the API call fails —
+     no longer the primary submission path (Phase 10C). */
+  const buildMailtoHref = () => {
     const s = state;
     const subject = `Website enquiry — ${s.name || ''}`;
     const body = `Name: ${s.name}\nCompany: ${s.company}\nReason: ${s.reason}\nProduct: ${s.product}\nEmail: ${s.email}\nPhone: ${s.phone ? `${cc(s.country).dial} ${s.phone}` : ''}\n\n${s.message}`;
-    dispatch({ type: 'SUBMIT' });
-    try { window.location.href = `mailto:sales@alignbsystems.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`; } catch { /* noop */ }
+    return `mailto:sales@alignbsystems.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  };
+
+  const doSubmit = async () => {
+    if (state.submitting) return;
+    dispatch({ type: 'SUBMIT_START' });
+
+    const payload = {
+      name: state.name,
+      company: state.company,
+      reason: state.reason,
+      product: state.product,
+      email: state.email,
+      phone: state.phone,
+      countryIso: state.country,
+      message: state.message,
+      honeypot: state.honeypot,
+      source: 'contact-form',
+      pageUrl: window.location.href,
+      turnstileToken: turnstileRef.current?.getToken() || '',
+    };
+
+    const result = await submitContact(payload);
+    // Tokens are single-use — reset now so a retry (or the next visit to
+    // this form) gets a fresh one instead of being rejected as a duplicate.
+    turnstileRef.current?.reset();
+    if (result.ok) dispatch({ type: 'SUBMIT_SUCCESS' });
+    else dispatch({ type: 'SUBMIT_ERROR', error: result.error });
   };
 
   /* ---- guided chat ---- */
   const st = chatSteps(state.reason);
   const key = st[state.step] || 'message';
   const advance = () => {
+    if (state.submitting) return;
     if (key === 'name' && !validName(state.name)) { dispatch({ type: 'TOUCH', fields: ['name'] }); return; }
     if (key === 'contact' && (!validEmail(state.email) || !validPhone(state.phone, state.country))) {
       dispatch({ type: 'TOUCH', fields: ['email', 'phone'] }); return;
@@ -116,6 +169,7 @@ export default function ContactUs() {
   /* ---- classic submit ---- */
   const submitClassic = (e) => {
     e.preventDefault();
+    if (state.submitting) return;
     const errs = {};
     if (!validName(state.name)) errs.name = 'Enter a valid name (letters only).';
     if (!state.email.trim()) errs.email = 'Email is required so we can reply.';
@@ -131,6 +185,11 @@ export default function ContactUs() {
 
   return (
     <main style={{ fontFamily: 'var(--font-sans)', color: 'var(--ink)', background: '#fff' }}>
+      <SEO
+        {...seo}
+        title={seo.title || t('Contact Us')}
+        description={seo.description || t("Tell us what you're working with today and we'll show you what Align can do for your operations — however you prefer to reach us.")}
+      />
       {/* HERO */}
       <section style={{ position: 'relative', overflow: 'hidden', background: 'linear-gradient(180deg,var(--tint) 0%,#fff 100%)', padding: '90px 32px 30px', textAlign: 'center' }}>
         <div style={{ position: 'absolute', inset: 0, backgroundImage: "url('/assets/images/about/meeting.png')", backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.07, pointerEvents: 'none', WebkitMaskImage: 'linear-gradient(180deg,#000 0%,transparent 88%)', maskImage: 'linear-gradient(180deg,#000 0%,transparent 88%)' }} />
@@ -224,13 +283,15 @@ export default function ContactUs() {
                 </div>
               </div>
 
+              <Turnstile ref={turnstileRef} action="contact_form" />
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '18px' }}>
                 <button onClick={() => dispatch({ type: 'STEP_BACK' })} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: state.step === 0 ? '#d5deed' : '#8a94a6' }}>{t("← Back")}</button>
                 {key !== 'reason' && key !== 'product' && (
-                  <button onClick={advance} style={{ cursor: 'pointer', background: 'var(--blue)', color: '#fff', fontSize: '14.5px', fontWeight: 600, padding: '12px 26px', border: 'none', borderRadius: '12px' }}>{state.step >= st.length - 1 ? 'Send' : 'Continue'}</button>
+                  <button onClick={advance} disabled={state.submitting} style={{ cursor: state.submitting ? 'default' : 'pointer', opacity: state.submitting ? 0.7 : 1, background: 'var(--blue)', color: '#fff', fontSize: '14.5px', fontWeight: 600, padding: '12px 26px', border: 'none', borderRadius: '12px' }}>{state.submitting ? t('Sending…') : (state.step >= st.length - 1 ? t('Send') : t('Continue'))}</button>
                 )}
               </div>
               <div style={{ textAlign: 'right', fontSize: '11.5px', color: '#aeb8c8', marginTop: '8px' }}>{t("Press Enter to continue")}</div>
+              <SubmitErrorBanner message={state.submitError} onRetry={doSubmit} mailtoHref={buildMailtoHref()} t={t} />
             </div>
           )}
 
@@ -242,6 +303,14 @@ export default function ContactUs() {
                 <button onClick={() => dispatch({ type: 'TO_CHAT' })} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '13px', fontWeight: 600, color: 'var(--faint)' }}>{t("Prefer a quick chat? →")}</button>
               </div>
               <form onSubmit={submitClassic} noValidate>
+                {/* Honeypot — hidden from real visitors (off-screen, unreachable by tab,
+                    ignored by screen readers); any bot that autofills every field it can
+                    find will fill this one, and the API rejects the submission silently. */}
+                <div style={{ position: 'absolute', left: '-9999px', width: '1px', height: '1px', overflow: 'hidden' }} aria-hidden="true">
+                  <label htmlFor="cf-company-site">Company website</label>
+                  <input id="cf-company-site" type="text" tabIndex={-1} autoComplete="off"
+                    value={state.honeypot} onChange={(e) => setField('honeypot', e.target.value)} />
+                </div>
                 <div className="cGrid2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginTop: '22px' }}>
                   <div>
                     <label style={{ fontSize: '12px', fontWeight: 600, color: '#5b6472' }}>{t("Name")}</label>
@@ -282,8 +351,9 @@ export default function ContactUs() {
                     <textarea value={state.message} onChange={(e) => setField('message', e.target.value)} className="cInput" rows={4} placeholder="How can we help?" style={{ marginTop: '6px', resize: 'vertical' }} />
                   </div>
                 </div>
-                <button type="submit" style={{ cursor: 'pointer', width: '100%', marginTop: '20px', background: 'var(--blue)', color: '#fff', fontSize: '15px', fontWeight: 700, padding: '15px', border: 'none', borderRadius: '14px' }}>{t("Send message →")}</button>
-                <div style={{ textAlign: 'center', fontSize: '11.5px', color: '#aeb8c8', marginTop: '10px' }}>Submits to sales@alignbsystems.com · <span style={{ color: '#c47d17' }}>TODO: connect backend endpoint</span></div>
+                <Turnstile ref={turnstileRef} action="contact_form" />
+                <button type="submit" disabled={state.submitting} style={{ cursor: state.submitting ? 'default' : 'pointer', opacity: state.submitting ? 0.7 : 1, width: '100%', marginTop: '20px', background: 'var(--blue)', color: '#fff', fontSize: '15px', fontWeight: 700, padding: '15px', border: 'none', borderRadius: '14px' }}>{state.submitting ? t('Sending…') : t('Send message →')}</button>
+                <SubmitErrorBanner message={state.submitError} onRetry={doSubmit} mailtoHref={buildMailtoHref()} t={t} />
               </form>
             </div>
           )}

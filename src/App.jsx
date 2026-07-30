@@ -13,6 +13,8 @@ import OurClients from './pages/OurClients/OurClients.jsx';
 import Industries from './pages/Industries/Industries.jsx';
 import Events from './pages/Events/Events.jsx';
 import Careers from './pages/Careers/Careers.jsx';
+import ProductsIndex from './pages/Products/ProductsIndex.jsx';
+import ProductPage from './pages/Products/ProductPage.jsx';
 import './styles/shared.css';
 import './styles/i18n.css';
 
@@ -43,6 +45,8 @@ export default function App() {
         <Route path="/industries" element={<Industries />} />
         <Route path="/events" element={<Events />} />
         <Route path="/careers" element={<Careers />} />
+        <Route path="/products" element={<ProductsIndex />} />
+        <Route path="/products/:slug" element={<ProductPage />} />
         <Route path="*" element={<Placeholder name="Not Found" />} />
       </Routes>
       <Footer />

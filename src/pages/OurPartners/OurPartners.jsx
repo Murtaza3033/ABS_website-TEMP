@@ -5,13 +5,17 @@ import BaseReveal from '../../components/Reveal';
 import SmartLink from '../../components/SmartLink';
 import ConstellationCanvas from './ConstellationCanvas';
 import BenefitsCarousel from './BenefitsCarousel';
+import SEO, { resolveSeo } from '../../components/SEO';
+import { usePage } from '../../hooks/useCms';
 
 function Reveal({ children, ...props }) {
   return <BaseReveal data-reveal="" baseClass="" shownClass="in" {...props}>{children}</BaseReveal>;
 }
 
 export default function OurPartners() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+  const { data: cmsPage } = usePage('our-partners');
+  const seo = resolveSeo(cmsPage?.seo, lang);
   const heroRef = useRef(null);
   const cardRef = useRef(null);
   const featRef = useRef(null);
@@ -57,6 +61,11 @@ export default function OurPartners() {
 
   return (
     <main>
+      <SEO
+        {...seo}
+        title={seo.title || t('Our Partners')}
+        description={seo.description || t('Strong partnerships are the foundation of success. At Align Business Systems, we build collaborative relationships that empower growth, innovation, and mutual success.')}
+      />
       {/* HERO */}
       <section ref={heroRef} className="sec" data-hero onPointerMove={onHeroMove} onPointerLeave={onHeroLeave} style={{ position: 'relative', background: 'linear-gradient(180deg,var(--tint) 0%,#fff 100%)', padding: '80px 32px 66px', overflow: 'hidden', isolation: 'isolate' }}>
         <ConstellationCanvas hostRef={heroRef} />

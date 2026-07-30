@@ -75,6 +75,40 @@ export const chatSteps = (reason) => {
   return ['name', 'company', 'reason', routed ? 'product' : null, 'contact', 'message'].filter(Boolean);
 };
 
+/* Posts a Contact form submission to the Phase 10B backend. Returns a plain
+   { ok, id } or { ok: false, error, fields } — never throws, so callers don't
+   need try/catch. No token/secret is ever sent from the browser; the write
+   token lives only server-side in api/_lib/contactSubmission.js. */
+export async function submitContact(payload) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 15000);
+  try {
+    const res = await fetch('/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      signal: controller.signal,
+    });
+    clearTimeout(timeout);
+
+    let json = null;
+    try { json = await res.json(); } catch { /* non-JSON response — treated as an error below */ }
+
+    if (res.ok && json?.ok) return { ok: true, id: json.id };
+
+    return {
+      ok: false,
+      error: json?.error === 'validation_failed'
+        ? 'Please check the highlighted fields and try again.'
+        : 'Something went wrong sending your message — please try again, or email us directly.',
+      fields: json?.fields || null,
+    };
+  } catch {
+    clearTimeout(timeout);
+    return { ok: false, error: "We couldn't reach our server — please try again, or email us directly.", fields: null };
+  }
+}
+
 export const PINS = [
   { city: 'Karachi', tag: 'Headquarters', label: 'Suite #404, Imperial Trade Tower, DHA Phase 7 — our head office.', x: 67.3, y: 37.5, hit: 40 },
   { city: 'Islamabad', tag: 'Regional office', label: 'Our presence in the capital, serving northern operations.', x: 68.5, y: 33, hit: 30 },

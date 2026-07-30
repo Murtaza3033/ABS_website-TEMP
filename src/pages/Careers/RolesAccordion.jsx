@@ -1,16 +1,73 @@
 import { useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import BaseReveal from '../../components/Reveal';
+import { useJobs } from '../../hooks/useCms';
+import { loc } from '../../lib/loc';
 import { Icon, ROLES } from './careersData';
 
-const DEPTS = [...new Set(ROLES.map((r) => r.dept))];
-const CATS = [['All', ROLES.length], ...DEPTS.map((d) => [d, ROLES.filter((r) => r.dept === d).length])];
+/* Static ROLES reshaped to look like a Sanity `job` document list — same
+   purpose as the other pages' fallbacks: instant placeholderData and the
+   safe fallback if the CMS is unreachable or empty. desc/reqs stay plain
+   string/array here (matching ROLES) rather than Portable Text, since the
+   resolvers below already handle both shapes. */
+const FALLBACK_JOBS = ROLES.map((r, i) => ({
+  _id: `fallback-${i}`,
+  title: r.title,
+  department: r.dept,
+  location: r.loc,
+  employmentType: r.type,
+  description: r.desc,
+  requirements: r.reqs,
+  isActive: true,
+  order: i + 1,
+}));
+
+function resolveDescription(doc, lang, base) {
+  const value = doc.description;
+  if (!value) return base.desc;
+  if (typeof value === 'string') return value; // FALLBACK_JOBS shape
+  const blocks = (lang === 'ar' ? value.ar : value.en) || value.en || [];
+  const text = blocks.map((b) => (b.children || []).map((c) => c.text || '').join('')).join(' ').trim();
+  return text || base.desc;
+}
+
+function resolveRequirements(doc, lang, base) {
+  const value = doc.requirements;
+  if (!value) return base.reqs;
+  if (Array.isArray(value)) return value; // FALLBACK_JOBS shape (plain string array)
+  const blocks = (lang === 'ar' ? value.ar : value.en) || value.en || [];
+  const flat = blocks.map((b) => (b.children || []).map((c) => c.text || '').join(''));
+  return flat.length ? flat : base.reqs;
+}
+
+/* Adapter: a Sanity job doc (or FALLBACK_JOBS entry) -> the ROLES shape this
+   component already renders. `type` (employment type) is left from the
+   static base — Sanity stores it slugified ("full-time"), which doesn't
+   match the display casing ("Full-time") the chip already shows, so
+   overriding it would visibly change that text. Everything else maps
+   cleanly by position (Sanity was seeded in the same order as ROLES). */
+function mergeRole(doc, i, lang) {
+  const base = ROLES[i] || ROLES[0];
+  return {
+    ...base,
+    title: loc(doc.title, lang) || base.title,
+    dept: doc.department || base.dept,
+    loc: loc(doc.location, lang) || base.loc,
+    desc: resolveDescription(doc, lang, base),
+    reqs: resolveRequirements(doc, lang, base),
+  };
+}
 
 /* Open-roles accordion + department filter. Open state is a Set of indices;
    the filter is a dept string that toggles `.hide` on non-matching cards
    (was the classList open/hide toggles in the runtime). */
 export default function RolesAccordion() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+  const { data: cmsJobs } = useJobs({ fallbackData: FALLBACK_JOBS });
+  const roles = (cmsJobs && cmsJobs.length > 0 ? cmsJobs : FALLBACK_JOBS).map((doc, i) => mergeRole(doc, i, lang));
+  const depts = [...new Set(roles.map((r) => r.dept))];
+  const cats = [['All', roles.length], ...depts.map((d) => [d, roles.filter((r) => r.dept === d).length])];
+
   const [filter, setFilter] = useState('All');
   const [open, setOpen] = useState(() => new Set());
 
@@ -23,13 +80,13 @@ export default function RolesAccordion() {
   return (
     <>
       <BaseReveal className="jfiltbar" data-reveal="" baseClass="" shownClass="in" style={{ marginTop: '36px' }}>
-        {CATS.map(([d, n]) => (
+        {cats.map(([d, n]) => (
           <button key={d} className={`jfilt${filter === d ? ' on' : ''}`} onClick={() => setFilter(d)}>{d} <span className="n">{n}</span></button>
         ))}
       </BaseReveal>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-        {ROLES.map((r, i) => {
+        {roles.map((r, i) => {
           const hidden = filter !== 'All' && r.dept !== filter;
           return (
             <BaseReveal key={r.title} data-reveal="" baseClass="" shownClass="in" className={`crRole${open.has(i) ? ' open' : ''}${hidden ? ' hide' : ''}`} data-dept={r.dept}>

@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Sitemap: add a "Sitemap: <url>" line here once the production domain is
+# finalized (VITE_SITE_URL) and sitemap.xml is generated.
+
+Sitemap: https://www.alignbsystems.com/sitemap.xml

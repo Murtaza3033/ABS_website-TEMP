@@ -1,10 +1,30 @@
 import { useState, useEffect, useRef } from 'react';
 import SmartLink from './SmartLink';
 import { useLanguage } from '../context/LanguageContext';
+import { useSiteSettings, useFooterContent } from '../hooks/useCms';
+import { loc } from '../lib/loc';
+import { getSanityImageUrl } from '../lib/sanity';
+import { buildFooterIndex, footerColumnHeading, footerLinkLabel, footerLinkHref } from '../lib/navAdapters';
 import logo from '../assets/images/logos/logo-1783092411267.png';
 
 export default function Footer() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+  const { data: cmsSettings } = useSiteSettings();
+  const { data: cmsFooter } = useFooterContent();
+  const footerIndex = buildFooterIndex(cmsFooter);
+  const fh = (key, fallbackText) => footerColumnHeading(footerIndex, key, lang, t, fallbackText);
+  const fl = (key, fallbackText) => footerLinkLabel(footerIndex, key, lang, t, fallbackText);
+  const fr = (key, fallbackHref) => footerLinkHref(footerIndex, key, fallbackHref);
+  const logoSrc = getSanityImageUrl(cmsSettings?.logo, { width: 240 }) || logo;
+  const logoAlt = loc(cmsSettings?.logo?.alt, lang) || 'Align Business Systems';
+  const lede = loc(cmsSettings?.siteDescription, lang) || t("We build the ERP, HR and field-force platforms growing businesses run their operations on — designed, built and supported in-house.");
+  const address = loc(cmsSettings?.address, lang) || t('Karachi, Pakistan');
+  const email = cmsSettings?.email || 'info@alignbsystems.com';
+  const phone = cmsSettings?.phone || '+92 21 111 254 265';
+  const socialByPlatform = {};
+  (cmsSettings?.socialLinks || []).forEach((s) => { if (s?.platform && s?.url) socialByPlatform[s.platform] = s.url; });
+  const socialUrl = (platform, fallback) => socialByPlatform[platform] || fallback;
+  const copyrightText = loc(cmsFooter?.copyrightText, lang) || t('© 2026 Align Business Systems. All rights reserved.');
   const ref = useRef(null);
   const [revealed, setRevealed] = useState(false);
   useEffect(() => {
@@ -27,56 +47,54 @@ export default function Footer() {
         <div className="ft-main">
           
           <div>
-            <img className="ft-logo" src={logo} alt="Align Business Systems" />
-            <p className="ft-lede">{t("We build the ERP, HR and field-force platforms growing businesses run their operations on — designed, built and supported in-house.")}</p>
+            <img className="ft-logo" src={logoSrc} alt={logoAlt} />
+            <p className="ft-lede">{lede}</p>
             <div className="ft-rule"></div>
             <div className="ft-contact">
-              <div><span className="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span>{t("Karachi, Pakistan")}</div>
-              <SmartLink href="mailto:info@alignbsystems.com"><span className="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-10 5L2 7"></path></svg></span>info@alignbsystems.com</SmartLink>
-              <div><span className="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.7 2.6a2 2 0 0 1-.5 2.1L8.1 9.8a16 16 0 0 0 6 6l1.4-1.2a2 2 0 0 1 2.1-.5c.8.4 1.7.6 2.6.7a2 2 0 0 1 1.7 2z"></path></svg></span><bdi dir="ltr">+92 21 111 254 265</bdi></div>
+              <div><span className="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span>{address}</div>
+              <SmartLink href={`mailto:${email}`}><span className="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-10 5L2 7"></path></svg></span>{email}</SmartLink>
+              <div><span className="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.7 2.6a2 2 0 0 1-.5 2.1L8.1 9.8a16 16 0 0 0 6 6l1.4-1.2a2 2 0 0 1 2.1-.5c.8.4 1.7.6 2.6.7a2 2 0 0 1 1.7 2z"></path></svg></span><bdi dir="ltr">{phone}</bdi></div>
               <div><span className="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg></span>{t("Mon – Fri  |  9:00 AM – 6:00 PM PKT")}</div>
             </div>
             <div className="ft-social-h">{t('Follow us')}</div>
             <div className="ft-social">
-              <SmartLink href="https://www.linkedin.com/company/align-business-systems" target="_blank" rel="noopener" aria-label="LinkedIn"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2.06 3.77-2.06 4 0 4.75 2.65 4.75 6.1V21H20v-5.4c0-1.3 0-2.95-1.8-2.95s-2.08 1.4-2.08 2.85V21H9z"></path></svg></SmartLink>
-              <SmartLink href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M14 9h3V5h-3c-2.2 0-4 1.8-4 4v2H7v4h3v6h4v-6h3l1-4h-4V9c0-.6.4-1 1-1z"></path></svg></SmartLink>
-              <SmartLink href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="0.6"></circle></svg></SmartLink>
-              <SmartLink href="https://youtube.com" target="_blank" rel="noopener" aria-label="YouTube"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M23 12s0-3.4-.4-5a2.8 2.8 0 0 0-2-2C18.8 4.5 12 4.5 12 4.5s-6.8 0-8.6.5a2.8 2.8 0 0 0-2 2C1 8.6 1 12 1 12s0 3.4.4 5a2.8 2.8 0 0 0 2 2c1.8.5 8.6.5 8.6.5s6.8 0 8.6-.5a2.8 2.8 0 0 0 2-2c.4-1.6.4-5 .4-5z"></path><path d="M10 15.5 15 12l-5-3.5z" fill="#0b1220"></path></svg></SmartLink>
+              <SmartLink href={socialUrl('linkedin', 'https://www.linkedin.com/company/align-business-systems')} target="_blank" rel="noopener" aria-label="LinkedIn"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2.06 3.77-2.06 4 0 4.75 2.65 4.75 6.1V21H20v-5.4c0-1.3 0-2.95-1.8-2.95s-2.08 1.4-2.08 2.85V21H9z"></path></svg></SmartLink>
+              <SmartLink href={socialUrl('facebook', 'https://facebook.com')} target="_blank" rel="noopener" aria-label="Facebook"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M14 9h3V5h-3c-2.2 0-4 1.8-4 4v2H7v4h3v6h4v-6h3l1-4h-4V9c0-.6.4-1 1-1z"></path></svg></SmartLink>
+              <SmartLink href={socialUrl('instagram', 'https://instagram.com')} target="_blank" rel="noopener" aria-label="Instagram"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="0.6"></circle></svg></SmartLink>
+              <SmartLink href={socialUrl('youtube', 'https://youtube.com')} target="_blank" rel="noopener" aria-label="YouTube"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M23 12s0-3.4-.4-5a2.8 2.8 0 0 0-2-2C18.8 4.5 12 4.5 12 4.5s-6.8 0-8.6.5a2.8 2.8 0 0 0-2 2C1 8.6 1 12 1 12s0 3.4.4 5a2.8 2.8 0 0 0 2 2c1.8.5 8.6.5 8.6.5s6.8 0 8.6-.5a2.8 2.8 0 0 0 2-2c.4-1.6.4-5 .4-5z"></path><path d="M10 15.5 15 12l-5-3.5z" fill="#0b1220"></path></svg></SmartLink>
             </div>
           </div>
     
           
           <div>
-            <div className="ft-col-h">{t('Company')}</div><div className="ft-col-rule"></div>
+            <div className="ft-col-h">{fh('company', 'Company')}</div><div className="ft-col-rule"></div>
             <div className="ft-links">
-              <SmartLink href="/our-team.html">{t('Our Team')} <span className="arw">&rarr;</span></SmartLink>
-              <SmartLink href="/our-advisors.html">{t('Our Advisors')} <span className="arw">&rarr;</span></SmartLink>
-              <SmartLink href="/our-partners.html">{t('Our Partners')} <span className="arw">&rarr;</span></SmartLink>
-              <SmartLink href="/careers.html">{t('Careers')} <span className="arw">&rarr;</span></SmartLink>
-              <SmartLink href="/about-us.html">{t('About Us')} <span className="arw">&rarr;</span></SmartLink>
-              <SmartLink href="/contact-us.html">{t('Contact Us')} <span className="arw">&rarr;</span></SmartLink>
+              <SmartLink href={fr('our-team', '/our-team.html')}>{fl('our-team', 'Our Team')} <span className="arw">&rarr;</span></SmartLink>
+              <SmartLink href={fr('our-advisors', '/our-advisors.html')}>{fl('our-advisors', 'Our Advisors')} <span className="arw">&rarr;</span></SmartLink>
+              <SmartLink href={fr('our-partners', '/our-partners.html')}>{fl('our-partners', 'Our Partners')} <span className="arw">&rarr;</span></SmartLink>
+              <SmartLink href={fr('careers', '/careers.html')}>{fl('careers', 'Careers')} <span className="arw">&rarr;</span></SmartLink>
+              <SmartLink href={fr('about-us', '/about-us.html')}>{fl('about-us', 'About Us')} <span className="arw">&rarr;</span></SmartLink>
+              <SmartLink href={fr('contact-us', '/contact-us.html')}>{fl('contact-us', 'Contact Us')} <span className="arw">&rarr;</span></SmartLink>
             </div>
           </div>
-    
-          
+
           <div>
-            <div className="ft-col-h">{t('Products')}</div><div className="ft-col-rule"></div>
+            <div className="ft-col-h">{fh('products', 'Products')}</div><div className="ft-col-rule"></div>
             <div className="ft-links">
-              <SmartLink href="https://businessflo.co" target="_blank" rel="noopener">{t("BusinessFlo")} <span className="arw">&#8599;</span></SmartLink>
-              <SmartLink href="https://peoplenest.co" target="_blank" rel="noopener">{t("PeopleNest")} <span className="arw">&#8599;</span></SmartLink>
-              <SmartLink href="https://pharmafieldflo.co" target="_blank" rel="noopener">{t("Field Force")} <span className="arw">&#8599;</span></SmartLink>
+              <SmartLink href={fr('businessflo', '/products/businessflo')}>{fl('businessflo', 'BusinessFlo')} <span className="arw">&rarr;</span></SmartLink>
+              <SmartLink href={fr('peoplenest', '/products/peoplenest')}>{fl('peoplenest', 'PeopleNest')} <span className="arw">&rarr;</span></SmartLink>
+              <SmartLink href={fr('field-force', '/products/pharmafieldflo')}>{fl('field-force', 'Field Force')} <span className="arw">&rarr;</span></SmartLink>
             </div>
           </div>
-    
-          
+
           <div>
-            <div className="ft-col-h">{t('Resources')}</div><div className="ft-col-rule"></div>
+            <div className="ft-col-h">{fh('resources', 'Resources')}</div><div className="ft-col-rule"></div>
             <div className="ft-links">
-              <SmartLink href="/events.html">{t('Events')} <span className="arw">&rarr;</span></SmartLink>
-              <SmartLink href="#">{t("Insights")} <span className="arw">&rarr;</span></SmartLink>
-              <SmartLink href="/our-clients.html">{t('Case Studies')} <span className="arw">&rarr;</span></SmartLink>
-              <SmartLink href="#">{t("Blog")} <span className="arw">&rarr;</span></SmartLink>
-              <SmartLink href="/contact-us.html">{t('Help Center')} <span className="arw">&rarr;</span></SmartLink>
+              <SmartLink href={fr('events', '/events.html')}>{fl('events', 'Events')} <span className="arw">&rarr;</span></SmartLink>
+              <SmartLink href={fr('insights', '#')}>{fl('insights', 'Insights')} <span className="arw">&rarr;</span></SmartLink>
+              <SmartLink href={fr('case-studies', '/our-clients.html')}>{fl('case-studies', 'Case Studies')} <span className="arw">&rarr;</span></SmartLink>
+              <SmartLink href={fr('blog', '#')}>{fl('blog', 'Blog')} <span className="arw">&rarr;</span></SmartLink>
+              <SmartLink href={fr('help-center', '/contact-us.html')}>{fl('help-center', 'Help Center')} <span className="arw">&rarr;</span></SmartLink>
             </div>
           </div>
     
@@ -104,7 +122,7 @@ export default function Footer() {
         </div>
     
         <div className="ft-bottom">
-          <span>{t("© 2026 Align Business Systems. All rights reserved.")}</span>
+          <span>{copyrightText}</span>
           <div className="ft-legal">
             <SmartLink href="#">{t("Privacy Policy")}</SmartLink><span className="dot">&bull;</span>
             <SmartLink href="#">{t("Terms of Use")}</SmartLink><span className="dot">&bull;</span>

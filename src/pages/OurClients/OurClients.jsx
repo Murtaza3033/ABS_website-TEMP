@@ -7,6 +7,8 @@ import CountUp from '../../components/CountUp';
 import ClientWall from './ClientWall';
 import Sectors from './Sectors';
 import { NUMBERS } from './clientsData';
+import SEO, { resolveSeo } from '../../components/SEO';
+import { usePage } from '../../hooks/useCms';
 
 function Reveal({ children, ...props }) {
   return <BaseReveal data-reveal="" baseClass="" shownClass="in" {...props}>{children}</BaseReveal>;
@@ -15,7 +17,9 @@ function Reveal({ children, ...props }) {
 const HEAD = ['The', 'businesses', "we're", 'proud', 'to', 'work', 'with.'];
 
 export default function OurClients() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+  const { data: cmsPage } = usePage('our-clients');
+  const seo = resolveSeo(cmsPage?.seo, lang);
   const [play, setPlay] = useState(false);
 
   useLayoutEffect(() => {
@@ -33,6 +37,11 @@ export default function OurClients() {
 
   return (
     <main>
+      <SEO
+        {...seo}
+        title={seo.title || t('Our Clients')}
+        description={seo.description || t("Every name here chose to trust us with the systems their business runs on. Their growth is the story we're proudest of — and the reason we keep building.")}
+      />
       {/* HERO */}
       <section className="sec" style={{ position: 'relative', background: 'linear-gradient(180deg,var(--tint) 0%,#fff 100%)', padding: '80px 32px 46px', overflow: 'hidden' }}>
         <div className="dotfield" />

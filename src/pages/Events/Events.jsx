@@ -4,6 +4,9 @@ import '../../styles/events.css';
 import BaseReveal from '../../components/Reveal';
 import SmartLink from '../../components/SmartLink';
 import Gallery from './Gallery';
+import { useEvent, usePage } from '../../hooks/useCms';
+import { getSanityImageUrl } from '../../lib/sanity';
+import SEO, { resolveSeo } from '../../components/SEO';
 import { GALLERY, WHY } from './eventsData';
 
 function Reveal({ children, ...props }) {
@@ -12,8 +15,30 @@ function Reveal({ children, ...props }) {
 
 const HEAD = ['Where', "you'll", 'find us', '—', 'out', 'in', 'the', 'industry.'];
 
+/* Static gallery paths reshaped as a Sanity `event` fallback — same adapter
+   as Gallery.jsx (kept local to each component rather than shared, since both
+   are small and independent). */
+const FALLBACK_GALLERY_PATHS = GALLERY.map(([file, ext]) => `/assets/images/about/${file}.${ext}`);
+
+function mergeGallery(paths, sanityImages) {
+  return GALLERY.map((base, i) => {
+    const path = paths?.[i];
+    const sanityImage = sanityImages?.[i];
+    if (!path) return [...base, sanityImage];
+    const m = path.match(/\/([^/]+)\.([a-zA-Z0-9]+)$/);
+    return m ? [m[1], m[2], base[2], base[3], sanityImage] : [...base, sanityImage];
+  });
+}
+
 export default function Events() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+  const { data: cmsPage } = usePage('events');
+  const seo = resolveSeo(cmsPage?.seo, lang);
+  const { data: cmsEvent } = useEvent('itcn-asia-2023', {
+    fallbackData: { _id: 'fallback-event', galleryPaths: FALLBACK_GALLERY_PATHS },
+  });
+  const gallery = mergeGallery(cmsEvent?.galleryPaths, cmsEvent?.gallery);
+  const gsrc = (i) => getSanityImageUrl(gallery[i][4], { width: 900 }) || `/assets/images/about/${gallery[i][0]}.${gallery[i][1]}`;
   const [play, setPlay] = useState(false);
   const [mk, setMk] = useState(0); // hero montage index
 
@@ -29,7 +54,7 @@ export default function Events() {
   }, []);
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
-    const id = setInterval(() => setMk((k) => (k + 1) % GALLERY.length), 4200);
+    const id = setInterval(() => setMk((k) => (k + 1) % gallery.length), 4200);
     return () => clearInterval(id);
   }, []);
 
@@ -37,11 +62,16 @@ export default function Events() {
 
   return (
     <main>
+      <SEO
+        {...seo}
+        title={seo.title || t('Events')}
+        description={seo.description || t("We show up where our industry gathers — exhibitions, conferences and the rooms where businesses meet the people building their tools.")}
+      />
       {/* HERO */}
       <section className="sec" style={{ position: 'relative', background: 'linear-gradient(180deg,var(--tint) 0%,#fff 100%)', padding: '80px 32px 44px', overflow: 'hidden', isolation: 'isolate' }}>
         <div className="evMontage">
-          {GALLERY.map((t, i) => (
-            <span key={t[0]} className={i === mk ? 'on' : ''} style={{ backgroundImage: `url('/assets/images/about/${t[0]}.${t[1]}')` }} />
+          {gallery.map((g, i) => (
+            <span key={g[0]} className={i === mk ? 'on' : ''} style={{ backgroundImage: `url('${gsrc(i)}')` }} />
           ))}
         </div>
         <div style={{ position: 'absolute', top: '-140px', left: '50%', transform: 'translateX(-50%)', width: '920px', height: '520px', background: 'radial-gradient(ellipse at center,rgba(26,86,219,.08),transparent 62%)', pointerEvents: 'none', zIndex: 0 }} />

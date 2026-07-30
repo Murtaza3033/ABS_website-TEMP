@@ -6,6 +6,10 @@ import SmartLink from '../../components/SmartLink';
 import CountUp from '../../components/CountUp';
 import IndustryPanel from './IndustryPanel';
 import Convergence from './Convergence';
+import { useIndustries, usePage } from '../../hooks/useCms';
+import { loc } from '../../lib/loc';
+import { getSanityImageUrl } from '../../lib/sanity';
+import SEO, { resolveSeo } from '../../components/SEO';
 import { IND } from './industriesData';
 
 function Reveal({ children, ...props }) {
@@ -15,8 +19,45 @@ function Reveal({ children, ...props }) {
 const HEAD = ['The', 'industries', 'we', 'help', 'move', 'forward.'];
 const AUTO = 4600;
 
+/* Static IND reshaped to look like a Sanity `industry` document list — same
+   purpose as the OurClients/OurTeam fallbacks: instant placeholderData and
+   the safe fallback if the CMS is unreachable or empty. */
+const FALLBACK_INDUSTRIES = IND.map((ind, i) => ({
+  _id: `fallback-${i}`,
+  name: ind.name,
+  description: `${ind.head} ${ind.para}`,
+  illustrationPath: `/assets/images/industries/${ind.img}.png`,
+  order: i + 1,
+}));
+
+/* Adapter: a Sanity industry doc (or FALLBACK_INDUSTRIES entry) only covers
+   name/description/illustration/order — the showcase panel, tabs and
+   convergence diagram also need short/ico/insight/focus/modules/members,
+   which have no CMS equivalent yet. So this merges the CMS name + image onto
+   the matching static IND entry (by position — Sanity was seeded in the same
+   order) rather than replacing it, keeping IndustryPanel/Convergence untouched.
+   `description` isn't used here: it was seeded as one combined string and
+   can't be safely split back into the separate head/para the panel renders. */
+function mergeIndustry(doc, i, lang) {
+  const base = IND[i] || IND[0];
+  const img = doc.illustrationPath
+    ? doc.illustrationPath.replace(/^.*\//, '').replace(/\.[a-z0-9]+$/i, '')
+    : base.img;
+  return {
+    ...base,
+    name: loc(doc.name, lang) || base.name,
+    img,
+    imgUrl: getSanityImageUrl(doc.illustration, { width: 1200 }) || `/assets/images/industries/${img}.png`,
+  };
+}
+
 export default function Industries() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+  const { data: cmsPage } = usePage('industries');
+  const seo = resolveSeo(cmsPage?.seo, lang);
+  const { data: cmsIndustries } = useIndustries({ fallbackData: FALLBACK_INDUSTRIES });
+  const industries = (cmsIndustries && cmsIndustries.length > 0 ? cmsIndustries : FALLBACK_INDUSTRIES)
+    .map((doc, i) => mergeIndustry(doc, i, lang));
   const [cur, setCur] = useState(0);
   const [play, setPlay] = useState(false);
   const autoRef = useRef(true);
@@ -47,7 +88,7 @@ export default function Industries() {
     const tick = (t) => {
       if (autoRef.current) {
         const e = (t - baseRef.current) / AUTO;
-        if (e >= 1) { baseRef.current = t; setCur((c) => (c + 1) % IND.length); }
+        if (e >= 1) { baseRef.current = t; setCur((c) => (c + 1) % industries.length); }
         else if (fillRef.current) fillRef.current.style.width = `${Math.min(e, 1) * 100}%`;
       } else if (fillRef.current) {
         fillRef.current.style.width = '0%';
@@ -74,21 +115,26 @@ export default function Industries() {
   }, [cur]);
 
   const select = (i, manual) => {
-    setCur((i + IND.length) % IND.length);
+    setCur((i + industries.length) % industries.length);
     if (manual) { autoRef.current = false; baseRef.current = performance.now(); if (fillRef.current) fillRef.current.style.width = '0%'; }
   };
   const jumpFromNode = (i) => { select(i, true); showcaseRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
 
   const hw = `hw${play ? ' play' : ''}`;
-  const d = IND[cur];
+  const d = industries[cur];
 
   return (
     <main>
+      <SEO
+        {...seo}
+        title={seo.title || t('Our Presence')}
+        description={seo.description || t('Across manufacturing floors, pharmacies, storefronts and solar rooftops, we build the systems that keep operations running. Different sectors, the same discipline.')}
+      />
       {/* HERO */}
       <section className="sec" style={{ position: 'relative', background: 'linear-gradient(180deg,var(--tint) 0%,#fff 100%)', padding: '80px 32px 40px', overflow: 'hidden', isolation: 'isolate' }}>
         <div className="indMontage">
-          {IND.map((ind, i) => (
-            <span key={ind.short} className={i === cur ? 'on' : ''} style={{ backgroundImage: `url('/assets/images/industries/${ind.img}.png')` }} />
+          {industries.map((ind, i) => (
+            <span key={ind.short} className={i === cur ? 'on' : ''} style={{ backgroundImage: `url('${ind.imgUrl}')` }} />
           ))}
         </div>
         <div style={{ position: 'absolute', top: '-140px', left: '50%', transform: 'translateX(-50%)', width: '920px', height: '520px', background: 'radial-gradient(ellipse at center,rgba(26,86,219,.08),transparent 62%)', pointerEvents: 'none', zIndex: 0 }} />
@@ -124,7 +170,7 @@ export default function Industries() {
             onKeyDown={(e) => { if (e.key === 'ArrowRight') { e.preventDefault(); select(curRef.current + 1, true); } else if (e.key === 'ArrowLeft') { e.preventDefault(); select(curRef.current - 1, true); } }}
             style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '10px', padding: '8px', background: 'var(--tint)', border: '1px solid #eef1f6', borderRadius: '999px', width: 'fit-content', margin: '0 auto', maxWidth: '100%', overflowX: 'auto' }}
           >
-            {IND.map((ind, i) => {
+            {industries.map((ind, i) => {
               const on = i === cur;
               return (
                 <button key={ind.short} className="iTab" onClick={() => select(i, true)}

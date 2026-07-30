@@ -1,5 +1,11 @@
 import { useReducer, useRef, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
+import { submitContact } from '../pages/ContactUs/contactData';
+import Turnstile from './Turnstile';
+
+// Real number only — never a placeholder. Unset until VITE_WHATSAPP_NUMBER is
+// configured, in which case the WhatsApp channel below appears automatically.
+const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || '';
 
 /* Align Assistant — a useReducer-driven chat state machine (replaces the
    imperative lib/salesBot.js engine). State holds the message history, captured
@@ -70,6 +76,8 @@ export default function SalesBot() {
   const msgsRef = useRef(null);
   const typingTimer = useRef(null);
   const greetedRef = useRef(false);
+  const submittingRef = useRef(false);
+  const turnstileRef = useRef(null);
 
   // persist lead data / product / tip-dismissed
   useEffect(() => {
@@ -106,6 +114,11 @@ export default function SalesBot() {
     }, 620);
   };
   const focusInput = () => setTimeout(() => inputRef.current?.focus(), 650);
+  // Shows a bot message immediately, bypassing the typing-delay timer used by
+  // botSay() — needed for the "Sending your details…" status message, since
+  // botSay() clears any pending timer when called again (which would silently
+  // drop this message if the API responds before the 620ms typing delay).
+  const botSayNow = (content, opts = null, extra = {}) => dispatch({ type: 'ADD', msg: { who: 'bot', content, opts, ...extra } });
 
   const handoff = () => botSay("Here's how you can reach a real person on our team — pick whatever's easiest:", null, { channels: true });
 
@@ -144,16 +157,40 @@ export default function SalesBot() {
     { label: t('Talk to a human'), onClick: () => { addUser(t('Talk to a human')); handoff(); } },
   ];
 
-  const finishCapture = (path) => {
+  const finishCapture = async (path) => {
+    if (submittingRef.current) return;
+    submittingRef.current = true;
+
     const d = stateRef.current.data;
-    const summary = (
-      <div style={{ fontSize: '12px', color: '#5b6472', background: TINT, border: '1px solid #e3e9f3', borderRadius: '10px', padding: '9px 11px', marginTop: '2px' }}>
-        <b>Captured:</b> {d.name || ''}{d.company ? ` · ${d.company}` : ''} · {d.email || ''}{d.size ? ` · ${d.size}` : ''}
-        <br /><span style={{ color: '#c47d17' }}>TODO: connect to CRM / endpoint</span>
-      </div>
-    );
-    if (path === 'partner') botSay(<>Thanks, {d.name}! Align partners with companies across the ecosystem. I&apos;ll connect you with the team.{summary}</>, null, { channels: true });
-    else botSay(<>Perfect, {d.name}! Our team will set up a demo of {stateRef.current.product || 'the Align platform'}. Here&apos;s how to reach us directly too:{summary}</>, null, { channels: true });
+    const product = stateRef.current.product;
+    botSayNow(t('Sending your details…'));
+
+    const result = await submitContact({
+      name: d.name,
+      company: d.company,
+      email: d.email,
+      companySize: d.size || undefined, // not in the contactSubmission schema yet — folded into `message` below too, so it's never lost
+      reason: path === 'partner' ? 'Partnership' : 'Book a demo',
+      product: product || 'Not sure yet',
+      message: d.size ? `Company size: ${d.size} (captured via Align Assistant chat)` : '(captured via Align Assistant chat)',
+      source: 'salesbot',
+      pageUrl: window.location.href,
+      honeypot: '', // SalesBot has no exposed form field for bots to fill — always empty
+      turnstileToken: turnstileRef.current?.getToken() || '',
+    });
+    submittingRef.current = false;
+    // Single-use token — reset now so the next capture flow gets a fresh one.
+    turnstileRef.current?.reset();
+
+    if (result.ok) {
+      if (path === 'partner') {
+        botSay(<>Thanks, {d.name}! Align partners with companies across the ecosystem — I&apos;ve passed your details to the team. Here&apos;s how to reach us directly too:</>, null, { channels: true });
+      } else {
+        botSay(<>Perfect, {d.name}! Our team will set up a demo of {product || 'the Align platform'} — I&apos;ve sent your details over. Here&apos;s how to reach us directly too:</>, null, { channels: true });
+      }
+    } else {
+      botSay(<>Hmm, I couldn&apos;t send that through just now — but your details are saved, and here&apos;s how to reach our team directly:</>, null, { channels: true });
+    }
   };
   const setSize = (sz) => { addUser(sz); dispatch({ type: 'MERGE_DATA', data: { size: sz } }); setTimeout(() => finishCapture('demo'), 0); };
   const askSizeOrFinish = () => {
@@ -204,6 +241,10 @@ export default function SalesBot() {
 
   return (
     <div className="ab-root" style={{ fontFamily: 'Outfit,system-ui,sans-serif' }}>
+      {/* Mounted as soon as SalesBot mounts (every page) so a token is
+          typically already ready by the time a capture flow completes —
+          invisible (interaction-only), takes no layout space. */}
+      <Turnstile ref={turnstileRef} action="salesbot" />
       {!state.open && (
         <button className="ab-launcher" aria-label="Chat with Align Assistant" onClick={openBot}
           style={{ position: 'fixed', right: '24px', bottom: '88px', zIndex: 940, width: '60px', height: '60px', borderRadius: '50%', border: 'none', background: BLUE, color: '#fff', cursor: 'pointer', boxShadow: '0 16px 34px -10px rgba(26,86,219,.6)', display: 'grid', placeItems: 'center', animation: 'abFloat 5s ease-in-out infinite' }}>
@@ -271,19 +312,21 @@ export default function SalesBot() {
 
 function Channels({ mailto }) {
   const items = [
-    ['✉️  Email Sales', mailto('sales@alignbsystems.com', 'Demo / enquiry — Align'), false],
-    ['🛟  Email Support', mailto('support@alignbsystems.com', 'Support request — Align'), false],
-    ['📞  Call Sales · +92 317 3822206', 'tel:+923173822206', false],
-    ['📞  Call Support · +92 318 6944418', 'tel:+923186944418', false],
-    ['💬  Chat on WhatsApp', 'https://wa.me/0000000000', true],
-    ['💼  Careers · talent@alignbsystems.com', mailto('talent@alignbsystems.com', 'Application — Align'), false],
+    ['✉️  Email Sales', mailto('sales@alignbsystems.com', 'Demo / enquiry — Align')],
+    ['🛟  Email Support', mailto('support@alignbsystems.com', 'Support request — Align')],
+    ['📞  Call Sales · +92 317 3822206', 'tel:+923173822206'],
+    ['📞  Call Support · +92 318 6944418', 'tel:+923186944418'],
+    // Only shown once a real number is configured (VITE_WHATSAPP_NUMBER) —
+    // never a placeholder pretending to be a working link.
+    ...(WHATSAPP_NUMBER ? [['💬  Chat on WhatsApp', `https://wa.me/${WHATSAPP_NUMBER}`]] : []),
+    ['💼  Careers · talent@alignbsystems.com', mailto('talent@alignbsystems.com', 'Application — Align')],
   ];
   const linkStyle = { display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', fontSize: '13px', fontWeight: 600, color: SLATE, background: '#fff', border: '1.5px solid #e3e9f3', borderRadius: '12px', padding: '10px 13px' };
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '7px', marginTop: '2px' }}>
-      {items.map(([label, href, todo]) => (
+      {items.map(([label, href]) => (
         <a key={label} href={href} target={/^https?:/.test(href) ? '_blank' : undefined} rel="noopener noreferrer" style={linkStyle}>
-          {label}{todo && <span style={{ color: '#c47d17', fontSize: '10px', fontWeight: 700 }}> (TODO: set #)</span>}
+          {label}
         </a>
       ))}
       <div style={{ display: 'flex', gap: '8px', marginTop: '2px' }}>

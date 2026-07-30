@@ -2,6 +2,8 @@ import '../../styles/about-us.css';
 import { useLanguage } from '../../context/LanguageContext';
 import BaseReveal from '../../components/Reveal';
 import SmartLink from '../../components/SmartLink';
+import SEO, { resolveSeo } from '../../components/SEO';
+import { usePage } from '../../hooks/useCms';
 
 // about-us.css reveals via [data-reveal] + `.in` (not .cReveal/.cin) — preset those here.
 function Reveal({ children, ...props }) {
@@ -14,9 +16,16 @@ import Journey from './Journey';
 import ProductCarousel from './ProductCarousel';
 
 export default function AboutUs() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+  const { data: cmsPage } = usePage('about-us');
+  const seo = resolveSeo(cmsPage?.seo, lang);
   return (
     <main>
+      <SEO
+        {...seo}
+        title={seo.title || t('About Us')}
+        description={seo.description || t('Align Business Systems designs and builds the ERP, HR, and field-force platforms that businesses across Pakistan use to run their day-to-day operations.')}
+      />
       {/* 1. HERO */}
       <section className="sec" style={{ padding: '96px 32px 40px', background: 'linear-gradient(180deg,var(--tint) 0%,#fff 100%)', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: '-120px', left: '50%', transform: 'translateX(-50%)', width: '900px', height: '520px', background: 'radial-gradient(ellipse at center,rgba(26,86,219,.09),transparent 62%)', pointerEvents: 'none' }} />

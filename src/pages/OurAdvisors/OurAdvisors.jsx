@@ -6,6 +6,8 @@ import SmartLink from '../../components/SmartLink';
 import { Icon, AREAS, PILLARS } from './advisorsData';
 import AreaCard from './AreaCard';
 import Timeline from './Timeline';
+import SEO, { resolveSeo } from '../../components/SEO';
+import { usePage } from '../../hooks/useCms';
 
 function Reveal({ children, ...props }) {
   return <BaseReveal data-reveal="" baseClass="" shownClass="in" {...props}>{children}</BaseReveal>;
@@ -41,7 +43,9 @@ function Headline() {
 const shape = (extra) => ({ position: 'absolute', ...extra });
 
 export default function OurAdvisors() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+  const { data: cmsPage } = usePage('our-advisors');
+  const seo = resolveSeo(cmsPage?.seo, lang);
   useLayoutEffect(() => {
     const prev = document.body.style.background;
     document.body.style.background = 'var(--white)';
@@ -50,6 +54,11 @@ export default function OurAdvisors() {
 
   return (
     <main>
+      <SEO
+        {...seo}
+        title={seo.title || t('Our Advisors')}
+        description={seo.description || t('Building a company that businesses trust with their operations takes more than good engineering. Our advisor brings the experience that helps Align make sharper calls on strategy, growth and scale.')}
+      />
       {/* HERO */}
       <section className="sec" style={{ position: 'relative', background: 'linear-gradient(180deg,var(--tint) 0%,#fff 100%)', padding: '90px 32px 56px', overflow: 'hidden', minHeight: '80vh', display: 'flex', alignItems: 'center' }}>
         <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden' }}>
