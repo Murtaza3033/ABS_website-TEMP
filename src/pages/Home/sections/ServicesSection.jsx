@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { useHome, ORBIT, SVC } from '../HomeContext';
 import { useLanguage } from '../../../context/LanguageContext';
+import SmartLink from '../../../components/SmartLink';
 
 export default function ServicesSection() {
   const { c, b, act, state, dispatch } = useHome();
@@ -15,12 +16,12 @@ export default function ServicesSection() {
           <div style={{position: 'absolute', top: '-160px', insetInlineStart: '-120px', width: '560px', height: '560px', borderRadius: '50%', background: 'radial-gradient(circle,rgba(120,167,255,.28),transparent 68%)', pointerEvents: 'none'}}></div>
           <div style={{position: 'absolute', bottom: '-180px', insetInlineEnd: '-140px', width: '520px', height: '520px', borderRadius: '50%', background: 'radial-gradient(circle,rgba(120,167,255,.18),transparent 70%)', pointerEvents: 'none'}}></div>
           <div style={{maxWidth: '1240px', margin: '0 auto', padding: '100px 32px', position: 'relative'}}>
-            <div style={{display: 'grid', gridTemplateColumns: '0.92fr 1.08fr', gap: '56px', alignItems: 'center'}}>
+            <div className="hm-stack" style={{display: 'grid', gridTemplateColumns: '0.92fr 1.08fr', gap: '56px', alignItems: 'center'}}>
               <div data-reveal="0" style={{opacity: '0', transform: 'translateY(24px)', transition: 'all .7s cubic-bezier(.2,.7,.3,1)'}}>
                 <div style={{display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '12px', fontWeight: '700', color: '#1a56db', letterSpacing: '1.4px', textTransform: 'uppercase', fontFamily: '\'Outfit\',sans-serif'}}>{t("Why Align Business Systems")}</div>
                 <h2 style={{fontSize: '42px', fontWeight: '700', letterSpacing: '-1px', margin: '18px 0 0', lineHeight: '1.12', textWrap: 'pretty'}}>{t("Enterprise software, built around how you actually work.")}</h2>
                 <p style={{fontSize: '17px', lineHeight: '1.65', color: '#4b5565', margin: '18px 0 0'}}>{t("Align Business Systems is a product & software company. We design, build, deploy and support the systems that run your operations — one accountable team from first call to daily use.")}</p>
-                <a href="Contact Us.dc.html" style={{display: 'inline-block', marginTop: '28px', textDecoration: 'none', background: '#1a56db', color: '#ffffff', fontSize: '15.5px', fontWeight: '600', padding: '15px 30px', borderRadius: '14px', boxShadow: '0 16px 34px -14px rgba(26,86,219,.6)'}} data-hv="hv-11">{t("Book a discovery call")}</a>
+                <SmartLink href="/contact-us.html" style={{display: 'inline-block', marginTop: '28px', textDecoration: 'none', background: '#1a56db', color: '#ffffff', fontSize: '15.5px', fontWeight: '600', padding: '15px 30px', borderRadius: '14px', boxShadow: '0 16px 34px -14px rgba(26,86,219,.6)'}} data-hv="hv-11">{t("Book a discovery call")}</SmartLink>
                 <div style={{display: 'flex', gap: '30px', marginTop: '34px', paddingTop: '26px', borderTop: '1px solid #e4ebf6'}}>
                   <div><div style={{fontSize: '15px', fontWeight: '800', color: '#0f1729'}}>{t("Product + Services")}</div><div style={{fontSize: '12px', color: '#8a94a6', marginTop: '2px'}}>{t("one company")}</div></div>
                   <div><div style={{fontSize: '15px', fontWeight: '800', color: '#0f1729'}}>{t("7 industries")}</div><div style={{fontSize: '12px', color: '#8a94a6', marginTop: '2px'}}>{t("served today")}</div></div>
@@ -28,8 +29,8 @@ export default function ServicesSection() {
                 </div>
               </div>
               
-          <div data-reveal="1" style={{opacity: '0', transform: 'translateY(24px)', transition: 'all .7s cubic-bezier(.2,.7,.3,1)'}}>
-            <div data-svc-panel="1" style={{position: 'relative', width: '600px', maxWidth: '100%', height: '580px', margin: '0 auto'}}>
+          <div data-reveal="1" className="hm-scale-wrap" style={{opacity: '0', transform: 'translateY(24px)', transition: 'all .7s cubic-bezier(.2,.7,.3,1)', '--hm-w': '600px', '--hm-h': '580px'}}>
+            <div data-svc-panel="1" className="hm-scale-panel" style={{position: 'relative', width: '600px', maxWidth: '100%', height: '580px', margin: '0 auto'}}>
               <svg width="600" height="580" viewBox="0 0 600 580" fill="none" style={{position: 'absolute', top: '0', insetInlineStart: '0', zIndex: '3', overflow: 'visible', pointerEvents: 'none'}}>
                 <defs><marker id="svcAh" markerWidth="9" markerHeight="9" refX="6" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#9fbdf0"/></marker><marker id="svcAhA" markerWidth="9" markerHeight="9" refX="6" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#1a56db"/></marker></defs>
               <path d="M383,143 Q425,107 406,160" stroke="#bcd0f2" strokeWidth="2.2" strokeLinecap="round" fill="none" markerEnd="url(#svcAh)"/>
@@ -62,7 +63,7 @@ export default function ServicesSection() {
       
           <div style={{maxWidth: '1240px', margin: '0 auto', padding: '0 32px 110px', position: 'relative'}}>
             <div style={{background: 'linear-gradient(180deg,#eef4ff 0%,#f5f9ff 100%)', border: '1px solid #e4ecfa', borderRadius: '32px', padding: '56px 52px', boxShadow: '0 44px 96px -54px rgba(26,86,219,.34)'}}>
-              <div style={{display: 'grid', gridTemplateColumns: '0.9fr 1.1fr', gap: '56px', alignItems: 'center'}}>
+              <div className="hm-stack" style={{display: 'grid', gridTemplateColumns: '0.9fr 1.1fr', gap: '56px', alignItems: 'center'}}>
                 <div data-reveal="0" style={{opacity: '0', transform: 'translateY(24px)', transition: 'all .7s cubic-bezier(.2,.7,.3,1)'}}>
                   <div style={{display: 'inline-flex', alignItems: 'center', gap: '8px', fontFamily: '\'Outfit\',sans-serif', fontSize: '12px', fontWeight: '700', color: '#1a56db', letterSpacing: '1.4px', textTransform: 'uppercase'}}>{t("When off-the-shelf isn't enough")}</div>
                   <h3 style={{fontSize: '42px', fontWeight: '800', letterSpacing: '-1.4px', lineHeight: '1.08', margin: '20px 0 0'}}>{t("We also build,")}<br /><span style={{background: 'linear-gradient(100deg,#1a56db 0%,#4b8bff 30%,#8fb8ff 50%,#4b8bff 70%,#1a56db 100%)', backgroundSize: '200% auto', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent', animation: 'shimmerText 4s linear infinite'}}>{t("what you can't buy.")}</span></h3>
@@ -72,12 +73,12 @@ export default function ServicesSection() {
                     <div style={{display: 'flex', alignItems: 'center', gap: '11px', fontSize: '15px', color: '#31405c'}}><span style={{width: '20px', height: '20px', borderRadius: '50%', background: '#e3f6ec', color: '#1a9d55', display: 'grid', placeItems: 'center', fontSize: '11px', flexShrink: '0'}}>✓</span>{t("Live fast, minimal disruption")}</div>
                     <div style={{display: 'flex', alignItems: 'center', gap: '11px', fontSize: '15px', color: '#31405c'}}><span style={{width: '20px', height: '20px', borderRadius: '50%', background: '#e3f6ec', color: '#1a9d55', display: 'grid', placeItems: 'center', fontSize: '11px', flexShrink: '0'}}>✓</span>{t("One accountable team")}</div>
                   </div>
-                  <a href="Contact Us.dc.html" style={{display: 'inline-flex', alignItems: 'center', gap: '8px', marginTop: '30px', textDecoration: 'none', background: '#0f1729', color: '#fff', fontSize: '15px', fontWeight: '600', padding: '14px 26px', borderRadius: '13px', transition: 'background .25s ease'}} data-hv="hv-12">{t("Explore solution →")}</a>
+                  <SmartLink href="/contact-us.html" style={{display: 'inline-flex', alignItems: 'center', gap: '8px', marginTop: '30px', textDecoration: 'none', background: '#0f1729', color: '#fff', fontSize: '15px', fontWeight: '600', padding: '14px 26px', borderRadius: '13px', transition: 'background .25s ease'}} data-hv="hv-12">{t("Explore solution →")}</SmartLink>
                 </div>
                 <div data-reveal="1" style={{opacity: '0', transform: 'translateY(24px)', transition: 'all .7s cubic-bezier(.2,.7,.3,1)', position: 'relative'}}>
                 <button onClick={() => scrollBy(-156)} aria-label="Previous services" style={{position: 'absolute', top: '-18px', insetInlineEnd: '6px', zIndex: '5', width: '44px', height: '44px', borderRadius: '50%', border: '1.5px solid #e3e9f3', background: '#fff', color: '#1a56db', fontSize: '18px', lineHeight: '1', cursor: 'pointer', boxShadow: '0 10px 26px -12px rgba(15,23,41,.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all .2s ease'}} data-hv="hv-13">&uarr;</button>
                 <button onClick={() => scrollBy(156)} aria-label="More services" style={{position: 'absolute', bottom: '-18px', insetInlineEnd: '6px', zIndex: '5', width: '44px', height: '44px', borderRadius: '50%', border: '1.5px solid #e3e9f3', background: '#fff', color: '#1a56db', fontSize: '18px', lineHeight: '1', cursor: 'pointer', boxShadow: '0 10px 26px -12px rgba(15,23,41,.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all .2s ease'}} data-hv="hv-13">&darr;</button>
-                <div data-svc-scroll ref={scrollRef} style={{height: '452px', overflowY: 'hidden', scrollbarWidth: 'none', MsOverflowStyle: 'none', WebkitMaskImage: 'linear-gradient(180deg,transparent 0,#000 8%,#000 92%,transparent 100%)', maskImage: 'linear-gradient(180deg,transparent 0,#000 8%,#000 92%,transparent 100%)', display: 'flex', flexDirection: 'column', gap: '16px', padding: '8px 6px'}}>
+                <div data-svc-scroll className="hm-svc-scroll" ref={scrollRef} style={{height: '452px', overflowY: 'hidden', scrollbarWidth: 'none', MsOverflowStyle: 'none', WebkitMaskImage: 'linear-gradient(180deg,transparent 0,#000 8%,#000 92%,transparent 100%)', maskImage: 'linear-gradient(180deg,transparent 0,#000 8%,#000 92%,transparent 100%)', display: 'flex', flexDirection: 'column', gap: '16px', padding: '8px 6px'}}>
                   <div style={{scrollSnapAlign: 'center', flexShrink: '0'}}>
                     <div data-act="svcOpen0" onClick={() => act('svcOpen0')} style={{display: 'flex', alignItems: 'center', gap: '18px', background: '#ffffff', border: '1.5px solid #eaeef5', borderRadius: '18px', padding: '16px 20px 16px 16px', boxShadow: '0 14px 34px -18px rgba(15,23,41,.22)', animation: 'svc6Pulse 9s ease-in-out 0.0s infinite', transition: 'transform .25s ease', cursor: 'pointer'}} data-hv="hv-14">
                       <div style={{width: '96px', height: '72px', borderRadius: '13px', flexShrink: '0', backgroundImage: 'url(\'/assets/images/services/web.png\')', backgroundSize: 'cover', backgroundPosition: 'center', boxShadow: '0 8px 18px -8px rgba(15,23,41,.4)'}}></div>
@@ -149,7 +150,7 @@ export default function ServicesSection() {
                     <div style={{width: '12px', '--h': '66%', background: '#4b8bff', borderRadius: '3px 3px 0 0', animation: 'svcBarGrow .7s cubic-bezier(.2,.8,.3,1) .55s both'}}></div>
                     <span style={{alignSelf: 'center', marginInlineStart: '8px', display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11px', fontWeight: '700', color: '#1a9d55'}}><span style={{width: '7px', height: '7px', borderRadius: '50%', background: '#1a9d55', animation: 'pulseDot 1.6s ease-in-out infinite'}}></span>{t("Live")}</span>
                   </div>
-                  <a href="Contact Us.dc.html" style={{display: 'inline-flex', alignItems: 'center', gap: '8px', marginTop: '24px', textDecoration: 'none', background: '#1a56db', color: '#fff', fontSize: '14.5px', fontWeight: '600', padding: '13px 24px', borderRadius: '12px', transition: 'background .2s ease'}} data-hv="hv-11">{t("Talk to us →")}</a>
+                  <SmartLink href="/contact-us.html" style={{display: 'inline-flex', alignItems: 'center', gap: '8px', marginTop: '24px', textDecoration: 'none', background: '#1a56db', color: '#fff', fontSize: '14.5px', fontWeight: '600', padding: '13px 24px', borderRadius: '12px', transition: 'background .2s ease'}} data-hv="hv-11">{t("Talk to us →")}</SmartLink>
                 </div>
               </div>
             </div>

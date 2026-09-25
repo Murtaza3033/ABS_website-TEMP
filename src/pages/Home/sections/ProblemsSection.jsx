@@ -1,5 +1,6 @@
 import { useHome } from '../HomeContext';
 import { useLanguage } from '../../../context/LanguageContext';
+import SmartLink from '../../../components/SmartLink';
 
 export default function ProblemsSection() {
   const { c, b, act, state } = useHome();
@@ -40,7 +41,8 @@ export default function ProblemsSection() {
               </div>
             </div>
       
-            <div data-reveal="1" style={{opacity: '0', transform: 'translateY(24px)', transition: 'all .7s cubic-bezier(.2,.7,.3,1)', position: 'relative', marginTop: '26px', background: '#f7faff', border: '1px solid #eef1f6', borderRadius: '24px', height: '430px', overflow: 'hidden'}}>
+            <div className="hm-scale-scroll-wrap" data-reveal="1" style={{opacity: '0', transform: 'translateY(24px)', transition: 'all .7s cubic-bezier(.2,.7,.3,1)', marginTop: '26px', borderRadius: '24px', '--hm-w': '1000px', '--hm-h': '430px'}}>
+            <div className="hm-scale-scroll" style={{position: 'relative', background: '#f7faff', border: '1px solid #eef1f6', borderRadius: '24px', height: '430px', overflow: 'hidden'}}>
               <div style={{position: 'absolute', inset: '0', background: 'radial-gradient(ellipse at center,rgba(229,72,77,.1) 0%,rgba(229,72,77,0) 70%)', opacity: 'var(--wOff,0)', transition: 'opacity .5s ease', pointerEvents: 'none'}}></div>
               
               <div style={{position: 'absolute', insetInlineStart: '3.5%', top: '50%', transform: 'translate(-50%,-50%)', textAlign: 'center', pointerEvents: 'none'}}>
@@ -155,10 +157,10 @@ export default function ProblemsSection() {
               </div>
             </div>
             </div>
-      
+            </div>
             <div data-reveal="1" style={{opacity: '0', transform: 'translateY(24px)', transition: 'all .7s cubic-bezier(.2,.7,.3,1)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '18px', marginTop: '34px', flexWrap: 'wrap'}}>
               <p style={{fontSize: '16px', lineHeight: '1.6', color: '#4b5565', margin: '0', maxWidth: '520px', textAlign: 'center'}}>{t("Every product we ship began as one of these knots inside a real client's business — and we straightened it.")}</p>
-              <a href="Contact Us.dc.html" style={{flexShrink: '0', textDecoration: 'none', background: '#1a56db', color: '#ffffff', fontSize: '15px', fontWeight: '600', padding: '13px 26px', borderRadius: '12px', boxShadow: '0 12px 28px -10px rgba(26,86,219,.5)', transition: 'transform .25s ease'}} data-hv="hv-9">{t("Untangle your operations →")}</a>
+              <SmartLink href="/contact-us.html" style={{flexShrink: '0', textDecoration: 'none', background: '#1a56db', color: '#ffffff', fontSize: '15px', fontWeight: '600', padding: '13px 26px', borderRadius: '12px', boxShadow: '0 12px 28px -10px rgba(26,86,219,.5)', transition: 'transform .25s ease'}} data-hv="hv-9">{t("Untangle your operations →")}</SmartLink>
             </div>
           </div>
         </section>

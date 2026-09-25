@@ -47,11 +47,14 @@ h1,h2,h3{font-family:var(--font-sans);}
           mask-image:radial-gradient(ellipse 82% 76% at 50% 32%,#000,transparent 76%);}
 .indMontage span{position:absolute;inset:0;background-size:cover;background-position:center;filter:grayscale(1) contrast(1.03);opacity:0;transition:opacity 1.6s ease;transform:scale(1.05);}
 .indMontage span.on{opacity:.13;}
-.trustline{display:inline-flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;font-size:13.5px;font-weight:600;color:#6b7688;margin-top:24px;}
-.trustline b{color:var(--blue);font-weight:800;}
-.trustline .tdot{width:5px;height:5px;border-radius:50%;background:#c9d5ea;}
-.scrollcue{display:inline-flex;flex-direction:column;align-items:center;gap:3px;margin-top:30px;color:var(--blue);font-size:9.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;opacity:.75;}
-.scrollcue svg{animation:cueBob 1.9s ease-in-out infinite;}
+/* Renamed from generic .trustline/.scrollcue — see events.css for why: this
+   codebase bundles every page's CSS globally with no scoping, so identical
+   class names on different pages silently clobber one another. */
+.ind-trustline{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;font-size:13.5px;font-weight:600;color:#6b7688;margin-top:24px;}
+.ind-trustline b{color:var(--blue);font-weight:800;}
+.ind-trustline .tdot{width:5px;height:5px;border-radius:50%;background:#c9d5ea;}
+.ind-scrollcue{display:flex;flex-direction:column;align-items:center;gap:3px;margin-top:30px;color:var(--blue);font-size:9.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;opacity:.75;}
+.ind-scrollcue svg{animation:cueBob 1.9s ease-in-out infinite;}
 @keyframes cueBob{0%,100%{transform:translateY(0);opacity:.5;}50%{transform:translateY(6px);opacity:1;}}
 .iProg{position:relative;margin:20px auto 0;max-width:300px;height:3px;border-radius:3px;background:rgba(26,86,219,.13);overflow:hidden;}
 .iProg i{display:block;height:100%;width:0;background:linear-gradient(90deg,#1a56db,#4b8bff);border-radius:3px;}
@@ -61,5 +64,10 @@ h1,h2,h3{font-family:var(--font-sans);}
 .conv-svg path[data-line]{transition:stroke-width .25s ease,stroke .25s ease;}
 .convNode{cursor:pointer;}
 
-@media (max-width:900px){.sec{padding:64px 22px;}.panel{grid-template-columns:1fr;}.conv-grid{grid-template-columns:1fr;}.conv-svg{display:none !important;}}
+@media (max-width:900px){.sec{padding:64px 22px;}.panel{grid-template-columns:1fr;}.conv-grid{grid-template-columns:1fr;}.conv-svg{display:none !important;}
+  /* The hub node's 300px minWidth was sized for the desktop 3-column layout;
+     once .conv-grid stacks to 1 column the row around it is much narrower
+     than 300px, so the node overflowed and got clipped by overflow-x:hidden. */
+  [data-hub]{min-width:0 !important;width:100%;box-sizing:border-box;}
+}
 @media (prefers-reduced-motion:reduce){*{animation:none !important;}[data-reveal]{opacity:1;transform:none;}.hw{opacity:1;transform:none;}}

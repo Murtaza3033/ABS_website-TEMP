@@ -72,8 +72,7 @@ export default function OurPartners() {
         <div style={{ position: 'absolute', top: '-140px', left: '50%', transform: 'translateX(-50%)', width: '920px', height: '520px', background: 'radial-gradient(ellipse at center,rgba(26,86,219,.09),transparent 62%)', pointerEvents: 'none', zIndex: 0 }} />
         <div className="hero-grid" style={{ maxWidth: '1180px', margin: '0 auto', position: 'relative', zIndex: 1, display: 'grid', gridTemplateColumns: '1.05fr .95fr', gap: '52px', alignItems: 'center' }}>
           <div>
-            <Reveal as={SmartLink} href="/about-us.html" style={{ display: 'inline-block', fontSize: '12px', fontWeight: 700, letterSpacing: '1.5px', color: 'var(--blue)', textTransform: 'uppercase' }}>{t("← About Align")}</Reveal>
-            <Reveal className="eyebrow" style={{ display: 'block', marginTop: '18px' }}>{t("Partners")}</Reveal>
+            <Reveal className="eyebrow" style={{ display: 'block' }}>{t("Partners")}</Reveal>
             <h1 className="h1" data-headline>
               <span className={hw} style={{ animationDelay: '0ms' }}>{t("Growth")}</span>{' '}
               <span className={hw} style={{ animationDelay: '90ms' }}>is</span>{' '}
@@ -101,7 +100,7 @@ export default function OurPartners() {
             </div>
           </Reveal>
         </div>
-        <Reveal className="scrollcue">{t("Explore")}<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6" /></svg></Reveal>
+        <Reveal className="op-scrollcue">{t("Explore")}<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6" /></svg></Reveal>
       </section>
 
       {/* DISCOVER NETWORK */}

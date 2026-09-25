@@ -64,7 +64,7 @@ export default function PresenceMap() {
         </div>
 
         {active && (
-          <div style={{ position: 'absolute', left: '24px', bottom: '24px', zIndex: 6, background: '#fff', border: '1px solid #e3e9f3', borderRadius: '16px', padding: '16px 20px', boxShadow: '0 26px 54px -20px rgba(15,23,41,.45)', maxWidth: '270px' }}>
+          <div className="presence-tooltip" style={{ position: 'absolute', left: '24px', bottom: '24px', zIndex: 6, background: '#fff', border: '1px solid #e3e9f3', borderRadius: '16px', padding: '16px 20px', boxShadow: '0 26px 54px -20px rgba(15,23,41,.45)', maxWidth: '270px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
               <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: 'var(--blue)', boxShadow: '0 0 0 4px rgba(26,86,219,.18)' }} />
               <span style={{ fontSize: '15px', fontWeight: 700, color: 'var(--ink)' }}>{t(active.city)}</span>

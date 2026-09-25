@@ -52,6 +52,18 @@ h1,h2,h3{font-family:var(--font-sans);}
 .card-lift{transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease;}
 .card-lift:hover{transform:translateY(-4px);}
 
-@media (max-width:900px){.sec{padding:72px 22px;}.hub-grid{grid-template-columns:1fr;}.two-col{grid-template-columns:1fr !important;}.four-col{grid-template-columns:1fr 1fr !important;}.journey-row{grid-template-columns:repeat(3,1fr) !important;}.rec-gallery{grid-template-columns:1fr 1fr !important;grid-template-rows:auto !important;}}
-@media (max-width:560px){.four-col{grid-template-columns:1fr !important;}.journey-row{grid-template-columns:1fr 1fr !important;}}
+@media (max-width:900px){.sec{padding:72px 22px;}.hub-grid{grid-template-columns:1fr;}.two-col{grid-template-columns:1fr !important;}.four-col{grid-template-columns:1fr 1fr !important;}.journey-row{grid-template-columns:repeat(3,1fr) !important;}.rec-gallery{grid-template-columns:1fr 1fr !important;grid-template-rows:auto !important;}
+  /* Floating decorative cards (pinned via negative left/right offsets) are
+     sized for the wide desktop image next to them — once .two-col stacks to
+     a single, much narrower column they no longer fit and crop against the
+     section edge. Same "hide below the stacking breakpoint" call already
+     made for .crHeroCard on the Careers page. */
+  .mobile-hide-float{display:none !important;}
+}
+@media (max-width:560px){.four-col{grid-template-columns:1fr !important;}.journey-row{grid-template-columns:1fr 1fr !important;}
+  /* Pull the carousel prev/next buttons in from their desktop -20px overhang
+     so they stay fully on-screen once the section's own side padding shrinks. */
+  .carousel-arrow[aria-label="Previous product"]{left:-4px !important;}
+  .carousel-arrow[aria-label="Next product"]{right:-4px !important;}
+}
 @media (prefers-reduced-motion:reduce){*{animation:none !important;}[data-reveal]{opacity:1;transform:none;}}

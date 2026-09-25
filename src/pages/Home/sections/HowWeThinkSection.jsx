@@ -7,8 +7,8 @@ export default function HowWeThinkSection() {
   return (
     <>
       <section data-screen-label="How We Think" className="ag" style={{background: '#0f1729', color: '#ffffff'}}>
-          <div style={{maxWidth: '1240px', margin: '0 auto', padding: '100px 32px', position: 'relative'}}>
-            <div style={{position: 'absolute', top: '-38px', insetInlineEnd: '28px', zIndex: '5', width: '410px', background: 'rgba(255,255,255,.99)', border: '1px solid rgba(255,255,255,.7)', borderRadius: '28px', boxShadow: '0 56px 130px -36px rgba(0,0,0,.72),0 20px 52px -26px rgba(0,0,0,.45),0 2px 4px rgba(0,0,0,.05)', padding: '28px 28px 30px', animation: 'bfFloat 5.6s ease-in-out infinite'}}>
+          <div className="hm-float-wrap" style={{maxWidth: '1240px', margin: '0 auto', padding: '100px 32px', position: 'relative'}}>
+            <div className="hm-float" style={{position: 'absolute', top: '-38px', insetInlineEnd: '28px', zIndex: '5', width: '410px', background: 'rgba(255,255,255,.99)', border: '1px solid rgba(255,255,255,.7)', borderRadius: '28px', boxShadow: '0 56px 130px -36px rgba(0,0,0,.72),0 20px 52px -26px rgba(0,0,0,.45),0 2px 4px rgba(0,0,0,.05)', padding: '28px 28px 30px', animation: 'bfFloat 5.6s ease-in-out infinite'}}>
               <div style={{fontSize: '11px', fontWeight: '700', color: '#1a56db', letterSpacing: '1.8px', textTransform: 'uppercase'}}>{t("Clients Benefits")}</div>
               <h3 style={{fontSize: '20px', fontWeight: '700', letterSpacing: '-.4px', color: '#0f1729', margin: '9px 0 0', lineHeight: '1.22'}}>{t("Explore the advantages of partnering with us")}</h3>
               <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px 18px', marginTop: '20px'}}>
@@ -38,12 +38,12 @@ export default function HowWeThinkSection() {
                 </div>
               </div>
             </div>
-            <div data-reveal="0" style={{opacity: '0', transform: 'translateY(24px)', transition: 'all .7s cubic-bezier(.2,.7,.3,1)', maxWidth: '600px'}}>
+            <div className="hm-float-text" data-reveal="0" style={{opacity: '0', transform: 'translateY(24px)', transition: 'all .7s cubic-bezier(.2,.7,.3,1)', maxWidth: '600px'}}>
               <div style={{fontSize: '12.5px', fontWeight: '700', color: '#7aa7ff', letterSpacing: '2px', textTransform: 'uppercase'}}>{t("How we think")}</div>
               <h2 style={{fontSize: '46px', fontWeight: '800', letterSpacing: '-1.6px', margin: '16px 0 0', lineHeight: '1.08', color: '#ffffff', textWrap: 'pretty'}}>{t("We don't just automate — we orchestrate.")}</h2>
               <p style={{fontSize: '17px', lineHeight: '1.65', color: 'rgba(255,255,255,.7)', margin: '16px 0 0'}}>{t("Align Business Systems is one team behind one platform. We connect finance, people and field operations so your whole company runs on a single source of truth — not five disconnected tools stitched together.")}</p>
             </div>
-            <div data-reveal="1" style={{opacity: '0', transform: 'translateY(24px)', transition: 'all .7s cubic-bezier(.2,.7,.3,1)', display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '1px', background: 'rgba(255,255,255,.1)', border: '1px solid rgba(255,255,255,.1)', borderRadius: '20px', overflow: 'hidden', marginTop: '56px'}}>
+            <div className="hm-stack hm-float-last" data-reveal="1" style={{opacity: '0', transform: 'translateY(24px)', transition: 'all .7s cubic-bezier(.2,.7,.3,1)', display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '1px', background: 'rgba(255,255,255,.1)', border: '1px solid rgba(255,255,255,.1)', borderRadius: '20px', overflow: 'hidden', marginTop: '56px'}}>
               <div style={{background: '#131c2e', padding: '38px 34px', transition: 'background .3s ease,transform .3s ease'}} data-hv="hv-8">
                 <div style={{position: 'relative', height: '44px', marginBottom: '22px', display: 'flex', alignItems: 'center'}}>
                   <div style={{position: 'absolute', insetInlineStart: '5px', insetInlineEnd: '5px', top: '50%', height: '2px', background: 'rgba(122,167,255,.22)'}}></div>

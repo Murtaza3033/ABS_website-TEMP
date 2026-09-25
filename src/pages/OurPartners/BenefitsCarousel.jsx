@@ -119,7 +119,7 @@ export default function BenefitsCarousel() {
         <span className="benCount"><b>{pad(idx + 1)}</b> / {pad(N)}</span>
         <button className="navbtn" onClick={() => go(idx + 1)} aria-label="Next" style={{ width: '44px', height: '44px', borderRadius: '50%', border: '1px solid #dbe4f3', background: '#fff', color: '#1a56db', fontSize: '18px', cursor: 'pointer', boxShadow: '0 12px 26px -14px rgba(15,23,41,.35)', transition: 'all .2s ease' }}>→</button>
       </div>
-      <div style={{ textAlign: 'center', marginTop: '14px', fontSize: '11px', fontWeight: 700, letterSpacing: '.5px', color: '#8a94a6', textTransform: 'uppercase' }}>{t("Hover to pause · drag or use ← → to explore")}</div>
+      <div style={{ textAlign: 'center', marginTop: '14px', fontSize: '11px', fontWeight: 700, letterSpacing: '.5px', color: '#8a94a6', textTransform: 'uppercase' }}>{t("Swipe, drag, or use ← → to explore")}</div>
     </div>
   );
 }

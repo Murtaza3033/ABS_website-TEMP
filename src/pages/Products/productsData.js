@@ -28,7 +28,7 @@ export const FALLBACK_PRODUCTS = [
   },
   {
     _id: 'fallback-pharmafieldflo',
-    name: 'PharmaFieldFlo',
+    name: 'Field Force',
     slug: 'pharmafieldflo',
     tagline: 'Plan, track and optimize field activities in real time.',
     description:

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import SmartLink from './SmartLink';
 import LanguageToggle from './LanguageToggle';
 import { useLanguage } from '../context/LanguageContext';
@@ -20,21 +20,67 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [showTop, setShowTop] = useState(false);
+  const [showBottom, setShowBottom] = useState(false);
+  const [navHidden, setNavHidden] = useState(false);
+  const lastY = useRef(0);
+  // Peak/trough hysteresis (Schmitt-trigger style), not "reset the anchor on
+  // every direction flip" — real wheel/trackpad scrolling isn't monotonic,
+  // it has small reversals mixed into an otherwise consistent gesture (hand
+  // tremor, momentum-correction ticks). An anchor that resets on *any* flip
+  // gets re-armed by that noise and never accumulates past the threshold, so
+  // the header could stay stuck hidden through a genuine scroll-up. Instead,
+  // extremeY tracks the furthest point reached in the current direction and
+  // only updates while still moving that way; direction only flips (and
+  // fires the show/hide) once movement has come back more than the
+  // threshold from that extreme, which noise alone can't trigger.
+  const dirRef = useRef('none');
+  const extremeY = useRef(0);
 
   useEffect(() => {
     const onScroll = () => {
       const y = window.scrollY || document.documentElement.scrollTop;
       setScrolled(y > 12);
       setShowTop(y > 600);
+      setShowBottom(document.documentElement.scrollHeight - window.innerHeight - y > 600);
+      // Auto-hide: scrolling down tucks the header away instead of pinning
+      // it in place — but any upward scroll brings it straight back, so
+      // reaching nav doesn't mean scrolling all the way back up to the top.
+      if (!mobileOpen) {
+        if (dirRef.current === 'none') {
+          dirRef.current = y >= lastY.current ? 'down' : 'up';
+          extremeY.current = y;
+          if (dirRef.current === 'down' && y > 80) setNavHidden(true);
+        } else if (dirRef.current === 'down') {
+          if (y > extremeY.current) {
+            extremeY.current = y;
+            if (y > 80) setNavHidden(true);
+          } else if (extremeY.current - y > 24) {
+            dirRef.current = 'up';
+            extremeY.current = y;
+            setNavHidden(false);
+          }
+        } else {
+          if (y < extremeY.current) {
+            extremeY.current = y;
+          } else if (y - extremeY.current > 24) {
+            dirRef.current = 'down';
+            extremeY.current = y;
+            if (y > 80) setNavHidden(true);
+          }
+        }
+      }
+      lastY.current = y;
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
     return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  }, [mobileOpen]);
+
+  useEffect(() => { if (mobileOpen) setNavHidden(false); }, [mobileOpen]);
 
   return (
     <>
-      <header className={`site-header ${scrolled ? 'is-scrolled' : ''}`} data-nav-header>
+      <header className={`site-header ${scrolled ? 'is-scrolled' : ''} ${navHidden ? 'nav-hidden' : ''}`} data-nav-header>
         <div className="nav-inner">
           <SmartLink href={nh('home', '/index.html')} className="nav-logo">
             <img src={logoSrc} alt={logoAlt} />
@@ -129,7 +175,6 @@ export default function Header() {
 
           <div className="nav-actions">
             <span className="nav-sep"></span>
-            <button className="icon-btn" aria-label="Apps"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="5" r="1.6"></circle><circle cx="12" cy="5" r="1.6"></circle><circle cx="19" cy="5" r="1.6"></circle><circle cx="5" cy="12" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="19" cy="12" r="1.6"></circle><circle cx="5" cy="19" r="1.6"></circle><circle cx="12" cy="19" r="1.6"></circle><circle cx="19" cy="19" r="1.6"></circle></svg></button>
             <LanguageToggle />
               <SmartLink href="/contact-us.html" className="btn-cta">{t('Book a Demo')} <span>&rarr;</span></SmartLink>
           </div>
@@ -160,6 +205,7 @@ export default function Header() {
       </header>
 
       <button className={`scroll-top ${showTop ? 'show' : ''}`} aria-label="Back to top" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M12 19V5"></path><path d="M5 12l7-7 7 7"></path></svg></button>
+      <button className={`scroll-bottom ${showBottom ? 'show' : ''}`} aria-label="Scroll to bottom" onClick={() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' })}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14"></path><path d="M19 12l-7 7-7-7"></path></svg></button>
     </>
   );
 }

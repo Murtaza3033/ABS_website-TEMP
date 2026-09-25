@@ -21,7 +21,7 @@ export default function HeroSection() {
     <>
       <section data-screen-label="Hero" data-product={state.product} data-aitab={state.aiTab} data-pnview={state.pnView} data-pnmenu={state.pnMenu || 'none'} style={{position: 'relative', overflow: 'hidden', background: 'linear-gradient(180deg,#ffffff 0%,#f7faff 100%)'}}>
           {c('tourOn') && (<>
-            <div style={{position: 'absolute', inset: '0', zIndex: '60', pointerEvents: 'none', fontFamily: 'Outfit,sans-serif'}}>
+            <div className="hm-annotate" style={{position: 'absolute', inset: '0', zIndex: '60', pointerEvents: 'none', fontFamily: 'Outfit,sans-serif'}}>
               
               
               <div style={{position: 'absolute', top: '918px', insetInlineStart: '50%', marginInlineStart: '-70px', width: '300px', textAlign: 'center', pointerEvents: 'none'}}>
@@ -33,35 +33,35 @@ export default function HeroSection() {
             </div>
           </>)}
           {c('tourHidden') && (<>
-            <div data-act="showTour" onClick={() => act('showTour')} style={{position: 'absolute', top: '120px', insetInlineEnd: '40px', zIndex: '60', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '7px', background: '#ffffff', border: '1px solid #c9d8f5', color: '#1a56db', fontSize: '13px', fontWeight: '600', borderRadius: '99px', padding: '9px 16px', boxShadow: '0 8px 20px -10px rgba(15,23,41,.2)'}}>{t("💡 Show tips")}</div>
+            <div data-act="showTour" onClick={() => act('showTour')} className="hm-annotate" style={{position: 'absolute', top: '120px', insetInlineEnd: '40px', zIndex: '60', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '7px', background: '#ffffff', border: '1px solid #c9d8f5', color: '#1a56db', fontSize: '13px', fontWeight: '600', borderRadius: '99px', padding: '9px 16px', boxShadow: '0 8px 20px -10px rgba(15,23,41,.2)'}}>{t("💡 Show tips")}</div>
           </>)}
           <div style={{position: 'absolute', top: '-220px', insetInlineStart: '50%', marginInlineStart: '-320px', width: '640px', height: '640px', borderRadius: '50%', background: 'radial-gradient(circle,rgba(26,86,219,.08) 0%,rgba(26,86,219,0) 65%)'}}></div>
           <div style={{maxWidth: '900px', margin: '0 auto', padding: '70px 32px 0', textAlign: 'center'}}>
             <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px', marginTop: '4px', position: 'relative', zIndex: '40'}}>
               <div style={{display: 'inline-flex', background: '#ffffff', border: '1px solid #e4eaf5', borderRadius: '999px', padding: '4px', boxShadow: '0 2px 10px rgba(15,23,41,.05)'}}>
-                <button data-act="goBiz" onClick={() => act('goBiz')} style={{fontFamily: 'Outfit,sans-serif', fontSize: '12.5px', fontWeight: '600', padding: '8px 18px', borderRadius: '999px', border: 'none', cursor: 'pointer', background: '#1a56db', color: '#ffffff', transition: 'background .25s cubic-bezier(.2,.7,.3,1),color .2s ease'}}>{t("BusinessFlo")}</button>
-                <button data-act="goPn" onClick={() => act('goPn')} style={{fontFamily: 'Outfit,sans-serif', fontSize: '12.5px', fontWeight: '600', padding: '8px 18px', borderRadius: '999px', border: 'none', cursor: 'pointer', background: 'transparent', color: '#5b6472', transition: 'background .25s cubic-bezier(.2,.7,.3,1),color .2s ease'}}>{t("PeopleNest")}</button>
-                <button data-act="goPff" onClick={() => act('goPff')} style={{fontFamily: 'Outfit,sans-serif', fontSize: '12.5px', fontWeight: '600', padding: '8px 18px', borderRadius: '999px', border: 'none', cursor: 'pointer', background: 'transparent', color: '#5b6472', transition: 'background .25s cubic-bezier(.2,.7,.3,1),color .2s ease'}}>{t("Field Force")}</button>
+                <button data-act="goBiz" onClick={() => act('goBiz')} style={{fontFamily: 'Outfit,sans-serif', fontSize: '12.5px', fontWeight: '600', padding: '8px 18px', borderRadius: '999px', border: 'none', cursor: 'pointer', background: '#1a56db', color: '#ffffff', whiteSpace: 'nowrap', transition: 'background .25s cubic-bezier(.2,.7,.3,1),color .2s ease'}}>{t("BusinessFlo")}</button>
+                <button data-act="goPn" onClick={() => act('goPn')} style={{fontFamily: 'Outfit,sans-serif', fontSize: '12.5px', fontWeight: '600', padding: '8px 18px', borderRadius: '999px', border: 'none', cursor: 'pointer', background: 'transparent', color: '#5b6472', whiteSpace: 'nowrap', transition: 'background .25s cubic-bezier(.2,.7,.3,1),color .2s ease'}}>{t("PeopleNest")}</button>
+                <button data-act="goPff" onClick={() => act('goPff')} style={{fontFamily: 'Outfit,sans-serif', fontSize: '12.5px', fontWeight: '600', padding: '8px 18px', borderRadius: '999px', border: 'none', cursor: 'pointer', background: 'transparent', color: '#5b6472', whiteSpace: 'nowrap', transition: 'background .25s cubic-bezier(.2,.7,.3,1),color .2s ease'}}>{t("Force")}</button>
               </div>
               <button data-act="togglePause" onClick={() => act('togglePause')} title="Pause / play auto-switch" style={{width: '34px', height: '34px', borderRadius: '50%', border: '1px solid #e4eaf5', background: '#ffffff', color: '#1a56db', cursor: 'pointer', display: 'grid', placeItems: 'center', boxShadow: '0 2px 10px rgba(15,23,41,.05)', fontSize: '10px', fontWeight: '700', transition: 'background .2s'}} data-hv="hv-0"><span data-bk="pauseIcon">{b('pauseIcon')}</span></button>
             </div>
-            <div style={{minHeight: '210px', marginTop: '10px'}}>
+            <div className="hero-headpara" style={{minHeight: '210px', marginTop: '10px'}}>
               {c('isBiz') && (<>
                 <div style={{animation: 'slideInR .5s cubic-bezier(.2,.7,.3,1) both'}}>
-                  <h1 style={{fontFamily: '\'Space Grotesk\',\'Outfit\',sans-serif', fontSize: '50px', lineHeight: '1.1', fontWeight: '700', letterSpacing: '-1.2px', margin: '20px 0 0', color: '#0f1729', textWrap: 'pretty'}}>{t("Go 100% paperless.")} <span style={{color: '#1a56db'}}>{t("Transform your operations.")}</span></h1>
-                  <p style={{fontSize: '18px', lineHeight: '1.6', color: '#4b5565', margin: '18px auto 0', maxWidth: '600px', textWrap: 'pretty'}}>{t("BusinessFlo moves approvals, workflows, finance, inventory and daily reporting off paper and into one connected ERP — every request routed, every action audited, every number live.")}</p>
+                  <h1 className="hero-h1" style={{fontFamily: '\'Space Grotesk\',\'Outfit\',sans-serif', fontSize: '50px', lineHeight: '1.1', fontWeight: '700', letterSpacing: '-1.2px', margin: '20px 0 0', color: '#0f1729', textWrap: 'pretty'}}>{t("Go 100% paperless.")} <span style={{color: '#1a56db'}}>{t("Transform your operations.")}</span></h1>
+                  <p className="hero-p-orig" style={{fontSize: '18px', lineHeight: '1.6', color: '#4b5565', margin: '18px auto 0', maxWidth: '600px', textWrap: 'pretty'}}>{t("BusinessFlo moves approvals, workflows, finance, inventory and daily reporting off paper and into one connected ERP — every request routed, every action audited, every number live.")}</p>
                 </div>
               </>)}
               {c('isPn') && (<>
                 <div style={{animation: 'slideInR .5s cubic-bezier(.2,.7,.3,1) both'}}>
-                  <h1 style={{fontFamily: '\'Space Grotesk\',\'Outfit\',sans-serif', fontSize: '50px', lineHeight: '1.1', fontWeight: '700', letterSpacing: '-1.2px', margin: '20px 0 0', color: '#0f1729', textWrap: 'pretty'}}>{t("One platform for")} <span style={{color: '#1a56db'}}>{t("all your workspace operations.")}</span></h1>
-                  <p style={{fontSize: '18px', lineHeight: '1.6', color: '#4b5565', margin: '18px auto 0', maxWidth: '600px', textWrap: 'pretty'}}>{t("PeopleNest manages employees, attendance, leave, payroll, performance, documents and every HR workflow from one modern platform — with a self-service view for every employee.")}</p>
+                  <h1 className="hero-h1" style={{fontFamily: '\'Space Grotesk\',\'Outfit\',sans-serif', fontSize: '50px', lineHeight: '1.1', fontWeight: '700', letterSpacing: '-1.2px', margin: '20px 0 0', color: '#0f1729', textWrap: 'pretty'}}>{t("One platform for")} <span style={{color: '#1a56db'}}>{t("all your workspace operations.")}</span></h1>
+                  <p className="hero-p-orig" style={{fontSize: '18px', lineHeight: '1.6', color: '#4b5565', margin: '18px auto 0', maxWidth: '600px', textWrap: 'pretty'}}>{t("PeopleNest manages employees, attendance, leave, payroll, performance, documents and every HR workflow from one modern platform — with a self-service view for every employee.")}</p>
                 </div>
               </>)}
               {c('isPff') && (<>
                 <div style={{animation: 'slideInR .5s cubic-bezier(.2,.7,.3,1) both'}}>
-                  <h1 style={{fontFamily: '\'Space Grotesk\',\'Outfit\',sans-serif', fontSize: '50px', lineHeight: '1.1', fontWeight: '700', letterSpacing: '-1.2px', margin: '20px 0 0', color: '#0f1729', textWrap: 'pretty'}}>{t("Track every call.")} <span style={{color: '#1a56db'}}>{t("Empower your field force.")}</span></h1>
-                  <p style={{fontSize: '18px', lineHeight: '1.6', color: '#4b5565', margin: '18px auto 0', maxWidth: '600px', textWrap: 'pretty'}}>{t("Field Force plans field visits, tracks calls, manages doctors and pharmacies, and turns territory activity into live field performance analytics — visible the moment it happens.")}</p>
+                  <h1 className="hero-h1" style={{fontFamily: '\'Space Grotesk\',\'Outfit\',sans-serif', fontSize: '50px', lineHeight: '1.1', fontWeight: '700', letterSpacing: '-1.2px', margin: '20px 0 0', color: '#0f1729', textWrap: 'pretty'}}>{t("Track every call.")} <span style={{color: '#1a56db'}}>{t("Empower your field force.")}</span></h1>
+                  <p className="hero-p-orig" style={{fontSize: '18px', lineHeight: '1.6', color: '#4b5565', margin: '18px auto 0', maxWidth: '600px', textWrap: 'pretty'}}>{t("Field Force plans field visits, tracks calls, manages doctors and pharmacies, and turns territory activity into live field performance analytics — visible the moment it happens.")}</p>
                 </div>
               </>)}
             </div>
@@ -71,8 +71,9 @@ export default function HeroSection() {
           
           <div className="rtl-mock" style={{maxWidth: '1120px', margin: '132px auto 0', padding: '0 40px 92px', position: 'relative'}}>
             {c('isBiz') && (<>
-            <div style={{position: 'relative', animation: 'slideInR .55s cubic-bezier(.2,.7,.3,1) both'}}>
-              <div style={{background: '#ffffff', border: '1px solid #e7ecf5', borderRadius: '16px', boxShadow: '0 50px 100px -40px rgba(15,23,41,.35)', overflow: 'hidden'}}>
+            <div className="hm-float-wrap" style={{position: 'relative', animation: 'slideInR .55s cubic-bezier(.2,.7,.3,1) both'}}>
+              <div className="hm-scale-scroll-wrap hm-float-main" style={{'--hm-w': '1040px', '--hm-h': '580px'}}>
+              <div className="hm-scale-scroll" style={{background: '#ffffff', border: '1px solid #e7ecf5', borderRadius: '16px', boxShadow: '0 50px 100px -40px rgba(15,23,41,.35)', overflow: 'hidden'}}>
                 
                 <div style={{display: 'flex', alignItems: 'center', gap: '14px', padding: '12px 18px', borderBottom: '1px solid #eef1f6'}}>
                   <span style={{display: 'flex', flexDirection: 'column', gap: '3px'}}><span style={{width: '16px', height: '2px', background: '#39404d', borderRadius: '2px'}}></span><span style={{width: '16px', height: '2px', background: '#39404d', borderRadius: '2px'}}></span><span style={{width: '16px', height: '2px', background: '#39404d', borderRadius: '2px'}}></span></span>
@@ -140,16 +141,18 @@ export default function HeroSection() {
           <span style={{display: 'flex', alignItems: 'center', marginTop: '5px'}}><span style={{fontSize: '9.5px', color: '#8a94a6'}}>{t("10-Jun-2026 · 3 weeks ago")}</span><span style={{marginInlineStart: 'auto', fontSize: '10px', fontWeight: '600', color: '#1a56db', cursor: 'pointer'}}>{t("Open ↗")}</span></span>
         </span></div>
                     </div>
-                    
+
                   </div>
                 </div>
               </div>
-              <div style={{position: 'absolute', top: '-186px', insetInlineStart: '-14px', width: '300px', textAlign: 'center', zIndex: '7', pointerEvents: 'none'}}>
+              </div>
+              <div className="hm-annotate" style={{position: 'absolute', top: '-186px', insetInlineStart: '-14px', width: '300px', textAlign: 'center', zIndex: '7', pointerEvents: 'none'}}>
                 <div style={{fontFamily: 'Caveat,cursive', fontWeight: '700', fontSize: '38px', letterSpacing: '.5px', color: '#1a56db', lineHeight: '1', transform: 'rotate(-3deg)'}}>{t("AI Hub")}</div>
                 <div style={{fontFamily: 'Outfit,sans-serif', fontSize: '12px', fontWeight: '500', color: '#1a56db', lineHeight: '1.4', marginTop: '4px'}}>{t("AI chat, support tickets & quick help —")}<br />{t("built into every interactive field")}</div>
                 <svg width="84" height="74" viewBox="0 0 84 74" fill="none" style={{marginTop: '2px', marginInlineStart: '104px'}}><path d="M44 8 C 10 6, 8 44, 38 38 C 60 34, 48 60, 44 70" stroke="#1a56db" strokeWidth="5" fill="none" strokeLinecap="round" strokeLinejoin="round" style={{strokeDasharray: '240', animation: 'drawCurve 2.6s ease-in-out infinite'}}></path><path d="M44 70 L 33 56 M44 70 L 56 58" stroke="#1a56db" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" style={{animation: 'drawHead 2.6s ease-in-out infinite'}}></path></svg>
               </div>
-              <div style={{position: 'absolute', top: '-30px', insetInlineStart: '-14px', zIndex: '6', width: '300px', borderRadius: '16px', overflow: 'hidden', background: '#ffffff', border: '1px solid #e9edf4', boxShadow: '0 30px 60px -22px rgba(15,23,41,.34)', animation: 'floatY 6.5s ease-in-out infinite'}}>
+              <span className="hm-float-caption">{t("✨ Built-in AI assistant")}</span>
+              <div className="hm-float" style={{position: 'absolute', top: '-30px', insetInlineStart: '-14px', zIndex: '6', width: '300px', borderRadius: '16px', overflow: 'hidden', background: '#ffffff', border: '1px solid #e9edf4', boxShadow: '0 30px 60px -22px rgba(15,23,41,.34)', animation: 'floatY 6.5s ease-in-out infinite'}}>
         <div style={{display: 'flex', alignItems: 'center', background: 'linear-gradient(90deg,#2c6ef2,#6d5df6)', padding: '11px 15px'}}>
           <span style={{fontSize: '13px', fontWeight: '700', color: '#ffffff'}}>✦ <span data-bk="aiTitle">{t(b('aiTitle'))}</span></span>
           <span style={{marginInlineStart: 'auto', fontSize: '12px', color: 'rgba(255,255,255,.8)', cursor: 'pointer'}}>✕</span>
@@ -219,7 +222,8 @@ export default function HeroSection() {
         </>)}
       </div>
               
-            <div style={{position: 'absolute', bottom: '-24px', insetInlineEnd: '-22px', zIndex: '20', width: '322px', animation: 'floatY2 7.5s ease-in-out infinite'}}><div style={{background: '#ffffff', border: '1px solid #eef1f6', borderRadius: '18px', boxShadow: '0 40px 80px -26px rgba(15,23,41,.4)', padding: '20px 22px', transformOrigin: 'top left', animation: 'emerge 1.1s cubic-bezier(.2,.7,.3,1) both'}}>
+            <span className="hm-float-caption">{t("📊 Live approval tracking")}</span>
+            <div className="hm-float" style={{position: 'absolute', bottom: '-24px', insetInlineEnd: '-22px', zIndex: '20', width: '322px', animation: 'floatY2 7.5s ease-in-out infinite'}}><div style={{background: '#ffffff', border: '1px solid #eef1f6', borderRadius: '18px', boxShadow: '0 40px 80px -26px rgba(15,23,41,.4)', padding: '20px 22px', transformOrigin: 'top left', animation: 'emerge 1.1s cubic-bezier(.2,.7,.3,1) both'}}>
         <div style={{fontSize: '15px', fontWeight: '700', color: '#0f1729'}}>{t("Approval Status")}</div>
         <div style={{fontSize: '11px', color: '#8a94a6'}}>{t("This Month")}</div>
         <div style={{display: 'grid', placeItems: 'center', padding: '16px 0 12px'}}>
@@ -236,16 +240,17 @@ export default function HeroSection() {
             </div>
             </>)}
             {c('isPn') && (<>
-            <div style={{position: 'relative', animation: 'slideInR .55s cubic-bezier(.2,.7,.3,1) both'}}>
-              <div style={{position: 'absolute', top: '-118px', insetInlineStart: '52px', zIndex: '60', pointerEvents: 'none', textAlign: 'start'}}>
+            <div className="hm-float-wrap" style={{position: 'relative', animation: 'slideInR .55s cubic-bezier(.2,.7,.3,1) both'}}>
+              <div className="hm-annotate" style={{position: 'absolute', top: '-118px', insetInlineStart: '52px', zIndex: '60', pointerEvents: 'none', textAlign: 'start'}}>
                 <div style={{fontFamily: 'Caveat,cursive', fontWeight: '700', fontSize: '34px', letterSpacing: '.5px', color: '#1a56db', lineHeight: '1'}}>{t("Try our menu")}</div>
                 <svg className="anno-arrow" width="96" height="106" viewBox="0 0 96 106" fill="none" style={{display: 'block', margin: '2px 0 0 30px'}}><path d="M34 8 C 6 20, 6 56, 38 50 C 64 45, 52 80, 62 98" stroke="#1a56db" strokeWidth="5" fill="none" strokeLinecap="round" strokeLinejoin="round" style={{strokeDasharray: '260', animation: 'drawCurve 2.6s ease-in-out infinite'}}></path><path d="M62 98 L 48 88 M62 98 L 72 82" stroke="#1a56db" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" style={{animation: 'drawHead 2.6s ease-in-out infinite'}}></path></svg>
               </div>
-              <div style={{position: 'absolute', top: '110px', insetInlineStart: '-172px', width: '150px', zIndex: '60', pointerEvents: 'none', textAlign: 'center'}}>
+              <div className="hm-annotate" style={{position: 'absolute', top: '110px', insetInlineStart: '-172px', width: '150px', zIndex: '60', pointerEvents: 'none', textAlign: 'center'}}>
                 <svg className="anno-arrow" width="148" height="56" viewBox="0 0 148 56" fill="none" style={{display: 'block', margin: '0 0 2px auto'}}><path d="M8 48 C 44 42, 98 30, 142 10" stroke="#1a56db" strokeWidth="5" fill="none" strokeLinecap="round" strokeLinejoin="round" style={{strokeDasharray: '220', animation: 'drawCurve 2.6s ease-in-out infinite'}}></path><path d="M142 10 L 126 12 M142 10 L 134 26" stroke="#1a56db" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" style={{animation: 'drawHead 2.6s ease-in-out infinite'}}></path></svg>
                 <div style={{fontFamily: 'Caveat,cursive', fontWeight: '700', fontSize: '27px', letterSpacing: '.4px', color: '#1a56db', lineHeight: '1.05'}}>{t("click to change")}<br />{t("the view")}</div>
               </div>
-              <div style={{position: 'relative', background: '#ffffff', border: '1px solid #e7ecf5', borderRadius: '16px', boxShadow: '0 50px 100px -40px rgba(15,23,41,.35)', overflow: 'hidden'}}>
+              <div className="hm-scale-scroll-wrap hm-float-main" style={{'--hm-w': '1040px', '--hm-h': '620px'}}>
+              <div className="hm-scale-scroll" style={{position: 'relative', background: '#ffffff', border: '1px solid #e7ecf5', borderRadius: '16px', boxShadow: '0 50px 100px -40px rgba(15,23,41,.35)', overflow: 'hidden'}}>
                 <div style={{display: 'flex', alignItems: 'center', gap: '14px', padding: '11px 18px', borderBottom: '1px solid #eef1f6', position: 'relative', zIndex: '30'}}>
                   <img src="/assets/images/logos/people-nest-logo.png" onError={(e) => { e.currentTarget.style.visibility = 'hidden'; }} alt="PeopleNest" style={{height: '19px', display: 'block'}} />
                   <span style={{flex: '1', display: 'flex', justifyContent: 'flex-start', gap: '22px', alignItems: 'center', margin: '0 14px', overflow: 'hidden'}}><button data-act="pnRec" onClick={() => act('pnRec')} style={{fontFamily: 'Outfit,sans-serif', display: 'flex', alignItems: 'center', gap: '5px', whiteSpace: 'nowrap', fontSize: '10.5px', fontWeight: '600', color: '#39404d', background: 'none', border: 'none', cursor: 'pointer', padding: '6px 9px', borderRadius: '9px', transition: 'all .15s'}} data-hv="hv-5"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect></svg>{t("Employee Recruitment")} <span style={{fontSize: '8px', opacity: '.7'}}>▾</span></button><button data-act="pnPd" onClick={() => act('pnPd')} style={{fontFamily: 'Outfit,sans-serif', display: 'flex', alignItems: 'center', gap: '5px', whiteSpace: 'nowrap', fontSize: '10.5px', fontWeight: '600', color: '#39404d', background: 'none', border: 'none', cursor: 'pointer', padding: '6px 9px', borderRadius: '9px', transition: 'all .15s'}} data-hv="hv-5"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg>{t("People Directory")} <span style={{fontSize: '8px', opacity: '.7'}}>▾</span></button><button data-act="pnTm" onClick={() => act('pnTm')} style={{fontFamily: 'Outfit,sans-serif', display: 'flex', alignItems: 'center', gap: '5px', whiteSpace: 'nowrap', fontSize: '10.5px', fontWeight: '600', color: '#39404d', background: 'none', border: 'none', cursor: 'pointer', padding: '6px 9px', borderRadius: '9px', transition: 'all .15s'}} data-hv="hv-5"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>{t("Time Management")} <span style={{fontSize: '8px', opacity: '.7'}}>▾</span></button><button data-act="pnPay" onClick={() => act('pnPay')} style={{fontFamily: 'Outfit,sans-serif', display: 'flex', alignItems: 'center', gap: '5px', whiteSpace: 'nowrap', fontSize: '10.5px', fontWeight: '600', color: '#39404d', background: 'none', border: 'none', cursor: 'pointer', padding: '6px 9px', borderRadius: '9px', transition: 'all .15s'}} data-hv="hv-5"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path></svg>{t("Payroll")} <span style={{fontSize: '8px', opacity: '.7'}}>▾</span></button></span>
@@ -341,8 +346,10 @@ export default function HeroSection() {
                   </div></>)}
                 </div>
               </div>
-              
-              <div style={{position: 'absolute', top: '-26px', insetInlineEnd: '-18px', zIndex: '40', width: '320px', background: '#ffffff', border: '1px solid #eef1f6', borderRadius: '16px', boxShadow: '0 34px 66px -22px rgba(15,23,41,.36)', padding: '16px', animation: 'floatY2 7s ease-in-out infinite'}}>
+              </div>
+
+              <span className="hm-float-caption">{t("🔍 Instant search, anywhere")}</span>
+              <div className="hm-float" style={{position: 'absolute', top: '-26px', insetInlineEnd: '-18px', zIndex: '40', width: '320px', background: '#ffffff', border: '1px solid #eef1f6', borderRadius: '16px', boxShadow: '0 34px 66px -22px rgba(15,23,41,.36)', padding: '16px', animation: 'floatY2 7s ease-in-out infinite'}}>
                 <div style={{display: 'flex', alignItems: 'center', gap: '8px', border: '1.5px solid #1a56db', borderRadius: '11px', padding: '9px 12px'}}>
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8a94a6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4-4"></path></svg>
                   <span style={{display: 'inline-block', overflow: 'hidden', whiteSpace: 'nowrap', fontSize: '13px', color: '#0f1729', borderInlineEnd: '1.5px solid #1a56db', paddingInlineEnd: '1px', animation: 'typeflush 5.5s cubic-bezier(.5,0,.5,1) infinite, caretB 1s steps(1) infinite'}}>{t("Employee Leave Request")}</span>
@@ -361,7 +368,8 @@ export default function HeroSection() {
                 <div style={{fontSize: '9px', color: '#8a94a6', marginTop: '8px', paddingTop: '9px', borderTop: '1px solid #eef1f6'}}>{t("↑↓ navigate · Enter open · Esc close · Ctrl+K toggle")}</div>
               </div>
               
-              <div style={{position: 'absolute', bottom: '-34px', insetInlineStart: '-30px', zIndex: '8', width: '262px', background: '#ffffff', border: '1px solid #eef1f6', borderRadius: '18px', boxShadow: '0 38px 72px -22px rgba(15,23,41,.42)', padding: '18px 19px', animation: 'floatY 7s ease-in-out infinite'}}>
+              <span className="hm-float-caption">{t("🧭 Visual org chart")}</span>
+              <div className="hm-float" style={{position: 'absolute', bottom: '-34px', insetInlineStart: '-30px', zIndex: '8', width: '262px', background: '#ffffff', border: '1px solid #eef1f6', borderRadius: '18px', boxShadow: '0 38px 72px -22px rgba(15,23,41,.42)', padding: '18px 19px', animation: 'floatY 7s ease-in-out infinite'}}>
                 <div style={{display: 'flex', alignItems: 'center'}}><span style={{display: 'flex', alignItems: 'center', gap: '7px', fontSize: '13px', fontWeight: '800', color: '#0f1729'}}><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1a56db" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="3" width="6" height="5" rx="1"></rect><rect x="3" y="16" width="6" height="5" rx="1"></rect><rect x="15" y="16" width="6" height="5" rx="1"></rect><path d="M12 8v4M6 16v-2h12v2"></path></svg>{t("Org Chart")}</span><span style={{marginInlineStart: 'auto', fontSize: '10.5px', fontWeight: '600', color: '#1a56db'}}>{t("View All ↗")}</span></div>
                 <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '12px'}}>
                   <div style={{width: '196px', background: '#fff', border: '1px solid #eef1f6', borderRadius: '11px', padding: '11px', textAlign: 'center'}}><span style={{width: '34px', height: '34px', borderRadius: '50%', background: '#eef2fb', color: '#1a56db', display: 'grid', placeItems: 'center', fontSize: '11px', fontWeight: '700', margin: '0 auto'}}>SR</span><div style={{fontSize: '11.5px', fontWeight: '700', color: '#0f1729', marginTop: '6px'}}>{t("Sofia Rossi")}</div><div style={{fontSize: '9.5px', color: '#8a94a6', marginTop: '1px', lineHeight: '1.3'}}>{t("Managing Director")}</div></div>
@@ -378,8 +386,9 @@ export default function HeroSection() {
             </div>
             </>)}
             {c('isPff') && (<>
-            <div style={{position: 'relative', animation: 'slideInR .55s cubic-bezier(.2,.7,.3,1) both'}}>
-              <div style={{display: 'flex', background: '#ffffff', border: '1px solid #e7ecf5', borderRadius: '16px', boxShadow: '0 50px 100px -40px rgba(15,23,41,.35)', overflow: 'hidden', minHeight: '520px'}}>
+            <div className="hm-float-wrap" style={{position: 'relative', animation: 'slideInR .55s cubic-bezier(.2,.7,.3,1) both'}}>
+              <div className="hm-scale-scroll-wrap hm-float-main" style={{'--hm-w': '1040px', '--hm-h': '520px'}}>
+              <div className="hm-scale-scroll" style={{display: 'flex', background: '#ffffff', border: '1px solid #e7ecf5', borderRadius: '16px', boxShadow: '0 50px 100px -40px rgba(15,23,41,.35)', overflow: 'hidden', minHeight: '520px'}}>
                 
                 <div style={{width: '180px', flexShrink: '0', borderInlineEnd: '1px solid #f0f3f8', display: 'flex', flexDirection: 'column', padding: '16px 12px'}}>
                   <div style={{display: 'flex', alignItems: 'center', gap: '7px', padding: '0 6px 14px'}}><span style={{fontSize: '17px', fontWeight: '800', letterSpacing: '1px', color: '#0e9384'}}>F<span style={{color: '#f5a623'}}>O</span>RCE</span></div>
@@ -440,9 +449,9 @@ export default function HeroSection() {
                   </div>
                 </div>
               </div>
-      
-              
-              <div style={{position: 'absolute', bottom: '-30px', insetInlineStart: '-26px', zIndex: '8', width: '262px', background: '#fff', border: '1px solid #eef1f6', borderRadius: '18px', boxShadow: '0 40px 78px -24px rgba(15,23,41,.42)', padding: '18px 19px', animation: 'floatY 7s ease-in-out infinite'}}>
+              </div>
+              <span className="hm-float-caption">{t("📋 Every call, logged")}</span>
+              <div className="hm-float" style={{position: 'absolute', bottom: '-30px', insetInlineStart: '-26px', zIndex: '8', width: '262px', background: '#fff', border: '1px solid #eef1f6', borderRadius: '18px', boxShadow: '0 40px 78px -24px rgba(15,23,41,.42)', padding: '18px 19px', animation: 'floatY 7s ease-in-out infinite'}}>
                 <div style={{display: 'flex', alignItems: 'center'}}><span style={{fontSize: '16px', fontWeight: '800', color: '#0f1729'}}>{t("Call Details")}</span><span style={{marginInlineStart: 'auto', width: '22px', height: '22px', borderRadius: '50%', background: '#f3f5fb', display: 'grid', placeItems: 'center', fontSize: '10px', color: '#5b6472'}}>✕</span></div>
                 <div style={{fontSize: '9px', fontWeight: '700', letterSpacing: '1px', color: '#8a94a6', marginTop: '13px'}}>{t("DOCTOR INFORMATION")}</div>
                 <div style={{display: 'flex', alignItems: 'center', gap: '10px', background: '#f4f8f7', border: '1px solid #e2f0ed', borderRadius: '12px', padding: '10px 11px', marginTop: '5px'}}><span style={{width: '34px', height: '34px', borderRadius: '50%', background: '#0e9384', color: '#fff', display: 'grid', placeItems: 'center', fontSize: '12px', fontWeight: '700', flexShrink: '0'}}>FR</span><span><span style={{display: 'block', fontSize: '12.5px', fontWeight: '700', color: '#0f1729'}}>{t("Dr. Faizan Rehman")}</span><span style={{display: 'block', fontSize: '9.5px', color: '#8a94a6', lineHeight: '1.4'}}>{t("Northline General Hospital, Lahore")}</span></span></div>
@@ -456,7 +465,8 @@ export default function HeroSection() {
               </div>
       
               
-              <div style={{position: 'absolute', top: '-28px', insetInlineEnd: '-20px', zIndex: '8', width: '186px', background: '#16302c', borderRadius: '26px', padding: '8px', boxShadow: '0 40px 78px -24px rgba(15,23,41,.5)', animation: 'floatY2 7.5s ease-in-out infinite'}}>
+              <span className="hm-float-caption">{t("📱 Field visits, on mobile")}</span>
+              <div className="hm-float" style={{position: 'absolute', top: '-28px', insetInlineEnd: '-20px', zIndex: '8', width: '186px', background: '#16302c', borderRadius: '26px', padding: '8px', boxShadow: '0 40px 78px -24px rgba(15,23,41,.5)', animation: 'floatY2 7.5s ease-in-out infinite'}}>
                 <div style={{background: '#f4f8f7', borderRadius: '19px', overflow: 'hidden'}}>
                   <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '6px 11px 4px', fontSize: '7.5px', fontWeight: '700', color: '#0f1729'}}><span>9:41</span><span>▪▪▪ ▪ ◔</span></div>
                   <div style={{display: 'flex', alignItems: 'center', gap: '6px', padding: '4px 10px 8px', background: '#fff'}}><span style={{display: 'flex', flexDirection: 'column', gap: '2px'}}><span style={{width: '11px', height: '1.6px', background: '#39404d'}}></span><span style={{width: '11px', height: '1.6px', background: '#39404d'}}></span><span style={{width: '11px', height: '1.6px', background: '#39404d'}}></span></span><span style={{flex: '1', display: 'flex', alignItems: 'center', gap: '4px', border: '1px solid #d3e6e2', borderRadius: '99px', padding: '4px 8px'}}><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#0e9384" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg><span style={{fontSize: '8px', fontWeight: '600', color: '#0f1729'}}>{t("Rehan Dilawar")}</span><span style={{marginInlineStart: 'auto', fontSize: '6px', color: '#8a94a6'}}>▾</span></span><span style={{width: '16px', height: '16px', borderRadius: '50%', background: '#0e9384', color: '#fff', display: 'grid', placeItems: 'center', fontSize: '7px'}}>◔</span></div>
@@ -491,6 +501,11 @@ export default function HeroSection() {
               </div>
             </div>
             </>)}
+          </div>
+          <div className="hero-p-mobile-wrap">
+            {c('isBiz') && (<p className="hero-p-mobile">{t("BusinessFlo moves approvals, workflows, finance, inventory and daily reporting off paper and into one connected ERP — every request routed, every action audited, every number live.")}</p>)}
+            {c('isPn') && (<p className="hero-p-mobile">{t("PeopleNest manages employees, attendance, leave, payroll, performance, documents and every HR workflow from one modern platform — with a self-service view for every employee.")}</p>)}
+            {c('isPff') && (<p className="hero-p-mobile">{t("Field Force plans field visits, tracks calls, manages doctors and pharmacies, and turns territory activity into live field performance analytics — visible the moment it happens.")}</p>)}
           </div>
         </section>
     </>

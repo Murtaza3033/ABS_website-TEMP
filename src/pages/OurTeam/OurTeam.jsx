@@ -134,8 +134,8 @@ export default function OurTeam() {
       </div>
       {/* diagonal spine SVG */}
       <svg ref={svgRef} data-spine-svg viewBox="0 0 100 1000" preserveAspectRatio="none" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1, pointerEvents: 'none', transition: 'opacity .4s ease' }}>
-        <path d={SPINE_PATH} fill="none" stroke="rgba(75,139,255,.4)" strokeWidth="0.9" strokeLinecap="round" style={{ filter: 'drop-shadow(0 0 4px rgba(75,139,255,.4))' }} />
-        <path ref={pathRef} d={SPINE_PATH} pathLength="100" fill="none" stroke="#4b8bff" strokeWidth="0.7" strokeLinecap="round" style={{ strokeDasharray: 100, strokeDashoffset: 100, filter: 'drop-shadow(0 0 7px rgba(75,139,255,.85))' }} />
+        <path d={SPINE_PATH} fill="none" stroke="rgba(143,184,255,.35)" strokeWidth="0.9" strokeLinecap="round" style={{ filter: 'drop-shadow(0 0 4px rgba(143,184,255,.35))' }} />
+        <path ref={pathRef} d={SPINE_PATH} pathLength="100" fill="none" stroke="#8fb8ff" strokeWidth="0.7" strokeLinecap="round" style={{ strokeDasharray: 100, strokeDashoffset: 100, filter: 'drop-shadow(0 0 7px rgba(143,184,255,.75))' }} />
       </svg>
 
       <ParticleCanvas />

@@ -55,10 +55,17 @@ h1,h2,h3{font-family:var(--font-sans);}
           mask-image:radial-gradient(ellipse 82% 78% at 50% 34%,#000,transparent 76%);}
 .evMontage span{position:absolute;inset:0;background-size:cover;background-position:center;filter:grayscale(1) contrast(1.03);opacity:0;transition:opacity 1.8s ease;transform:scale(1.05);}
 .evMontage span.on{opacity:.12;}
-.trustline{display:inline-flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;font-size:13px;font-weight:700;letter-spacing:.5px;color:#6b7688;text-transform:uppercase;margin-top:24px;}
-.trustline .tdot{width:5px;height:5px;border-radius:50%;background:#c9d5ea;}
-.scrollcue{display:inline-flex;flex-direction:column;align-items:center;gap:3px;margin-top:26px;color:var(--blue);font-size:9.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;opacity:.75;}
-.scrollcue svg{animation:cueBob 1.9s ease-in-out infinite;}
+/* Renamed from the generic .trustline/.scrollcue: this project has no CSS
+   scoping, so every page's stylesheet is bundled together globally — other
+   pages (industries.css, our-clients.css, our-partners.css) define their own
+   same-named classes with different rules, and whichever loaded last in the
+   bundle silently won here, which is exactly how "Explore" ended up
+   absolutely-positioned (our-partners.css's version) and overlapping
+   "Conferences" instead of flowing normally below it. */
+.evt-trustline{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;font-size:13px;font-weight:700;letter-spacing:.5px;color:#6b7688;text-transform:uppercase;margin-top:24px;}
+.evt-trustline .tdot{width:5px;height:5px;border-radius:50%;background:#c9d5ea;}
+.evt-scrollcue{display:flex;flex-direction:column;align-items:center;gap:3px;margin-top:26px;color:var(--blue);font-size:9.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;opacity:.75;}
+.evt-scrollcue svg{animation:cueBob 1.9s ease-in-out infinite;}
 @keyframes cueBob{0%,100%{transform:translateY(0);opacity:.5;}50%{transform:translateY(6px);opacity:1;}}
 @keyframes kenBurns{0%{transform:scale(1.02);}100%{transform:scale(1.13);}}
 .evStageBtn{position:absolute;right:20px;top:18px;width:38px;height:38px;border-radius:11px;border:none;cursor:pointer;background:rgba(15,23,41,.5);color:#fff;display:grid;place-items:center;transition:background .2s ease,transform .2s ease;z-index:3;}

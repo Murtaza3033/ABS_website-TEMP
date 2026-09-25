@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { HomeProvider } from './HomeContext';
 import HeroSection from './sections/HeroSection';
 import ClientsSection from './sections/ClientsSection';
@@ -20,6 +21,25 @@ export default function Home() {
   const { lang } = useLanguage();
   const { data: cmsPage } = usePage('home');
   const seo = resolveSeo(cmsPage?.seo, lang);
+
+  // Adds .js-revealed the first time each [data-reveal]/.hm-stagger element
+  // scrolls into view — same one-shot IntersectionObserver approach
+  // Reveal.jsx uses elsewhere on the site, so entrance timing is identical
+  // across every browser instead of depending on scroll-timeline support.
+  // Runs under reduced-motion too: the stylesheet swaps the slide for a
+  // plain cross-fade there rather than dropping the entrance entirely, so
+  // the class still needs to land.
+  useEffect(() => {
+    const els = document.querySelectorAll('[data-reveal], .hm-stagger');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) { entry.target.classList.add('js-revealed'); io.unobserve(entry.target); }
+      });
+    }, { threshold: 0.15 });
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+
   return (
     <HomeProvider>
       <main className="home-rtl">

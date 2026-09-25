@@ -71,7 +71,6 @@ export default function OurAdvisors() {
           <div className="adShape" style={{ bottom: '30%', right: '22%', width: '22px', height: '22px', border: '2px solid rgba(26,86,219,.22)', borderRadius: '6px', transform: 'rotate(20deg)', animation: 'advFloatShape 10s ease-in-out .3s infinite' }} />
         </div>
         <div style={{ maxWidth: '920px', margin: '0 auto', textAlign: 'center', position: 'relative' }}>
-          <Reveal as={SmartLink} href="/about-us.html" style={{ display: 'inline-block', fontSize: '12px', fontWeight: 700, letterSpacing: '1.5px', color: 'var(--blue)', textTransform: 'uppercase' }}>{t("← About Align")}</Reveal>
           <Headline />
           <Reveal as="p" className="lede" style={{ margin: '22px auto 0', maxWidth: '620px' }}>{t("Building a company that businesses trust with their operations takes more than good engineering. Our advisor brings the experience that helps Align make sharper calls on strategy, growth and scale.")}</Reveal>
           <Reveal style={{ marginTop: '44px' }}><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1a56db" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ animation: 'advScrollCue 1.8s ease-in-out infinite' }}><path d="M12 5v13" /><path d="M6 12l6 6 6-6" /></svg></Reveal>

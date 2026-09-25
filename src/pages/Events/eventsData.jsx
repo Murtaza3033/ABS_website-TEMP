@@ -30,8 +30,8 @@ export const GALLERY = [
 export const gsrc = (i) => `/assets/images/about/${GALLERY[i][0]}.${GALLERY[i][1]}`;
 
 export const WHY = [
-  ['Global reach, local expertise', 'Connect with an expert who understands your market, speaks your language, and tailors support to your needs.', 'Discover what sets us apart', '/about-us.html', 'globe', 'global-reach'],
-  ['The perfect pricing plan', 'Our experts will recommend the bundle best-suited to you. Start simple and scale as you grow.', 'See our pricing', '/contact-us.html', 'tag', 'pricing'],
-  ['Access anytime, anywhere', 'Stay connected wherever you are with our mobile app.', 'Learn more', '/about-us.html', 'mobile', 'mobile-app'],
-  ['Your data, safe and sound', 'We take security and compliance seriously, with systems and processes designed to protect your business.', 'See our security standards', '/about-us.html', 'shield', 'security'],
+  ['We show up where you are', 'From regional expos to industry conferences, we go where operations teams already gather — not just online.', 'Talk to us', '/contact-us.html', 'globe', 'global-reach'],
+  ['Straight answers, not a runaround', 'Walk away from every conversation knowing exactly whether Align fits your business, and what it costs.', 'Ask us anything', '/contact-us.html', 'tag', 'pricing'],
+  ['Come see it running, live', 'We bring a real working product to every event, not a slideshow — see it running on a phone or laptop, right in front of you.', 'Book a live demo', '/contact-us.html', 'mobile', 'mobile-app'],
+  ['Bring your toughest questions', 'Security, compliance, implementation — whatever’s actually holding your decision back, ask it in person and get a straight answer.', 'Talk to our team', '/contact-us.html', 'shield', 'security'],
 ];

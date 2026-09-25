@@ -270,7 +270,7 @@ export default function SalesBot() {
             <button aria-label="Close" onClick={() => dispatch({ type: 'CLOSE' })} style={{ width: '30px', height: '30px', borderRadius: '8px', border: 'none', background: 'rgba(255,255,255,.16)', color: '#fff', cursor: 'pointer', fontSize: '18px', lineHeight: 1 }}>×</button>
           </div>
 
-          <div ref={msgsRef} style={{ flex: 1, overflowY: 'auto', padding: '18px 16px', background: TINT, display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <div ref={msgsRef} className="ab-msgs" style={{ flex: 1, overflowY: 'auto', padding: '18px 16px', background: TINT, display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {state.messages.map((m) => (
               <div key={m.id} style={{ animation: 'abSlideR .3s ease both', display: 'flex', flexDirection: 'column', gap: '8px', alignItems: m.who === 'user' ? 'flex-end' : 'flex-start' }}>
                 <div style={m.who === 'user'
@@ -281,7 +281,7 @@ export default function SalesBot() {
                 {m.opts && (
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '7px' }}>
                     {m.opts.map((o, i) => (
-                      <button key={i} onClick={o.onClick} style={{ fontFamily: 'Outfit,sans-serif', fontSize: '12.5px', fontWeight: 600, color: BLUE, background: '#fff', border: '1.5px solid #dce7fb', borderRadius: '999px', padding: '8px 14px', cursor: 'pointer' }}>{o.label}</button>
+                      <button key={i} onClick={o.onClick} style={{ fontFamily: 'Outfit,sans-serif', fontSize: '12.5px', fontWeight: 600, color: BLUE, background: '#fff', border: '1.5px solid #dce7fb', borderRadius: '999px', padding: '8px 14px', whiteSpace: 'nowrap', cursor: 'pointer' }}>{o.label}</button>
                     ))}
                   </div>
                 )}

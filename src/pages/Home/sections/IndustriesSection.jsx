@@ -1,5 +1,6 @@
 import { useHome } from '../HomeContext';
 import { useLanguage } from '../../../context/LanguageContext';
+import SmartLink from '../../../components/SmartLink';
 
 export default function IndustriesSection() {
   const { c, b, act, state } = useHome();
@@ -13,10 +14,10 @@ export default function IndustriesSection() {
                 <div style={{fontSize: '12.5px', fontWeight: '700', color: '#1a56db', letterSpacing: '1.6px', textTransform: 'uppercase'}}>{t("Who runs on Align")}</div>
                 <h2 style={{fontSize: '46px', fontWeight: '800', letterSpacing: '-1.8px', margin: '14px 0 0', lineHeight: '1.06', textWrap: 'pretty'}}>{t("Different industries,")}<br /><span style={{background: 'linear-gradient(100deg,#1a56db 0%,#4b8bff 100%)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent'}}>{t("the same discipline.")}</span></h2>
               </div>
-              <a href="Our Presence.dc.html" style={{fontSize: '15px', fontWeight: '600', color: '#1a56db', textDecoration: 'none', whiteSpace: 'nowrap'}}>{t("All industries →")}</a>
+              <SmartLink href="/industries.html" style={{fontSize: '15px', fontWeight: '600', color: '#1a56db', textDecoration: 'none', whiteSpace: 'nowrap'}}>{t("All industries →")}</SmartLink>
             </div>
       
-            <div data-reveal="1" style={{opacity: '0', transform: 'translateY(24px)', transition: 'all .7s cubic-bezier(.2,.7,.3,1)', display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '10px', marginTop: '36px'}}>
+            <div className="hm-stagger" style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '10px', marginTop: '36px'}}>
                 <button data-act="setInd0" onClick={() => act('setInd0')} style={{background: '#1a56db', color: '#ffffff', border: '1px solid #1a56db', borderRadius: '999px', padding: '9px 18px', fontSize: '13.5px', fontWeight: '600', cursor: 'pointer', transition: 'background .3s ease,color .3s ease,border-color .3s ease', whiteSpace: 'nowrap'}}>{t("Manufacturing")}</button>
                 <button data-act="setInd1" onClick={() => act('setInd1')} style={{background: '#ffffff', color: '#5b6472', border: '1px solid #e4eaf3', borderRadius: '999px', padding: '9px 18px', fontSize: '13.5px', fontWeight: '600', cursor: 'pointer', transition: 'background .3s ease,color .3s ease,border-color .3s ease', whiteSpace: 'nowrap'}}>{t("Pharmaceutical")}</button>
                 <button data-act="setInd2" onClick={() => act('setInd2')} style={{background: '#ffffff', color: '#5b6472', border: '1px solid #e4eaf3', borderRadius: '999px', padding: '9px 18px', fontSize: '13.5px', fontWeight: '600', cursor: 'pointer', transition: 'background .3s ease,color .3s ease,border-color .3s ease', whiteSpace: 'nowrap'}}>{t("Retail")}</button>
@@ -26,7 +27,7 @@ export default function IndustriesSection() {
                 <button data-act="setInd6" onClick={() => act('setInd6')} style={{background: '#ffffff', color: '#5b6472', border: '1px solid #e4eaf3', borderRadius: '999px', padding: '9px 18px', fontSize: '13.5px', fontWeight: '600', cursor: 'pointer', transition: 'background .3s ease,color .3s ease,border-color .3s ease', whiteSpace: 'nowrap'}}>{t("Services")}</button>
             </div>
       
-            <div data-reveal="1" style={{opacity: '0', transform: 'translateY(24px)', transition: 'all .7s cubic-bezier(.2,.7,.3,1)', position: 'relative', height: '480px', marginTop: '28px'}}>
+            <div className="hm-indp-wrap" data-reveal="1" style={{opacity: '0', transform: 'translateY(24px)', transition: 'all .7s cubic-bezier(.2,.7,.3,1)', position: 'relative', height: '480px', marginTop: '28px'}}>
               <div style={{position: 'absolute', inset: '0', transition: 'opacity .6s ease,transform .6s cubic-bezier(.4,0,.2,1)', opacity: '1', transform: 'none', pointerEvents: 'auto'}} data-indp="0">
                 <div style={{position: 'relative', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                   <div style={{position: 'relative', width: '70%', maxWidth: '660px', height: '430px', borderRadius: '20px', overflow: 'hidden', boxShadow: '0 44px 100px -40px rgba(26,86,219,.42)', border: '1px solid rgba(255,255,255,.6)', animation: 'floatY 8s ease-in-out infinite'}}>

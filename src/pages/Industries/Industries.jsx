@@ -139,7 +139,6 @@ export default function Industries() {
         </div>
         <div style={{ position: 'absolute', top: '-140px', left: '50%', transform: 'translateX(-50%)', width: '920px', height: '520px', background: 'radial-gradient(ellipse at center,rgba(26,86,219,.08),transparent 62%)', pointerEvents: 'none', zIndex: 0 }} />
         <div style={{ maxWidth: '880px', margin: '0 auto', textAlign: 'center', position: 'relative', zIndex: 1 }}>
-          <Reveal as={SmartLink} href="/about-us.html" className="backlink">{t("← About Align")}</Reveal>
           <h1 className="h1" data-headline>
             {HEAD.map((w, i) => (
               <Fragment key={i}>
@@ -151,14 +150,14 @@ export default function Industries() {
             ))}
           </h1>
           <Reveal as="p" className="lede" style={{ margin: '22px auto 0', maxWidth: '600px' }}>{t("Across manufacturing floors, pharmacies, storefronts and solar rooftops, we build the systems that keep operations running. Different sectors, the same discipline.")}</Reveal>
-          <Reveal className="trustline">
+          <Reveal className="ind-trustline">
             <span><b><CountUp end={6} duration={1300} /></b> {t("industries")}</span>
             <span className="tdot" />
             <span><b><CountUp end={20} duration={1300} /></b>{t("+ businesses")}</span>
             <span className="tdot" />
             <span><b>1</b> {t("platform")}</span>
           </Reveal>
-          <Reveal className="scrollcue">{t("Explore")}<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6" /></svg></Reveal>
+          <Reveal className="ind-scrollcue">{t("Explore")}<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6" /></svg></Reveal>
         </div>
       </section>
 

@@ -12,7 +12,7 @@ export default function PhoneField({ country, phone, onCountry, onPhone, onBlur,
         <select
           value={country}
           onChange={(e) => onCountry(e.target.value)}
-          className="cInput"
+          className="cInput phone-country-select"
           aria-label="Country dial code"
           style={{ width: '172px', flexShrink: 0, padding: '13px 10px' }}
         >

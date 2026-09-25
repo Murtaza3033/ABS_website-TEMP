@@ -53,7 +53,7 @@ h1,h2,h3{font-family:var(--font-sans);}
           mask-image:radial-gradient(ellipse 72% 62% at 50% 40%,#000,transparent 72%);
   animation:dotDrift 26s linear infinite;}
 @keyframes dotDrift{to{background-position:26px 52px;}}
-.trustline{display:inline-flex;align-items:center;gap:9px;flex-wrap:wrap;justify-content:center;font-size:13.5px;font-weight:600;color:#6b7688;margin-top:24px;}
+.oc-trustline{display:flex;align-items:center;gap:9px;flex-wrap:wrap;justify-content:center;font-size:13.5px;font-weight:600;color:#6b7688;margin-top:24px;}
 .trustline b{color:var(--blue);font-weight:800;}
 .trustline .tdot{width:5px;height:5px;border-radius:50%;background:#c9d5ea;}
 /* industry highlight filter */

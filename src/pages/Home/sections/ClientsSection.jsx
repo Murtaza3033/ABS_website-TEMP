@@ -8,7 +8,7 @@ export default function ClientsSection() {
       <section data-screen-label="Clients" className="ag" style={{background: '#ffffff', borderTop: '1px solid #f0f3f8', overflow: 'hidden'}}>
           <div style={{maxWidth: '1240px', margin: '0 auto', padding: '72px 32px', position: 'relative'}}>
             <div style={{position: 'relative'}}>
-              <div style={{display: 'grid', gridTemplateColumns: 'repeat(12,1fr)', gridAutoRows: '100px', gap: '12px'}}>
+              <div className="hm-logogrid" style={{display: 'grid', gridTemplateColumns: 'repeat(12,1fr)', gridAutoRows: '100px', gap: '12px'}}>
               <div style={{background: '#1a56db', borderRadius: '50%'}}></div>
               <LogoSlot />
               <div style={{background: '#e8effc', borderRadius: '18px'}}></div>

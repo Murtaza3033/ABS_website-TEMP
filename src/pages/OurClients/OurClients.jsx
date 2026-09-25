@@ -47,7 +47,6 @@ export default function OurClients() {
         <div className="dotfield" />
         <div style={{ position: 'absolute', top: '-140px', left: '50%', transform: 'translateX(-50%)', width: '920px', height: '520px', background: 'radial-gradient(ellipse at center,rgba(26,86,219,.09),transparent 62%)', pointerEvents: 'none', zIndex: 0 }} />
         <div style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center', position: 'relative', zIndex: 1 }}>
-          <Reveal as={SmartLink} href="/about-us.html" style={{ display: 'inline-block', fontSize: '12px', fontWeight: 700, letterSpacing: '1.5px', color: 'var(--blue)', textTransform: 'uppercase' }}>{t("← About Align")}</Reveal>
           <h1 className="h1" data-headline>
             {HEAD.map((w, i) => (
               <Fragment key={i}>
@@ -59,7 +58,7 @@ export default function OurClients() {
             ))}
           </h1>
           <Reveal as="p" className="lede" style={{ margin: '20px auto 0', maxWidth: '600px' }}>{t("Every name here chose to trust us with the systems their business runs on. Their growth is the story we're proudest of — and the reason we keep building.")}</Reveal>
-          <Reveal className="trustline">
+          <Reveal className="oc-trustline">
             <span>{t("Trusted by")} <b><CountUp end={35} duration={1400} /></b>{t("+ businesses")}</span>
             <span className="tdot" />
             <span>{t("across")} <b>6</b> {t("industries")}</span>

@@ -38,7 +38,7 @@ button,input,textarea,select{font-family:inherit;}
 .cInput:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,86,219,.12);}
 .cInput.cErr{border-color:#dc3545;box-shadow:0 0 0 3px rgba(220,53,69,.1);}
 .cErrMsg{display:flex;align-items:center;gap:5px;font-size:12px;color:#dc3545;margin-top:6px;font-weight:500;}
-.cOpt{cursor:pointer;font-family:var(--font-sans);font-size:14.5px;font-weight:500;color:var(--ink);background:#fff;border:1.5px solid #e3e9f3;border-radius:999px;padding:11px 20px;transition:all .2s ease;}
+.cOpt{cursor:pointer;font-family:var(--font-sans);font-size:14.5px;font-weight:500;color:var(--ink);background:#fff;border:1.5px solid #e3e9f3;border-radius:999px;padding:11px 20px;white-space:nowrap;transition:all .2s ease;}
 .cOpt:hover{border-color:var(--blue);color:var(--blue);background:#eef4ff;}
 .cInfoLink:hover{color:var(--blue) !important;}
 .cInfoLink:hover .cInfoLdot{background:var(--blue) !important;}
@@ -46,3 +46,15 @@ button,input,textarea,select{font-family:inherit;}
 .hero-eyebrow{font-size:12px;font-weight:700;letter-spacing:2px;color:var(--blue);text-transform:uppercase;}
 @media (prefers-reduced-motion:reduce){*{animation:none !important;}.cReveal{opacity:1 !important;}}
 @media (max-width:820px){.cGrid2{grid-template-columns:1fr !important;}.cContactGrid{grid-template-columns:1fr !important;}}
+@media (max-width:344px){
+  /* The map pin tooltip's fixed 270px maxWidth plus its 24px left offset
+     needs 294px of room — right below that, its own right edge starts
+     clipping against the section edge. Cap it against the right edge too. */
+  .presence-tooltip{right:16px;max-width:none;}
+}
+@media (max-width:400px){
+  /* Fixed 172px country-code select next to the flex:1 phone number input
+     leaves the number field only ~60-90px wide on narrow phones — shrink
+     the select down to dial-code-only width so the number stays usable. */
+  .phone-country-select{width:92px !important;padding-left:8px !important;padding-right:4px !important;}
+}

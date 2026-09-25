@@ -1,4 +1,5 @@
-import { Routes, Route } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import { LanguageProvider } from './context/LanguageContext';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -30,9 +31,19 @@ function Placeholder({ name }) {
   );
 }
 
+// React Router doesn't reset scroll position on navigation by default —
+// without this, clicking a nav link mid-scroll on one page lands the new
+// page at that same scroll depth instead of the top.
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
+  return null;
+}
+
 export default function App() {
   return (
     <LanguageProvider>
+      <ScrollToTop />
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />

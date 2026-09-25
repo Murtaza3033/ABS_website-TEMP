@@ -65,7 +65,7 @@ export default function AboutUs() {
               <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" /><path d="M8 21h8" /><path d="M12 17v4" /></svg>
               <img src="/assets/images/about/team-monitor.png" alt="Align engineering team" onError={(e) => e.currentTarget.remove()} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
-            <div style={{ position: 'absolute', left: '-26px', bottom: '-24px', width: '262px', background: '#fff', border: '1px solid #eaeef5', borderRadius: '18px', padding: '16px', boxShadow: '0 30px 64px -28px rgba(15,23,41,.5)', animation: 'abFloat 6.5s ease-in-out infinite' }}>
+            <div className="mobile-hide-float" style={{ position: 'absolute', left: '-26px', bottom: '-24px', width: '262px', background: '#fff', border: '1px solid #eaeef5', borderRadius: '18px', padding: '16px', boxShadow: '0 30px 64px -28px rgba(15,23,41,.5)', animation: 'abFloat 6.5s ease-in-out infinite' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <span style={{ fontSize: '13px', fontWeight: 700, color: '#0f1729' }}>{t("Align Dashboard")}</span>
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '10px', fontWeight: 700, color: '#1a9d55' }}><span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#1a9d55', animation: 'abDot 1.6s ease-in-out infinite' }} />{t("LIVE")}</span>
@@ -80,7 +80,7 @@ export default function AboutUs() {
                 ))}
               </div>
             </div>
-            <div style={{ position: 'absolute', right: '-18px', top: '24px', background: '#fff', border: '1px solid #eaeef5', borderRadius: '12px', padding: '10px 13px', boxShadow: '0 22px 48px -24px rgba(15,23,41,.45)', display: 'flex', alignItems: 'center', gap: '9px', animation: 'abFloat2 5.5s ease-in-out infinite' }}>
+            <div className="mobile-hide-float" style={{ position: 'absolute', right: '-18px', top: '24px', background: '#fff', border: '1px solid #eaeef5', borderRadius: '12px', padding: '10px 13px', boxShadow: '0 22px 48px -24px rgba(15,23,41,.45)', display: 'flex', alignItems: 'center', gap: '9px', animation: 'abFloat2 5.5s ease-in-out infinite' }}>
               <div style={{ width: '26px', height: '26px', borderRadius: '50%', background: '#e6f5ec', color: '#1a9d55', display: 'grid', placeItems: 'center' }}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M20 6L9 17l-5-5" /></svg></div>
               <div><div style={{ fontSize: '11.5px', fontWeight: 700, color: '#0f1729', lineHeight: 1 }}>{t("PO-2041 approved")}</div><div style={{ fontSize: '9.5px', color: '#8a94a6', marginTop: '2px' }}>{t("just now")}</div></div>
             </div>
