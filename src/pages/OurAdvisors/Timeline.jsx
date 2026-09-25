@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
-import BaseReveal from '../../components/Reveal';
+import { DataReveal } from '../../components/Reveal';
 import { Icon, TL } from './advisorsData';
 
 /* Background timeline — scroll-draw line fill + node activation (was
@@ -43,7 +43,7 @@ export default function Timeline() {
           const on = active[i];
           const ring = tl[3];
           return (
-            <BaseReveal key={tl[1]} data-reveal="" baseClass="" shownClass="in" className="tlItem" style={{ position: 'relative', display: 'flex', gap: '26px', alignItems: 'flex-start', padding: '0 0 30px 0' }}>
+            <DataReveal key={tl[1]} className="tlItem" style={{ position: 'relative', display: 'flex', gap: '26px', alignItems: 'flex-start', padding: '0 0 30px 0' }}>
               <div
                 ref={(el) => { nodeRefs.current[i] = el; }}
                 className="tlNode"
@@ -58,7 +58,7 @@ export default function Timeline() {
                 </div>
                 <p style={{ fontSize: '14px', lineHeight: 1.6, color: '#5b6472', margin: '9px 0 0' }}>{t(tl[2])}</p>
               </div>
-            </BaseReveal>
+            </DataReveal>
           );
         })}
       </div>

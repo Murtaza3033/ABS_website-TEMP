@@ -10,7 +10,6 @@
     "deploy-graphql": "sanity graphql deploy",
     "dev": "sanity dev",
     "start": "sanity start",
-    "init-data": "node scripts/init-data.mjs",
     "seed": "node scripts/seed.mjs",
     "seed:dry-run": "node scripts/seed.mjs --dry-run",
     "upload-assets": "node scripts/uploadAssets.mjs",

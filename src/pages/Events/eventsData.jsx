@@ -1,4 +1,4 @@
-/* Events — data + icon helper (mirrors events.runtime.js). */
+/* Events — data + icon helper. */
 
 const ICON_PATHS = {
   pin: <><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></>,
@@ -27,7 +27,28 @@ export const GALLERY = [
   ['booth-demo', 'webp', 'Live demos', 'Walking a visitor through the platform, live'],
   ['brochure', 'webp', 'In conversation', 'Talking operations — one conversation at a time'],
 ];
-export const gsrc = (i) => `/assets/images/about/${GALLERY[i][0]}.${GALLERY[i][1]}`;
+
+/* Local path for a gallery image file (public/assets/images/about). */
+export const galleryPath = (file, ext) => `/assets/images/about/${file}.${ext}`;
+
+/* Static gallery paths, used as the Sanity `event` fallback's galleryPaths. */
+export const FALLBACK_GALLERY_PATHS = GALLERY.map(([file, ext]) => galleryPath(file, ext));
+
+/* Adapter: merges CMS gallery image paths (+ real Sanity image assets, when
+   uploaded) onto the static GALLERY tuples (by position — Sanity was seeded
+   in the same order), keeping label/caption (GALLERY[i][2]/[3]) from the
+   static data since Sanity's event schema has no per-image label/caption
+   fields. Appends the raw Sanity image object as a 5th tuple element so
+   callers can prefer it over the reconstructed path. */
+export function mergeGallery(paths, sanityImages) {
+  return GALLERY.map((base, i) => {
+    const path = paths?.[i];
+    const sanityImage = sanityImages?.[i];
+    if (!path) return [...base, sanityImage];
+    const m = path.match(/\/([^/]+)\.([a-zA-Z0-9]+)$/);
+    return m ? [m[1], base[1], base[2], base[3], sanityImage] : [...base, sanityImage]; // ext from local data: CMS *Path strings may carry a stale .png/.jpg
+  });
+}
 
 export const WHY = [
   ['We show up where you are', 'From regional expos to industry conferences, we go where operations teams already gather — not just online.', 'Talk to us', '/contact-us.html', 'globe', 'global-reach'],

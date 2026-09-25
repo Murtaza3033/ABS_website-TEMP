@@ -1,20 +1,30 @@
-import { createClient } from '@sanity/client';
 import { createImageUrlBuilder } from '@sanity/image-url';
 
-/* Read-only Sanity client for the frontend.
-   No token here — VITE_ vars are inlined into the public bundle, so this
-   client can only ever read published content via useCdn. Writes (Studio,
-   the seed script) go through separate authenticated clients elsewhere. */
-export const client = createClient({
-  projectId: import.meta.env.VITE_SANITY_PROJECT_ID,
-  dataset: import.meta.env.VITE_SANITY_DATASET || 'production',
-  apiVersion: import.meta.env.VITE_SANITY_API_VERSION || '2024-01-01',
-  useCdn: true,
-});
+/* Read-only Sanity access for the frontend: a plain GET against the public
+   API CDN (the same request @sanity/client makes with useCdn), without
+   shipping the full client to the browser. No token here — VITE_ vars are
+   inlined into the public bundle, so this can only read published content.
+   Writes (Studio, seed scripts, api/) use authenticated clients elsewhere. */
+const projectId = import.meta.env.VITE_SANITY_PROJECT_ID;
+const dataset = import.meta.env.VITE_SANITY_DATASET || 'production';
+const apiVersion = import.meta.env.VITE_SANITY_API_VERSION || '2024-01-01';
 
-const builder = createImageUrlBuilder(client);
+const QUERY_URL = `https://${projectId}.apicdn.sanity.io/v${apiVersion.replace(/^v/, '')}/data/query/${dataset}`;
 
-export function urlFor(source) {
+/* Runs a GROQ query; params become `$name` search params (JSON-encoded, as
+   the API expects). Resolves to the query `result`, rejects on HTTP errors. */
+export async function sanityFetch(query, params = {}) {
+  const search = new URLSearchParams({ query });
+  for (const [key, value] of Object.entries(params)) search.append(`$${key}`, JSON.stringify(value));
+  search.append('returnQuery', 'false');
+  const res = await fetch(`${QUERY_URL}?${search}`);
+  if (!res.ok) throw new Error(`Sanity query failed (${res.status})`);
+  return (await res.json()).result;
+}
+
+const builder = createImageUrlBuilder({ projectId, dataset });
+
+function urlFor(source) {
   return builder.image(source);
 }
 

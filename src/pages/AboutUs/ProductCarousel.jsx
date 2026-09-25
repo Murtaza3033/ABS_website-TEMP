@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import Reveal from '../../components/Reveal';
-import { PRODMETA } from './aboutData';
+import { PRODMETA } from '../Products/productsData';
 
 /* "What We Build" product preview carousel — index state + 5s autoplay that
    pauses for 9s after any interaction (was pb/pbPaused/pbResume in the runtime). */

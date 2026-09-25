@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { client } from '../lib/sanity';
+import { sanityFetch } from '../lib/sanity';
 import {
   SITE_SETTINGS_QUERY,
   NAVIGATION_QUERY,
@@ -20,12 +20,11 @@ import {
 
 /* Thin useQuery wrapper shared by every CMS hook below.
    - Returns CMS data once it arrives; never throws on null/empty results.
-   - `fallbackData` is unused today but lets Phase 4 pass the existing
-     hard-coded arrays as `placeholderData` without changing any hook. */
+   - `fallbackData` (the static copy of the content) becomes `placeholderData`. */
 function useSanityQuery(queryKey, query, params, { fallbackData, enabled = true, ...rest } = {}) {
   return useQuery({
     queryKey,
-    queryFn: () => client.fetch(query, params),
+    queryFn: () => sanityFetch(query, params),
     placeholderData: fallbackData,
     enabled,
     ...rest,

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
-import BaseReveal from '../../components/Reveal';
+import { DataReveal } from '../../components/Reveal';
 import { useClients } from '../../hooks/useCms';
 import { getSanityImageUrl } from '../../lib/sanity';
 import { CLIENTS, SHORT, INDOF, DURS, DELS } from './clientsData';
@@ -52,31 +52,31 @@ export default function ClientWall() {
 
   return (
     <>
-      <BaseReveal className="filtbar" data-reveal="" baseClass="" shownClass="in">
+      <DataReveal className="filtbar">
         {labels.map((l, i) => (
           <button key={l} className={`filt${filter === i - 1 ? ' on' : ''}`} onClick={() => setFilter(i - 1)}>
             <span className="fdot" />{t(l)}
           </button>
         ))}
-      </BaseReveal>
+      </DataReveal>
 
       <div className="wall">
         {clients.map(({ name, file, logo }, i) => {
           const ind = name in INDOF ? INDOF[name] : -1;
           const state = filter < 0 ? '' : (ind === filter ? ' match' : ' ghost');
           return (
-            <BaseReveal
-              key={name} data-reveal="" baseClass="" shownClass="in" className={`clCard${state}`} data-ind={ind}
+            <DataReveal
+              key={name} className={`clCard${state}`}
               style={{ background: '#fff', border: '1px solid #eef2f8', borderRadius: '20px', boxShadow: '0 16px 40px -28px rgba(15,23,41,.28)', height: '150px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '26px', animation: `floatY ${DURS[i % DURS.length]} ease-in-out ${DELS[i % DELS.length]} infinite` }}
             >
               <ClientLogo name={name} file={file} logo={logo} />
               <div className="clCap">{name}</div>
-            </BaseReveal>
+            </DataReveal>
           );
         })}
       </div>
 
-      <BaseReveal as="p" data-reveal="" baseClass="" shownClass="in" style={{ textAlign: 'center', fontSize: '11.5px', color: '#aeb8c8', margin: '30px 0 0' }}>{t("Filter by industry, or hover a logo to bring it to life")}</BaseReveal>
+      <DataReveal as="p" style={{ textAlign: 'center', fontSize: '11.5px', color: '#aeb8c8', margin: '30px 0 0' }}>{t("Filter by industry, or hover a logo to bring it to life")}</DataReveal>
     </>
   );
 }

@@ -24,7 +24,7 @@ export default function IndustryPanel({ d, parallaxRef }) {
   return (
     <>
       <div style={{ position: 'relative', borderRadius: '26px', overflow: 'hidden', height: '460px', boxShadow: '0 40px 90px -44px rgba(15,23,41,.5)', background: '#0f1729', animation: 'slideInR .5s cubic-bezier(.2,.7,.3,1) both' }}>
-        <div ref={parallaxRef} data-ind-parallax style={{ position: 'absolute', left: 0, right: 0, top: '-8%', height: '116%', willChange: 'transform' }}>
+        <div ref={parallaxRef} style={{ position: 'absolute', left: 0, right: 0, top: '-8%', height: '116%', willChange: 'transform' }}>
           <div style={{ position: 'absolute', inset: 0, backgroundImage: `url('${d.imgUrl || `/assets/images/industries/${d.img}.webp`}')`, backgroundSize: 'cover', backgroundPosition: 'center', animation: 'kenBurns 12s ease-in-out infinite alternate' }} />
         </div>
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(150deg,rgba(15,23,41,.30),rgba(26,86,219,.30))' }} />
@@ -40,7 +40,7 @@ export default function IndustryPanel({ d, parallaxRef }) {
         </div>
       </div>
 
-      <div data-ind-copy style={{ animation: 'slideInR .55s cubic-bezier(.2,.7,.3,1) both' }}>
+      <div style={{ animation: 'slideInR .55s cubic-bezier(.2,.7,.3,1) both' }}>
         <div style={{ fontSize: '12px', fontWeight: 700, letterSpacing: '1.5px', color: '#1a56db', textTransform: 'uppercase' }}>{t(d.name)}</div>
         <h2 style={{ fontSize: '30px', fontWeight: 800, letterSpacing: '-.8px', margin: '10px 0 0', lineHeight: 1.14 }}>{t(d.head)}</h2>
         <p style={{ fontSize: '15px', lineHeight: 1.72, color: '#4b5565', margin: '14px 0 0' }}>{t(d.para)}</p>

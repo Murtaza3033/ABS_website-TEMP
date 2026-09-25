@@ -1,8 +1,13 @@
-/* Shared data/adapter for the Products index + detail pages.
-   PRODMETA (per-product accent color + dashboard-mock demo data) is reused
-   for reference only, per the phase's explicit allowance — it isn't
-   modified, and the About page's own ProductCarousel is untouched. */
-import { PRODMETA } from '../AboutUs/aboutData';
+/* Shared data/adapters for the Products index + detail pages (and the About
+   page's ProductCarousel, which reuses PRODMETA). */
+import { loc, blocksToText } from '../../lib/loc';
+
+/* Per-product accent color + dashboard-mock demo data (no CMS equivalent). */
+export const PRODMETA = [
+  { name: 'BusinessFlo', accent: '#1a56db', tint: 'rgba(26,86,219,.14)', url: 'app.businessflo.com', img: 'dash-businessflo', topTitle: 'PO-2041 approved', topSub: 'Warehouse notified', botLabel: 'Payment received', botValue: 'Rs 84,500', botDelta: '↑ Cleared just now' },
+  { name: 'PeopleNest', accent: '#7c5cff', tint: 'rgba(124,92,255,.14)', url: 'app.peoplenest.com', img: 'dash-peoplenest', topTitle: 'Leave approved', topSub: 'Casual · 2 days', botLabel: 'New hires this month', botValue: '12', botDelta: '↑ Onboarded' },
+  { name: 'Field Force', accent: '#1a9d55', tint: 'rgba(26,157,85,.14)', url: 'app.pharmafieldflo.com', img: 'dash-pharmafieldflo', topTitle: 'Visit logged', topSub: 'Dr. review · 4:20 PM', botLabel: 'Coverage today', botValue: '87%', botDelta: '↑ 6% vs target' },
+];
 
 /* Same literal copy seeded into Sanity's `product` documents (sourced from
    Header.jsx's mega-menu descriptions + translations.js's full sentences),
@@ -43,11 +48,7 @@ export function resolveDescription(doc, lang) {
   const value = doc?.description;
   if (!value) return '';
   if (typeof value === 'string') return value;
-  const blocks = (lang === 'ar' ? value.ar : value.en) || value.en || [];
-  return blocks
-    .map((b) => (b.children || []).map((c) => c.text || '').join(''))
-    .join(' ')
-    .trim();
+  return blocksToText(value, lang);
 }
 
 /* Attaches the matching PRODMETA entry (by position — Sanity was seeded in
@@ -61,6 +62,33 @@ export function withMeta(doc, i) {
 export function findFallbackIndex(slug) {
   const i = FALLBACK_PRODUCTS.findIndex((p) => p.slug === slug);
   return i === -1 ? 0 : i;
+}
+
+/* A CMS product doc is only usable if it has a slug and a name; anything else
+   (e.g. docs written outside the schema) is ignored in favour of static data. */
+export function isValidProduct(p) {
+  return Boolean(p && typeof p === 'object' && slugOf(p) && loc(p.name, 'en'));
+}
+
+/* Valid CMS products, de-duplicated by slug (first wins), with any known
+   product the CMS doesn't provide filled in from FALLBACK_PRODUCTS. */
+export function mergeProducts(cmsProducts) {
+  const bySlug = new Map();
+  for (const p of cmsProducts || []) {
+    if (isValidProduct(p) && !bySlug.has(slugOf(p))) bySlug.set(slugOf(p), p);
+  }
+  for (const p of FALLBACK_PRODUCTS) {
+    if (!bySlug.has(p.slug)) bySlug.set(p.slug, p);
+  }
+  return [...bySlug.values()].sort((a, b) => (a.order || 0) - (b.order || 0));
+}
+
+/* Features must be {title, description} objects (schema); plain strings or
+   untitled entries are skipped. */
+export function validFeatures(features) {
+  return Array.isArray(features)
+    ? features.filter((f) => f && typeof f === 'object' && loc(f.title, 'en'))
+    : [];
 }
 
 /* Sanity's slug field is {_type:'slug', current:'...'}; FALLBACK_PRODUCTS uses

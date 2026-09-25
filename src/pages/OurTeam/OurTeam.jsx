@@ -1,8 +1,7 @@
 import { useRef, useState, useEffect, useLayoutEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
-import '../../styles/our-team.css';
 import SmartLink from '../../components/SmartLink';
-import CountUp from './CountUp';
+import CountUp from '../../components/CountUp';
 import ParticleCanvas from './ParticleCanvas';
 import LeaderScene from './LeaderScene';
 import { useTeam, usePage } from '../../hooks/useCms';
@@ -30,7 +29,7 @@ const FALLBACK_TEAM = LEADERS.map((L, i) => ({
    matching static LEADERS entry (by position — Sanity was seeded in the same
    order) rather than replacing it outright, keeping LeaderScene untouched. */
 function mergeLeader(doc, i, lang) {
-  const base = LEADERS[i] || LEADERS[0];
+  const base = LEADERS[i];
   const photo = doc.photoPath
     ? doc.photoPath.replace(/^.*\//, '').replace(/\.[a-z0-9]+$/i, '')
     : base.photo;
@@ -49,7 +48,11 @@ export default function OurTeam() {
   const { data: cmsPage } = usePage('our-team');
   const seo = resolveSeo(cmsPage?.seo, lang);
   const { data: cmsTeam } = useTeam({ fallbackData: FALLBACK_TEAM });
-  const leaders = (cmsTeam && cmsTeam.length > 0 ? cmsTeam : FALLBACK_TEAM).map((doc, i) => mergeLeader(doc, i, lang));
+  // Capped to the designed LEADERS slots: extra CMS docs have no scene data
+  // (caption/tags/stats) and would render as duplicates of LEADERS[0].
+  const leaders = (cmsTeam && cmsTeam.length > 0 ? cmsTeam : FALLBACK_TEAM)
+    .slice(0, LEADERS.length)
+    .map((doc, i) => ({ ...mergeLeader(doc, i, lang), _id: doc._id || `leader-${i}` }));
   const secRefs = useRef([]);
   const fillRef = useRef(null);
   const pathRef = useRef(null);
@@ -133,7 +136,7 @@ export default function OurTeam() {
         <div style={{ position: 'absolute', top: '52%', right: '6%', width: '460px', height: '460px', borderRadius: '50%', background: 'radial-gradient(circle,rgba(26,86,219,.16),transparent 66%)', animation: 'tmGlowDrift 22s ease-in-out 2s infinite' }} />
       </div>
       {/* diagonal spine SVG */}
-      <svg ref={svgRef} data-spine-svg viewBox="0 0 100 1000" preserveAspectRatio="none" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1, pointerEvents: 'none', transition: 'opacity .4s ease' }}>
+      <svg ref={svgRef} viewBox="0 0 100 1000" preserveAspectRatio="none" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1, pointerEvents: 'none', transition: 'opacity .4s ease' }}>
         <path d={SPINE_PATH} fill="none" stroke="rgba(143,184,255,.35)" strokeWidth="0.9" strokeLinecap="round" style={{ filter: 'drop-shadow(0 0 4px rgba(143,184,255,.35))' }} />
         <path ref={pathRef} d={SPINE_PATH} pathLength="100" fill="none" stroke="#8fb8ff" strokeWidth="0.7" strokeLinecap="round" style={{ strokeDasharray: 100, strokeDashoffset: 100, filter: 'drop-shadow(0 0 7px rgba(143,184,255,.75))' }} />
       </svg>
@@ -169,7 +172,7 @@ export default function OurTeam() {
 
         {/* LEADERS */}
         {leaders.map((L, k) => (
-          <LeaderScene key={L.num} L={L} i={k} even={k % 2 === 0} revealed={revealed[k + 1]} refCb={setSec(k + 1)} />
+          <LeaderScene key={L._id} L={L} i={k} even={k % 2 === 0} revealed={revealed[k + 1]} refCb={setSec(k + 1)} />
         ))}
 
         {/* THE ALIGN WAY */}

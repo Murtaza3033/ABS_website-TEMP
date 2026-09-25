@@ -42,7 +42,7 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer ref={ref} className={`site-footer ${revealed ? 'reveal' : ''}`} data-ft>
+    <footer ref={ref} className={`site-footer ${revealed ? 'reveal' : ''}`}>
       <div className="ft-inner">
         <div className="ft-main">
           

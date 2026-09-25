@@ -1,7 +1,6 @@
 import { Fragment, useRef, useState, useEffect, useLayoutEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
-import '../../styles/industries.css';
-import BaseReveal from '../../components/Reveal';
+import { DataReveal } from '../../components/Reveal';
 import SmartLink from '../../components/SmartLink';
 import CountUp from '../../components/CountUp';
 import IndustryPanel from './IndustryPanel';
@@ -11,10 +10,6 @@ import { loc } from '../../lib/loc';
 import { getSanityImageUrl } from '../../lib/sanity';
 import SEO, { resolveSeo } from '../../components/SEO';
 import { IND } from './industriesData';
-
-function Reveal({ children, ...props }) {
-  return <BaseReveal data-reveal="" baseClass="" shownClass="in" {...props}>{children}</BaseReveal>;
-}
 
 const HEAD = ['The', 'industries', 'we', 'help', 'move', 'forward.'];
 const AUTO = 4600;
@@ -149,22 +144,22 @@ export default function Industries() {
               </Fragment>
             ))}
           </h1>
-          <Reveal as="p" className="lede" style={{ margin: '22px auto 0', maxWidth: '600px' }}>{t("Across manufacturing floors, pharmacies, storefronts and solar rooftops, we build the systems that keep operations running. Different sectors, the same discipline.")}</Reveal>
-          <Reveal className="ind-trustline">
+          <DataReveal as="p" className="lede" style={{ margin: '22px auto 0', maxWidth: '600px' }}>{t("Across manufacturing floors, pharmacies, storefronts and solar rooftops, we build the systems that keep operations running. Different sectors, the same discipline.")}</DataReveal>
+          <DataReveal className="ind-trustline">
             <span><b><CountUp end={6} duration={1300} /></b> {t("industries")}</span>
             <span className="tdot" />
             <span><b><CountUp end={20} duration={1300} /></b>{t("+ businesses")}</span>
             <span className="tdot" />
             <span><b>1</b> {t("platform")}</span>
-          </Reveal>
-          <Reveal className="ind-scrollcue">{t("Explore")}<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6" /></svg></Reveal>
+          </DataReveal>
+          <DataReveal className="ind-scrollcue">{t("Explore")}<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6" /></svg></DataReveal>
         </div>
       </section>
 
       {/* TABBED SHOWCASE */}
       <section ref={showcaseRef} className="sec" style={{ background: '#fff', padding: '36px 32px 90px' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <Reveal
+          <DataReveal
             tabIndex={0}
             onKeyDown={(e) => { if (e.key === 'ArrowRight') { e.preventDefault(); select(curRef.current + 1, true); } else if (e.key === 'ArrowLeft') { e.preventDefault(); select(curRef.current - 1, true); } }}
             style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '10px', padding: '8px', background: 'var(--tint)', border: '1px solid #eef1f6', borderRadius: '999px', width: 'fit-content', margin: '0 auto', maxWidth: '100%', overflowX: 'auto' }}
@@ -176,8 +171,8 @@ export default function Industries() {
                   style={{ background: on ? '#1a56db' : 'transparent', color: on ? '#fff' : '#0f1729', boxShadow: on ? '0 12px 24px -10px rgba(26,86,219,.55)' : 'none' }}>{t(ind.short)}</button>
               );
             })}
-          </Reveal>
-          <Reveal className="iProg"><i ref={fillRef} style={{ width: '0%' }} /></Reveal>
+          </DataReveal>
+          <DataReveal className="iProg"><i ref={fillRef} style={{ width: '0%' }} /></DataReveal>
           <div className="panel" style={{ marginTop: '34px' }}>
             <IndustryPanel key={cur} d={d} parallaxRef={parallaxRef} />
           </div>
@@ -188,9 +183,9 @@ export default function Industries() {
       <section className="sec" style={{ background: 'linear-gradient(180deg,var(--tint) 0%,#fff 100%)', borderTop: '1px solid #eef1f6', padding: '90px 32px 100px' }}>
         <div style={{ maxWidth: '1080px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center' }}>
-            <Reveal as="span" className="eyebrow">{t("One platform, every sector")}</Reveal>
-            <Reveal as="h2" className="h2">{t("Six industries.")} <span className="cave" style={{ fontSize: '1.28em' }}>{t("One")}</span> {t("Align.")}</Reveal>
-            <Reveal as="p" style={{ fontSize: '16px', lineHeight: 1.6, color: '#5b6472', margin: '14px auto 0', maxWidth: '600px' }}>{t("Every sector runs on the same platform — finance, people, inventory, field ops and reporting flowing into one source of truth.")}</Reveal>
+            <DataReveal as="span" className="eyebrow">{t("One platform, every sector")}</DataReveal>
+            <DataReveal as="h2" className="h2">{t("Six industries.")} <span className="cave" style={{ fontSize: '1.28em' }}>{t("One")}</span> {t("Align.")}</DataReveal>
+            <DataReveal as="p" style={{ fontSize: '16px', lineHeight: 1.6, color: '#5b6472', margin: '14px auto 0', maxWidth: '600px' }}>{t("Every sector runs on the same platform — finance, people, inventory, field ops and reporting flowing into one source of truth.")}</DataReveal>
           </div>
           <Convergence onJump={jumpFromNode} />
         </div>
@@ -198,7 +193,7 @@ export default function Industries() {
 
       {/* CTA */}
       <section className="sec" style={{ background: '#fff', padding: '70px 32px 110px' }}>
-        <Reveal style={{ maxWidth: '1100px', margin: '0 auto', background: 'linear-gradient(135deg,#1a56db,#123f9e)', borderRadius: '28px', padding: '66px 48px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+        <DataReveal style={{ maxWidth: '1100px', margin: '0 auto', background: 'linear-gradient(135deg,#1a56db,#123f9e)', borderRadius: '28px', padding: '66px 48px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
           <div style={{ position: 'absolute', inset: 0, opacity: 0.12, backgroundImage: 'linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px)', backgroundSize: '40px 40px' }} />
           <div style={{ position: 'relative', fontFamily: 'var(--font-hand)', fontSize: '26px', fontWeight: 700, color: '#9fc0ff' }}>{t("Don't see your industry? Let's talk about what we can build for you.")}</div>
           <h2 style={{ position: 'relative', fontSize: 'clamp(24px,3.4vw,33px)', lineHeight: 1.22, letterSpacing: '-.8px', fontWeight: 800, color: '#fff', margin: '10px auto 0', maxWidth: '820px' }}>{t("Let's talk about innovative solutions, business automation and how we can help you achieve your business goals.")}</h2>
@@ -206,7 +201,7 @@ export default function Industries() {
             <SmartLink href="/contact-us.html" style={{ background: '#fff', color: '#1a56db', fontSize: '15px', fontWeight: 700, padding: '15px 32px', borderRadius: '999px' }}>{t("Let's talk")}</SmartLink>
             <SmartLink href="/contact-us.html" style={{ background: 'rgba(255,255,255,.12)', color: '#fff', fontSize: '15px', fontWeight: 600, padding: '15px 32px', borderRadius: '999px', border: '1.5px solid rgba(255,255,255,.4)' }}>{t("Get Info")}</SmartLink>
           </div>
-        </Reveal>
+        </DataReveal>
       </section>
     </main>
   );

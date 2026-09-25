@@ -10,3 +10,16 @@ export function loc(field, lang) {
 
   return field.en || '';
 }
+
+/* Plain-text lines (one per block) of a bilingual Portable Text field
+   ({ en: [block...], ar: [block...] }), falling back to English. */
+export function blockLines(value, lang) {
+  const blocks = (lang === 'ar' ? value?.ar : value?.en) || value?.en || [];
+  if (!Array.isArray(blocks)) return [];
+  return blocks.map((b) => (b.children || []).map((c) => c.text || '').join(''));
+}
+
+/* The same field flattened to a single string. */
+export function blocksToText(value, lang) {
+  return blockLines(value, lang).join(' ').trim();
+}

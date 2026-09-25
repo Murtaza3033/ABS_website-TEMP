@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
-import BaseReveal from '../../components/Reveal';
+import { DataReveal } from '../../components/Reveal';
 import { Icon, NODES, NODE_DURS, NODE_DELS } from './industriesData';
 
 const LINES = [
@@ -16,8 +16,8 @@ const HUB_PILLS = ['Finance', 'People', 'Inventory', 'Field Ops', 'Reporting'];
 function ConvNode({ n, i, onJump, onHover }) {
   const { t } = useLanguage();
   return (
-    <BaseReveal
-      data-reveal="" baseClass="" shownClass="in" className="convNode" title={`Explore ${n[0]}`}
+    <DataReveal
+      className="convNode" title={`Explore ${n[0]}`}
       onMouseEnter={() => onHover(i)} onMouseLeave={() => onHover(null)} onClick={() => onJump(i)}
       style={{ background: '#fff', border: '1px solid #e9edf4', borderRadius: '18px', padding: '18px 20px', boxShadow: '0 20px 46px -26px rgba(15,23,41,.32)', cursor: 'pointer', animation: `floatY ${NODE_DURS[i % 6]} ease-in-out ${NODE_DELS[i % 6]} infinite` }}
     >
@@ -29,7 +29,7 @@ function ConvNode({ n, i, onJump, onHover }) {
         </div>
       </div>
       <div style={{ fontSize: '12.5px', lineHeight: 1.5, color: '#5b6472', marginTop: '12px' }}>{t(n[2])}</div>
-    </BaseReveal>
+    </DataReveal>
   );
 }
 
@@ -39,7 +39,7 @@ export default function Convergence({ onJump }) {
   const { t } = useLanguage();
   const [hov, setHov] = useState(null);
   return (
-    <BaseReveal data-reveal="" baseClass="" shownClass="in" style={{ position: 'relative', marginTop: '56px' }}>
+    <DataReveal style={{ position: 'relative', marginTop: '56px' }}>
       <svg className="conv-svg" viewBox="0 0 100 100" fill="none" preserveAspectRatio="none" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', overflow: 'visible', zIndex: 0 }}>
         {LINES.map((l, i) => <path key={`g${i}`} d={l[0]} stroke="#d0ddf5" strokeWidth="0.3" fill="none" vectorEffect="non-scaling-stroke" />)}
         {LINES.map((l, i) => (
@@ -62,6 +62,6 @@ export default function Convergence({ onJump }) {
         </div>
         {NODES.slice(3).map((n, i) => <ConvNode key={n[0]} n={n} i={i + 3} onJump={onJump} onHover={setHov} />)}
       </div>
-    </BaseReveal>
+    </DataReveal>
   );
 }

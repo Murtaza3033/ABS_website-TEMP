@@ -3,7 +3,7 @@ import {
 } from 'react';
 
 /* ============================================================================
-   Home state — idiomatic replacement for the imperative index.runtime.js.
+   Home state.
    One useReducer drives the hero + §2-7 interactive state; every interval /
    timeout / listener the old runtime created lives here in a cleaned-up
    useEffect. Sections consume this via:
@@ -13,7 +13,7 @@ import {
      - state / dispatch      for §2-7 visibility, orbit, carousel, mosaic
    ========================================================================== */
 
-/* ---- static data mirrored verbatim from index.runtime.js ---- */
+/* ---- static data ---- */
 const CHATS = {
   openC0: ['Zainab Malik', 'ZM'], openC1: ['Bilal Sattar', 'BS'],
   openC2: ['Hooria Naveed', 'HN'], openC3: ['Usman Tariq', 'UT'],
@@ -54,7 +54,6 @@ const initialState = {
   rows: ['open', 'open', 'open'],   // open | approved | hold | rejected
   counts: { a: 24, p: 6, r: 2 },
   tour: true,
-  toast: { show: false, kind: null },
   // §2-7
   prodTab: 0,              // 0..2  (products filter)
   indTab: 0,               // 0..6  (industries panel)
@@ -93,7 +92,7 @@ function reducer(s, a) {
       if (a.kind === 'approved') counts.a++;
       else if (a.kind === 'hold') counts.p++;
       else counts.r++;
-      return { ...s, rows, counts, toast: { show: true, kind: a.kind } };
+      return { ...s, rows, counts };
     }
     case 'ROW_RESET': {
       if (s.rows[a.i] !== a.kind) return s;   // already changed/reset — no-op
@@ -104,8 +103,6 @@ function reducer(s, a) {
       else counts.r--;
       return { ...s, rows, counts };
     }
-    case 'HIDE_TOAST':
-      return { ...s, toast: { ...s.toast, show: false } };
     case 'PROD_TAB':
       return { ...s, prodTab: a.n };
     case 'IND_TAB':
@@ -158,13 +155,6 @@ export function HomeProvider({ children }) {
     return () => clearInterval(id);
   }, [state.orbitPlaying]);
 
-  /* toast auto-hide — 2.6s (was showToast's setTimeout) */
-  useEffect(() => {
-    if (!state.toast.show) return undefined;
-    const id = setTimeout(() => dispatch({ type: 'HIDE_TOAST' }), 2600);
-    return () => clearTimeout(id);
-  }, [state.toast]);
-
   /* Escape closes the service modal (was window keydown) */
   useEffect(() => {
     if (state.svcModal == null) return undefined;
@@ -203,7 +193,6 @@ export function HomeProvider({ children }) {
       case 'rowOpen2': return state.rows[2] === 'open';
       case 'rowDone2': return state.rows[2] !== 'open';
       case 'svcOpenOn': return state.svcModal != null;
-      case 'toastShow': return state.toast.show;
       default: return false;
     }
   }

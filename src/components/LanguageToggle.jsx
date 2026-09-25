@@ -1,6 +1,6 @@
 import { useLanguage } from '../context/LanguageContext';
 
-// EN / عربي pill. id="alignI18nToggle" so the i18n text-swap skips its own labels.
+// EN / عربي pill.
 export default function LanguageToggle() {
   const { lang, setLang } = useLanguage();
 
@@ -18,14 +18,12 @@ export default function LanguageToggle() {
   return (
     <div id="alignI18nToggle" style={wrap}>
       <button
-        data-lang="en"
         onClick={() => setLang('en')}
         style={{ ...base, fontSize: '12px', ...(lang === 'en' ? on : off) }}
       >
         EN
       </button>
       <button
-        data-lang="ar"
         onClick={() => setLang('ar')}
         style={{ ...base, fontSize: '13px', fontFamily: "'Cairo',sans-serif", ...(lang === 'ar' ? on : off) }}
       >

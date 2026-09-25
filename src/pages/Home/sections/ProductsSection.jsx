@@ -35,7 +35,7 @@ export default function ProductsSection() {
               </div>
       
               
-              <div data-reveal="1" data-dashwrap className="hm-scale-wrap" style={{opacity: '0', transform: 'translateY(24px)', transition: 'all .7s cubic-bezier(.2,.7,.3,1)', '--hm-w': '680px', '--hm-h': '560px'}}>
+              <div data-reveal="1" className="hm-scale-wrap" style={{opacity: '0', transform: 'translateY(24px)', transition: 'all .7s cubic-bezier(.2,.7,.3,1)', '--hm-w': '680px', '--hm-h': '560px'}}>
                 <div className="hm-scale-panel" style={{position: 'relative', height: '560px'}}>
                 <div style={{position: 'absolute', top: '-30px', insetInlineEnd: '-30px', width: '320px', height: '320px', borderRadius: '50%', background: 'radial-gradient(circle,rgba(26,86,219,.15) 0%,rgba(26,86,219,0) 68%)', pointerEvents: 'none', zIndex: '0'}}></div>
                 <div style={{position: 'absolute', bottom: '-30px', insetInlineStart: '-10px', width: '280px', height: '280px', borderRadius: '50%', background: 'radial-gradient(circle,rgba(75,139,255,.13) 0%,rgba(75,139,255,0) 68%)', pointerEvents: 'none', zIndex: '0'}}></div>

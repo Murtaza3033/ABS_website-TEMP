@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
-import BaseReveal from '../../components/Reveal';
+import { DataReveal } from '../../components/Reveal';
 import { useJobs } from '../../hooks/useCms';
-import { loc } from '../../lib/loc';
+import { loc, blockLines, blocksToText } from '../../lib/loc';
 import { Icon, ROLES } from './careersData';
 
 /* Static ROLES reshaped to look like a Sanity `job` document list — same
@@ -26,17 +26,14 @@ function resolveDescription(doc, lang, base) {
   const value = doc.description;
   if (!value) return base.desc;
   if (typeof value === 'string') return value; // FALLBACK_JOBS shape
-  const blocks = (lang === 'ar' ? value.ar : value.en) || value.en || [];
-  const text = blocks.map((b) => (b.children || []).map((c) => c.text || '').join('')).join(' ').trim();
-  return text || base.desc;
+  return blocksToText(value, lang) || base.desc;
 }
 
 function resolveRequirements(doc, lang, base) {
   const value = doc.requirements;
   if (!value) return base.reqs;
   if (Array.isArray(value)) return value; // FALLBACK_JOBS shape (plain string array)
-  const blocks = (lang === 'ar' ? value.ar : value.en) || value.en || [];
-  const flat = blocks.map((b) => (b.children || []).map((c) => c.text || '').join(''));
+  const flat = blockLines(value, lang);
   return flat.length ? flat : base.reqs;
 }
 
@@ -79,17 +76,17 @@ export default function RolesAccordion() {
 
   return (
     <>
-      <BaseReveal className="jfiltbar" data-reveal="" baseClass="" shownClass="in" style={{ marginTop: '36px' }}>
+      <DataReveal className="jfiltbar" style={{ marginTop: '36px' }}>
         {cats.map(([d, n]) => (
           <button key={d} className={`jfilt${filter === d ? ' on' : ''}`} onClick={() => setFilter(d)}>{d} <span className="n">{n}</span></button>
         ))}
-      </BaseReveal>
+      </DataReveal>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
         {roles.map((r, i) => {
           const hidden = filter !== 'All' && r.dept !== filter;
           return (
-            <BaseReveal key={r.title} data-reveal="" baseClass="" shownClass="in" className={`crRole${open.has(i) ? ' open' : ''}${hidden ? ' hide' : ''}`} data-dept={r.dept}>
+            <DataReveal key={r.title} className={`crRole${open.has(i) ? ' open' : ''}${hidden ? ' hide' : ''}`}>
               <div className="r-head" onClick={() => toggle(i)}>
                 <div className="r-icon"><Icon name="briefcase" /></div>
                 <div style={{ flex: 1 }}>
@@ -112,12 +109,12 @@ export default function RolesAccordion() {
                   <a className="r-apply" href={`mailto:talent@alignbsystems.com?subject=${encodeURIComponent(`Application: ${r.title}`)}`}>{t("Apply for this role →")}</a>
                 </div>
               </div>
-            </BaseReveal>
+            </DataReveal>
           );
         })}
       </div>
 
-      <BaseReveal as="p" data-reveal="" baseClass="" shownClass="in" style={{ textAlign: 'center', fontSize: '12px', color: '#9aa4b6', margin: '28px 0 0' }}>{t("Don't see your role listed? We're always open to a conversation — email us anyway.")}</BaseReveal>
+      <DataReveal as="p" style={{ textAlign: 'center', fontSize: '12px', color: '#9aa4b6', margin: '28px 0 0' }}>{t("Don't see your role listed? We're always open to a conversation — email us anyway.")}</DataReveal>
     </>
   );
 }

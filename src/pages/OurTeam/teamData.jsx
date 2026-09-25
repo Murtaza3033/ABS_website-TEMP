@@ -1,4 +1,4 @@
-/* Our Team — data + icon helper (mirrors our-team.runtime.js). */
+/* Our Team — data + icon helper. */
 
 const ICON_PATHS = {
   spark: <><path d="M12 3v4" /><path d="M12 17v4" /><path d="M3 12h4" /><path d="M17 12h4" /><path d="M5.6 5.6l2.8 2.8" /><path d="M15.6 15.6l2.8 2.8" /><path d="M18.4 5.6l-2.8 2.8" /><path d="M8.4 15.6l-2.8 2.8" /></>,

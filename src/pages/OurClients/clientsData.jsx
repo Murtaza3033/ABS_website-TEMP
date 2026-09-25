@@ -1,4 +1,4 @@
-/* Our Clients — data + icon helper (mirrors our-clients.runtime.js). */
+/* Our Clients — data + icon helper. */
 
 const ICON_PATHS = {
   cup: <><path d="M6 2h12v3a6 6 0 0 1-12 0z" /><path d="M6 5H4a2 2 0 0 0 0 4h2" /><path d="M18 5h2a2 2 0 0 1 0 4h-2" /><path d="M8 15h8v5a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2z" /></>,

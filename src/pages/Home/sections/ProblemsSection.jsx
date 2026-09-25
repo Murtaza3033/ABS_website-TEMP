@@ -34,8 +34,8 @@ export default function ProblemsSection() {
                   <svg width="13" height="17" viewBox="0 0 13 17" fill="none" style={{animation: 'nudgeR 1.4s ease-in-out .15s infinite'}}><path d="M2 3.5 L8.5 8.5 L2 13.5" stroke="#1a56db" strokeWidth="2.6" fill="none" strokeLinecap="round" strokeLinejoin="round"/></svg>
                   <svg width="15" height="19" viewBox="0 0 15 19" fill="none" style={{animation: 'nudgeR 1.4s ease-in-out .3s infinite'}}><path d="M2 4 L10 9.5 L2 15" stroke="#1a56db" strokeWidth="2.8" fill="none" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </span>
-                <span style={{fontSize: '14.5px', fontWeight: '700', color: 'var(--wLabel,#1a56db)', transition: 'color .35s ease'}}><span data-bk="togLabel">{t(b('togLabel'))}</span></span>
-                <button data-act="toggleAbs" onClick={() => act('toggleAbs')} aria-label="Toggle Align on or off" style={{position: 'relative', width: '62px', height: '33px', border: 'none', borderRadius: '99px', background: 'var(--wTrack,#1a56db)', cursor: 'pointer', transition: 'background .35s ease', padding: '0'}}>
+                <span style={{fontSize: '14.5px', fontWeight: '700', color: 'var(--wLabel,#1a56db)', transition: 'color .35s ease'}}><span>{t(b('togLabel'))}</span></span>
+                <button onClick={() => act('toggleAbs')} aria-label="Toggle Align on or off" style={{position: 'relative', width: '62px', height: '33px', border: 'none', borderRadius: '99px', background: 'var(--wTrack,#1a56db)', cursor: 'pointer', transition: 'background .35s ease', padding: '0'}}>
                   <span style={{position: 'absolute', top: '4px', insetInlineStart: '4px', width: '25px', height: '25px', borderRadius: '50%', background: '#ffffff', transform: 'var(--wKnob,translateX(29px))', transition: 'transform .35s cubic-bezier(.5,1.6,.4,1)', boxShadow: '0 2px 7px rgba(15,23,41,.3)'}}></span>
                 </button>
               </div>
@@ -60,7 +60,7 @@ export default function ProblemsSection() {
                 <div style={{fontSize: '11.5px', fontWeight: '700', color: '#e5484d', marginTop: '9px', whiteSpace: 'nowrap', position: 'absolute', insetInlineStart: '50%', transform: 'translateX(-50%)', opacity: 'var(--wOff,0)', transition: 'opacity .4s'}}>{t("Stuck & frustrated")}</div>
               </div>
               
-              <svg data-journey-svg viewBox="0 0 1000 380" preserveAspectRatio="none" style={{position: 'absolute', inset: '0', width: '100%', height: '100%'}}>
+              <svg viewBox="0 0 1000 380" preserveAspectRatio="none" style={{position: 'absolute', inset: '0', width: '100%', height: '100%'}}>
                 <defs>
                   <linearGradient id="pgblue" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stopColor="#1a56db" /><stop offset="1" stopColor="#4b8bff" /></linearGradient>
                 </defs>

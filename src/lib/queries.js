@@ -1,20 +1,22 @@
 import groq from 'groq';
 
-/* GROQ queries for CMS content. Kept as full-document projections (`...`) for
-   now since nothing consumes these yet — Phase 4 can tighten projections once
-   real pages are wired up. */
+/* GROQ queries for CMS content (full-document projections).
+   Singletons are fetched by their canonical _id (see studio/scripts/seed.mjs)
+   so a stray second document of the same type can never be picked instead. */
 
-export const SITE_SETTINGS_QUERY = groq`*[_type == "siteSettings"][0]`;
+export const SITE_SETTINGS_QUERY = groq`*[_id == "siteSettings"][0]`;
 
-export const NAVIGATION_QUERY = groq`*[_type == "navigation"][0]`;
+export const NAVIGATION_QUERY = groq`*[_id == "navigation"][0]`;
 
-export const FOOTER_QUERY = groq`*[_type == "footer"][0]`;
+export const FOOTER_QUERY = groq`*[_id == "footer"][0]`;
 
 export const PAGE_BY_SLUG_QUERY = groq`*[_type == "page" && slug.current == $slug][0]`;
 
 export const ALL_PRODUCTS_QUERY = groq`*[_type == "product"] | order(order asc)`;
 
-export const PRODUCT_BY_SLUG_QUERY = groq`*[_type == "product" && slug.current == $slug][0]`;
+// defined(name): skip docs without the required name so a malformed duplicate
+// sharing the slug is never chosen.
+export const PRODUCT_BY_SLUG_QUERY = groq`*[_type == "product" && slug.current == $slug && defined(name)] | order(order asc)[0]`;
 
 export const ALL_CLIENTS_QUERY = groq`*[_type == "client"] | order(order asc){
   ...,

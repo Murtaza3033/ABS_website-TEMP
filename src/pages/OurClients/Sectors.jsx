@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
-import BaseReveal from '../../components/Reveal';
+import { DataReveal } from '../../components/Reveal';
 import { Icon, SECTORS } from './clientsData';
 
 /* the six convergence connectors (shared d for the static + animated pair) */
@@ -20,9 +20,9 @@ export default function Sectors() {
   const [hov, setHov] = useState(null);
 
   return (
-    <BaseReveal data-reveal="" baseClass="" shownClass="in" style={{ position: 'relative', marginTop: '34px' }}>
+    <DataReveal style={{ position: 'relative', marginTop: '34px' }}>
       <div style={{ display: 'flex', justifyContent: 'center', position: 'relative', zIndex: 3 }}>
-        <div data-node style={{ display: 'inline-flex', alignItems: 'center', background: '#1a56db', color: '#fff', fontWeight: 800, fontSize: '14px', letterSpacing: '.3px', padding: '11px 22px', borderRadius: '999px', whiteSpace: 'nowrap', boxShadow: '0 18px 36px -14px rgba(26,86,219,.6)', animation: 'nodePulse 2.6s ease-in-out infinite', transition: 'transform .3s cubic-bezier(.2,.7,.3,1)', ...(hov != null ? { transform: 'scale(1.05)' } : null) }}>Align Business Systems</div>
+        <div style={{ display: 'inline-flex', alignItems: 'center', background: '#1a56db', color: '#fff', fontWeight: 800, fontSize: '14px', letterSpacing: '.3px', padding: '11px 22px', borderRadius: '999px', whiteSpace: 'nowrap', boxShadow: '0 18px 36px -14px rgba(26,86,219,.6)', animation: 'nodePulse 2.6s ease-in-out infinite', transition: 'transform .3s cubic-bezier(.2,.7,.3,1)', ...(hov != null ? { transform: 'scale(1.05)' } : null) }}>Align Business Systems</div>
       </div>
       <svg className="converge-svg" viewBox="0 0 1200 560" fill="none" preserveAspectRatio="none" style={{ position: 'absolute', left: 0, top: '52px', width: '100%', height: 'calc(100% - 52px)', overflow: 'visible', zIndex: 0, pointerEvents: 'none' }}>
         {LINES.map((l, i) => <path key={`g${i}`} d={l[0]} stroke="#d0ddf5" strokeWidth="1.5" fill="none" />)}
@@ -33,8 +33,8 @@ export default function Sectors() {
       </svg>
       <div className="sector-grid">
         {SECTORS.map((s, i) => (
-          <BaseReveal
-            key={s[0]} data-reveal="" baseClass="" shownClass="in" className="clGrp"
+          <DataReveal
+            key={s[0]} className="clGrp"
             onMouseEnter={() => setHov(i)} onMouseLeave={() => setHov(null)}
             style={{ background: '#fff', border: '1px solid #eaeef5', borderRadius: '20px', padding: '26px', boxShadow: '0 16px 42px -30px rgba(15,23,41,.24)' }}
           >
@@ -55,9 +55,9 @@ export default function Sectors() {
                 ))}
               </div>
             </div>
-          </BaseReveal>
+          </DataReveal>
         ))}
       </div>
-    </BaseReveal>
+    </DataReveal>
   );
 }

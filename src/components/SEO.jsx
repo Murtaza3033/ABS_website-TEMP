@@ -5,8 +5,8 @@ import { useSiteSettings } from '../hooks/useCms';
 import { loc } from '../lib/loc';
 import { getSanityImageUrl } from '../lib/sanity';
 
-export const SITE_NAME = 'Align Business Systems';
-export const DEFAULT_DESCRIPTION =
+const SITE_NAME = 'Align Business Systems';
+const DEFAULT_DESCRIPTION =
   'Align Business Systems — the ERP, HR and field-force platforms growing businesses run their operations on.';
 
 /* Only set if VITE_SITE_URL is configured (see .env) — canonical/og:url are

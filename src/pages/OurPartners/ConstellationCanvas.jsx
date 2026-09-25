@@ -109,5 +109,5 @@ export default function ConstellationCanvas({ hostRef }) {
     };
   }, [hostRef]);
 
-  return <canvas ref={cvRef} className="net-canvas" data-net />;
+  return <canvas ref={cvRef} className="net-canvas" />;
 }

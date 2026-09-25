@@ -1,14 +1,14 @@
 import { useReducer, useState, useEffect, useRef } from 'react';
-import '../../styles/contact-us.css';
 import Reveal from '../../components/Reveal';
 import { useLanguage } from '../../context/LanguageContext';
 import PhoneField from './PhoneField';
 import PresenceMap from './PresenceMap';
 import Turnstile from '../../components/Turnstile';
 import {
-  cc, validEmail, validName, validPhone, phoneErr,
-  REASON_OPTS, PRODUCT_OPTS, Q_TITLES, chatSteps, submitContact,
+  cc, validPhone, phoneErr,
+  REASON_OPTS, PRODUCT_OPTS, Q_TITLES, chatSteps,
 } from './contactData';
+import { submitContact, validEmail, validName } from '../../lib/contactApi';
 import SEO, { resolveSeo } from '../../components/SEO';
 import { usePage } from '../../hooks/useCms';
 

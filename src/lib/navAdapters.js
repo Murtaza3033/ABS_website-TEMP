@@ -19,9 +19,15 @@ const STALE_PRODUCT_HREF_MAP = {
   'https://pharmafieldflo.co': '/products/pharmafieldflo',
 };
 
-export function resolveHref(href, fallback) {
+function resolveHref(href, fallback) {
   if (!href) return fallback;
   return STALE_PRODUCT_HREF_MAP[href] || href;
+}
+
+/* A CMS label is normally bilingual ({en, ar}); a plain string (not schema
+   shape) has no Arabic, so it goes through the dictionary like static text. */
+function cmsLabel(field, lang, t) {
+  return typeof field === 'string' ? t(field) : loc(field, lang);
 }
 
 /* navigation.items[] (+ each item's children[]) -> flat lookup by _key. */
@@ -38,7 +44,7 @@ export function buildNavIndex(doc) {
 
 export function navLabel(index, key, lang, t, fallbackText) {
   const item = index[key];
-  const label = item && loc(item.label, lang);
+  const label = item && cmsLabel(item.label, lang, t);
   return label || t(fallbackText);
 }
 
@@ -62,13 +68,13 @@ export function buildFooterIndex(doc) {
 
 export function footerColumnHeading({ columns }, key, lang, t, fallbackText) {
   const col = columns[key];
-  const heading = col && loc(col.heading, lang);
+  const heading = col && cmsLabel(col.heading, lang, t);
   return heading || t(fallbackText);
 }
 
 export function footerLinkLabel({ links }, key, lang, t, fallbackText) {
   const link = links[key];
-  const label = link && loc(link.label, lang);
+  const label = link && cmsLabel(link.label, lang, t);
   return label || t(fallbackText);
 }
 

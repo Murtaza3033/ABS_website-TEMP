@@ -80,7 +80,7 @@ export default function Header() {
 
   return (
     <>
-      <header className={`site-header ${scrolled ? 'is-scrolled' : ''} ${navHidden ? 'nav-hidden' : ''}`} data-nav-header>
+      <header className={`site-header ${scrolled ? 'is-scrolled' : ''} ${navHidden ? 'nav-hidden' : ''}`}>
         <div className="nav-inner">
           <SmartLink href={nh('home', '/index.html')} className="nav-logo">
             <img src={logoSrc} alt={logoAlt} />

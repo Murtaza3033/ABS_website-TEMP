@@ -1,4 +1,4 @@
-/* Contact Us — data + validation helpers (mirrors contact-us.runtime.js). */
+/* Contact Us — data + validation helpers. */
 
 export const COUNTRIES = [
   { iso: 'PK', name: 'Pakistan', dial: '+92', len: [10, 10] },
@@ -36,7 +36,7 @@ export const COUNTRIES = [
 const byIso = Object.fromEntries(COUNTRIES.map((c) => [c.iso, c]));
 export const cc = (iso) => byIso[iso] || byIso.PK;
 
-export const lenText = (iso) => {
+const lenText = (iso) => {
   const c = cc(iso);
   return c.len[0] === c.len[1] ? `${c.len[0]} digits` : `${c.len[0]}–${c.len[1]} digits`;
 };
@@ -46,11 +46,6 @@ export const phonePH = (iso) => {
 };
 export const phoneErr = (iso) => `Enter a valid ${cc(iso).name} number (${lenText(iso)}).`;
 
-export const validEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((v || '').trim());
-export const validName = (v) => {
-  const t = (v || '').trim();
-  return t.length >= 2 && /^[A-Za-z][A-Za-z .'-]*$/.test(t);
-};
 export const validPhone = (v, iso) => {
   if (!v || !v.trim()) return true; // phone is optional
   const c = cc(iso);
@@ -74,40 +69,6 @@ export const chatSteps = (reason) => {
   const routed = reason === 'Book a demo' || reason === 'Product question';
   return ['name', 'company', 'reason', routed ? 'product' : null, 'contact', 'message'].filter(Boolean);
 };
-
-/* Posts a Contact form submission to the Phase 10B backend. Returns a plain
-   { ok, id } or { ok: false, error, fields } — never throws, so callers don't
-   need try/catch. No token/secret is ever sent from the browser; the write
-   token lives only server-side in api/_lib/contactSubmission.js. */
-export async function submitContact(payload) {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 15000);
-  try {
-    const res = await fetch('/api/contact', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-      signal: controller.signal,
-    });
-    clearTimeout(timeout);
-
-    let json = null;
-    try { json = await res.json(); } catch { /* non-JSON response — treated as an error below */ }
-
-    if (res.ok && json?.ok) return { ok: true, id: json.id };
-
-    return {
-      ok: false,
-      error: json?.error === 'validation_failed'
-        ? 'Please check the highlighted fields and try again.'
-        : 'Something went wrong sending your message — please try again, or email us directly.',
-      fields: json?.fields || null,
-    };
-  } catch {
-    clearTimeout(timeout);
-    return { ok: false, error: "We couldn't reach our server — please try again, or email us directly.", fields: null };
-  }
-}
 
 export const PINS = [
   { city: 'Karachi', tag: 'Headquarters', label: 'Suite #404, Imperial Trade Tower, DHA Phase 7 — our head office.', x: 67.3, y: 37.5, hit: 40 },

@@ -6,7 +6,7 @@ export default function HowWeThinkSection() {
   const { t } = useLanguage();
   return (
     <>
-      <section data-screen-label="How We Think" className="ag" style={{background: '#0f1729', color: '#ffffff'}}>
+      <section className="ag" style={{background: '#0f1729', color: '#ffffff'}}>
           <div className="hm-float-wrap" style={{maxWidth: '1240px', margin: '0 auto', padding: '100px 32px', position: 'relative'}}>
             <div className="hm-float" style={{position: 'absolute', top: '-38px', insetInlineEnd: '28px', zIndex: '5', width: '410px', background: 'rgba(255,255,255,.99)', border: '1px solid rgba(255,255,255,.7)', borderRadius: '28px', boxShadow: '0 56px 130px -36px rgba(0,0,0,.72),0 20px 52px -26px rgba(0,0,0,.45),0 2px 4px rgba(0,0,0,.05)', padding: '28px 28px 30px', animation: 'bfFloat 5.6s ease-in-out infinite'}}>
               <div style={{fontSize: '11px', fontWeight: '700', color: '#1a56db', letterSpacing: '1.8px', textTransform: 'uppercase'}}>{t("Clients Benefits")}</div>

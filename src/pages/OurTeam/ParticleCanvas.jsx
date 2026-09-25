@@ -52,7 +52,11 @@ export default function ParticleCanvas() {
     };
     raf = requestAnimationFrame(tick);
 
-    const onVis = () => { running = !document.hidden; if (running) raf = requestAnimationFrame(tick); };
+    const onVis = () => {
+      running = !document.hidden;
+      cancelAnimationFrame(raf);
+      if (running) raf = requestAnimationFrame(tick);
+    };
     window.addEventListener('resize', resize);
     document.addEventListener('visibilitychange', onVis);
     return () => {
@@ -63,5 +67,5 @@ export default function ParticleCanvas() {
     };
   }, []);
 
-  return <canvas ref={ref} data-particles style={{ position: 'fixed', inset: 0, zIndex: 1, pointerEvents: 'none' }} />;
+  return <canvas ref={ref} style={{ position: 'fixed', inset: 0, zIndex: 1, pointerEvents: 'none' }} />;
 }

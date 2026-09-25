@@ -44,3 +44,9 @@ const Reveal = forwardRef(function Reveal({
 });
 
 export default Reveal;
+
+/* Preset used by the page stylesheets, which reveal via [data-reveal] + `.in`
+   (rather than .cReveal/.cin). `ref` passes through as a prop (React 19). */
+export function DataReveal(props) {
+  return <Reveal data-reveal="" baseClass="" shownClass="in" {...props} />;
+}

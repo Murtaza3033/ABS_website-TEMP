@@ -1,23 +1,34 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-import { tr } from '../lib/translations';
+import { createContext, useContext, useState, useEffect, useRef } from 'react';
+import { tr, loadArabic, arabicReady } from '../lib/arabic';
 
-/* Language state + a React-driven translator. Replaces lib/i18n.js's
-   MutationObserver + TreeWalker DOM-text-swap: components now call t(text) and
+/* Language state + a React-driven translator: components call t(text) and
    render the correct string directly. The only side effect is setting
    dir/lang on <html> (a document-level attribute React can't own) — the Cairo
-   font, RTL mirroring and glyph-flip live in styles/i18n.css. */
+   font, RTL mirroring and glyph-flip live in styles/i18n.css.
+   The Arabic dictionary is lazy: `lang` only flips to 'ar' once it has loaded
+   (main.jsx preloads it before first render for returning Arabic visitors). */
 const LanguageContext = createContext({ lang: 'en', setLang: () => {}, t: (s) => s });
 
 const LS = 'alignLang';
 
+export function storedLang() {
+  try { return localStorage.getItem(LS) || 'en'; } catch { return 'en'; }
+}
+
 export function LanguageProvider({ children }) {
   const [lang, setLangState] = useState(() => {
-    try { return localStorage.getItem(LS) || 'en'; } catch { return 'en'; }
+    const v = storedLang();
+    return v === 'ar' && !arabicReady() ? 'en' : v;
   });
+  const requested = useRef(lang);
 
   const setLang = (v) => {
+    requested.current = v;
     try { localStorage.setItem(LS, v); } catch { /* ignore */ }
-    setLangState(v);
+    if (v !== 'ar' || arabicReady()) { setLangState(v); return; }
+    loadArabic()
+      .then(() => { if (requested.current === 'ar') setLangState('ar'); })
+      .catch(() => { /* chunk failed to load — stay in English */ });
   };
 
   useEffect(() => {

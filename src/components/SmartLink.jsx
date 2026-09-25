@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 
 // Map the static site's ".html" hrefs to React Router routes.
-const ROUTES = {
+export const LEGACY_ROUTES = {
   '/index.html': '/',
   '/contact-us.html': '/contact-us',
   '/about-us.html': '/about-us',
@@ -29,7 +29,7 @@ function isBareInternalPath(href) {
 // Reproduces the static nav's active-link highlight (data-navlink links only).
 export default function SmartLink({ href, children, style, ...rest }) {
   const location = useLocation();
-  let to = href != null ? ROUTES[href] : undefined;
+  let to = href != null ? LEGACY_ROUTES[href] : undefined;
   if (to === undefined && href && isBareInternalPath(href)) {
     to = href;
   }

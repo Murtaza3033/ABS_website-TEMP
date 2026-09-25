@@ -1,14 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
-import BaseReveal from '../../components/Reveal';
+import { DataReveal } from '../../components/Reveal';
 import { useEvent } from '../../hooks/useCms';
 import { loc } from '../../lib/loc';
 import { getSanityImageUrl } from '../../lib/sanity';
-import { Icon, FACTS, GALLERY } from './eventsData';
-
-function Reveal({ children, ...props }) {
-  return <BaseReveal data-reveal="" baseClass="" shownClass="in" {...props}>{children}</BaseReveal>;
-}
+import { Icon, FACTS, FALLBACK_GALLERY_PATHS, galleryPath, mergeGallery } from './eventsData';
 
 /* Static event reshaped to look like a Sanity `event` document — same purpose
    as the other pages' fallbacks. Only `title` and the gallery paths have a
@@ -18,24 +14,8 @@ function Reveal({ children, ...props }) {
 const FALLBACK_EVENT = {
   _id: 'fallback-event',
   title: 'ITCN Asia 2023',
-  galleryPaths: GALLERY.map(([file, ext]) => `/assets/images/about/${file}.${ext}`),
+  galleryPaths: FALLBACK_GALLERY_PATHS,
 };
-
-/* Adapter: merges CMS gallery image paths (+ real Sanity image assets, when
-   uploaded — Phase 6A) onto the static GALLERY tuples (by position — Sanity
-   was seeded in the same order), keeping label/caption (GALLERY[i][2]/[3])
-   from the static data since Sanity's event schema has no per-image
-   label/caption fields yet. Appends the raw Sanity image object as a 5th
-   tuple element so gsrc() below can prefer it over the reconstructed path. */
-function mergeGallery(paths, sanityImages) {
-  return GALLERY.map((base, i) => {
-    const path = paths?.[i];
-    const sanityImage = sanityImages?.[i];
-    if (!path) return [...base, sanityImage];
-    const m = path.match(/\/([^/]+)\.([a-zA-Z0-9]+)$/);
-    return m ? [m[1], base[1], base[2], base[3], sanityImage] : [...base, sanityImage]; // ext from local data: CMS *Path strings may carry a stale .png/.jpg
-  });
-}
 
 /* Featured-event gallery: main stage + thumbnails + lightbox. Current image is
    state (gi); the lightbox open/close, prev/next, keyboard nav and body-scroll
@@ -46,8 +26,7 @@ export default function Gallery() {
   const ev = cmsEvent || FALLBACK_EVENT;
   const title = loc(ev.title, lang) || FALLBACK_EVENT.title;
   const gallery = mergeGallery(ev.galleryPaths, ev.gallery);
-  const gsrcLocal = (i) => `/assets/images/about/${gallery[i][0]}.${gallery[i][1]}`;
-  const gsrc = (i) => getSanityImageUrl(gallery[i][4], { width: 1200 }) || gsrcLocal(i);
+  const gsrc = (i) => getSanityImageUrl(gallery[i][4], { width: 1200 }) || galleryPath(gallery[i][0], gallery[i][1]);
 
   const [gi, setGi] = useState(0);
   const [lbOpen, setLbOpen] = useState(false);
@@ -70,15 +49,15 @@ export default function Gallery() {
     <>
       <section className="sec" style={{ background: '#fff', padding: '40px 32px 90px' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <Reveal style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '26px' }}>
+          <DataReveal style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '26px' }}>
             <span className="eyebrow">{t("Featured Event")}</span>
             <span style={{ flex: 1, height: '1px', background: '#e4eaf3' }} />
             <span style={{ fontSize: '12px', color: '#8a94a6', fontWeight: 600 }}>2023</span>
-          </Reveal>
+          </DataReveal>
 
           <div className="feat-grid" style={{ display: 'grid', gridTemplateColumns: '1.08fr .92fr', gap: '44px', alignItems: 'stretch' }}>
             {/* stage */}
-            <Reveal onClick={() => setLbOpen(true)} style={{ position: 'relative', borderRadius: '26px', overflow: 'hidden', minHeight: '460px', background: '#0f1729', boxShadow: '0 40px 90px -44px rgba(15,23,41,.55)', cursor: 'zoom-in' }}>
+            <DataReveal onClick={() => setLbOpen(true)} style={{ position: 'relative', borderRadius: '26px', overflow: 'hidden', minHeight: '460px', background: '#0f1729', boxShadow: '0 40px 90px -44px rgba(15,23,41,.55)', cursor: 'zoom-in' }}>
               <div key={gi} style={{ position: 'absolute', inset: 0, backgroundImage: `url('${gsrc(gi)}')`, backgroundSize: 'cover', backgroundPosition: 'center', animation: 'evFade .4s ease, kenBurns 14s ease-in-out infinite alternate' }} />
               <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(155deg,rgba(15,23,41,.35),rgba(26,86,219,.34))', pointerEvents: 'none' }} />
               <button className="evStageBtn" aria-label="View full size" onClick={(e) => { e.stopPropagation(); setLbOpen(true); }}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h6v6" /><path d="M9 21H3v-6" /><path d="M21 3l-7 7" /><path d="M3 21l7-7" /></svg></button>
@@ -92,10 +71,10 @@ export default function Gallery() {
                 <div style={{ fontSize: '9.5px', fontWeight: 700, letterSpacing: '1px', color: '#8fb8ff', textTransform: 'uppercase' }}>{t("Find us at")}</div>
                 <div style={{ fontSize: '15px', fontWeight: 700, marginTop: '4px' }}>Hall 1 · Booth A-30</div>
               </div>
-            </Reveal>
+            </DataReveal>
 
             {/* details */}
-            <Reveal style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            <DataReveal style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', width: 'fit-content', fontSize: '11px', fontWeight: 700, letterSpacing: '1px', color: '#1a56db', background: '#eef4ff', borderRadius: '999px', padding: '6px 13px', textTransform: 'uppercase' }}>{t("Karachi Expo Centre · Pakistan")}</div>
               <h2 className="h2" style={{ fontSize: '34px', margin: '16px 0 0' }}>{title}</h2>
               <p style={{ fontSize: '15.5px', lineHeight: 1.75, color: '#4b5565', margin: '16px 0 0' }}>{t("At Pakistan's leading IT & telecom exhibition, we set up at")} <strong style={{ color: '#0f1729', fontWeight: 600 }}>Hall #1, Booth #A-30</strong> {t("and spent the show doing what we like most — talking to businesses. Teams from real estate, manufacturing, trading and services stopped by to see how the right systems reshape day-to-day operations, and we walked through their challenges one conversation at a time.")}</p>
@@ -108,11 +87,11 @@ export default function Gallery() {
                   </div>
                 ))}
               </div>
-            </Reveal>
+            </DataReveal>
           </div>
 
           {/* thumbnails */}
-          <Reveal className="thumbs" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '16px', marginTop: '20px' }}>
+          <DataReveal className="thumbs" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '16px', marginTop: '20px' }}>
             {gallery.map((g, i) => (
               <div key={g[0]} className={`evVisual evGThumb${i === gi ? ' active' : ''}`} onClick={() => setGi(i)} style={{ background: '#0f1729', boxShadow: '0 20px 44px -30px rgba(15,23,41,.4)' }}>
                 <div className="evShot" style={{ position: 'absolute', inset: 0, backgroundImage: `url('${gsrc(i)}')`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
@@ -120,7 +99,7 @@ export default function Gallery() {
                 <span style={{ position: 'absolute', left: '14px', bottom: '12px', fontSize: '10px', fontWeight: 700, letterSpacing: '1px', color: '#fff', textTransform: 'uppercase' }}>{t(g[2])}</span>
               </div>
             ))}
-          </Reveal>
+          </DataReveal>
         </div>
       </section>
 

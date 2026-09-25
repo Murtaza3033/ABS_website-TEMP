@@ -80,7 +80,7 @@ export default function BenefitsCarousel() {
   return (
     <div data-reveal style={{ position: 'relative', marginTop: '48px' }}>
       <div
-        ref={trackRef} data-ben-track tabIndex={0} aria-label="Partnership benefits carousel"
+        ref={trackRef} tabIndex={0} aria-label="Partnership benefits carousel"
         onMouseEnter={() => { pausedRef.current = true; }}
         onMouseLeave={() => { clearTimeout(resumeRef.current); pausedRef.current = false; baseRef.current = performance.now(); }}
         onKeyDown={(e) => { if (e.key === 'ArrowRight') go(idx + 1); else if (e.key === 'ArrowLeft') go(idx - 1); }}

@@ -1,4 +1,4 @@
-/* Our Advisors — data + icon helper (mirrors our-advisors.runtime.js). */
+/* Our Advisors — data + icon helper. */
 
 const ICON_PATHS = {
   compass: <><circle cx="12" cy="12" r="10" /><path d="M16.2 7.8l-2.9 6.4-6.4 2.9 2.9-6.4 6.4-2.9z" /></>,

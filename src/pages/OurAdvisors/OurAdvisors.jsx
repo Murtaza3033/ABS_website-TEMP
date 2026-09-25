@@ -1,17 +1,12 @@
 import { Fragment, useRef, useState, useEffect, useLayoutEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
-import '../../styles/our-advisors.css';
-import BaseReveal from '../../components/Reveal';
+import { DataReveal } from '../../components/Reveal';
 import SmartLink from '../../components/SmartLink';
 import { Icon, AREAS, PILLARS } from './advisorsData';
 import AreaCard from './AreaCard';
 import Timeline from './Timeline';
 import SEO, { resolveSeo } from '../../components/SEO';
 import { usePage } from '../../hooks/useCms';
-
-function Reveal({ children, ...props }) {
-  return <BaseReveal data-reveal="" baseClass="" shownClass="in" {...props}>{children}</BaseReveal>;
-}
 
 // Headline with word-by-word reveal (was the runtime's [data-headline] split + .play).
 function Headline() {
@@ -72,14 +67,14 @@ export default function OurAdvisors() {
         </div>
         <div style={{ maxWidth: '920px', margin: '0 auto', textAlign: 'center', position: 'relative' }}>
           <Headline />
-          <Reveal as="p" className="lede" style={{ margin: '22px auto 0', maxWidth: '620px' }}>{t("Building a company that businesses trust with their operations takes more than good engineering. Our advisor brings the experience that helps Align make sharper calls on strategy, growth and scale.")}</Reveal>
-          <Reveal style={{ marginTop: '44px' }}><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1a56db" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ animation: 'advScrollCue 1.8s ease-in-out infinite' }}><path d="M12 5v13" /><path d="M6 12l6 6 6-6" /></svg></Reveal>
+          <DataReveal as="p" className="lede" style={{ margin: '22px auto 0', maxWidth: '620px' }}>{t("Building a company that businesses trust with their operations takes more than good engineering. Our advisor brings the experience that helps Align make sharper calls on strategy, growth and scale.")}</DataReveal>
+          <DataReveal style={{ marginTop: '44px' }}><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1a56db" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ animation: 'advScrollCue 1.8s ease-in-out infinite' }}><path d="M12 5v13" /><path d="M6 12l6 6 6-6" /></svg></DataReveal>
         </div>
       </section>
 
       {/* EDITORIAL PROFILE */}
       <section style={{ background: '#fff', padding: '36px 32px 80px' }}>
-        <Reveal className="profile-grid" style={{ maxWidth: '1080px', margin: '0 auto', background: 'var(--tint)', border: '1px solid #eaeef5', borderRadius: '28px', overflow: 'hidden', display: 'grid', gridTemplateColumns: '0.82fr 1.18fr', boxShadow: '0 30px 70px -40px rgba(15,23,41,.35)' }}>
+        <DataReveal className="profile-grid" style={{ maxWidth: '1080px', margin: '0 auto', background: 'var(--tint)', border: '1px solid #eaeef5', borderRadius: '28px', overflow: 'hidden', display: 'grid', gridTemplateColumns: '0.82fr 1.18fr', boxShadow: '0 30px 70px -40px rgba(15,23,41,.35)' }}>
           <div style={{ position: 'relative', background: 'linear-gradient(160deg,#0f1729,#1c2b52)', minHeight: '460px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px', padding: '40px', overflow: 'hidden' }}>
             <div style={{ position: 'absolute', inset: 0, opacity: 0.14, backgroundImage: 'linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px)', backgroundSize: '38px 38px' }} />
             <div style={{ position: 'relative', width: '220px', height: '220px', display: 'grid', placeItems: 'center' }}>
@@ -105,15 +100,15 @@ export default function OurAdvisors() {
             <p style={{ fontSize: '15.5px', lineHeight: 1.7, color: '#4b5565', margin: '10px 0 0' }}>{t("Placeholder for the advisor's background — the experience across enterprise software, scaling teams and go-to-market that informs the guidance they bring to Align. Real bio to be added once confirmed.")}</p>
             <blockquote style={{ margin: '26px 0 0', padding: '20px 24px', background: '#fff', borderLeft: '3px solid var(--blue)', borderRadius: '0 14px 14px 0', fontSize: '17px', lineHeight: 1.5, color: '#31405c', fontStyle: 'italic' }}>{t("\"Advisor quote pending — a short line capturing their perspective on Align's mission.\"")}</blockquote>
           </div>
-        </Reveal>
+        </DataReveal>
       </section>
 
       {/* AREAS OF GUIDANCE */}
       <section className="sec" style={{ background: 'linear-gradient(180deg,#fff 0%,#f4f8ff 100%)', borderTop: '1px solid #eef1f6' }}>
         <div style={{ maxWidth: '1160px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto' }}>
-            <Reveal as="span" className="eyebrow">{t("Where the guidance lands")}</Reveal>
-            <Reveal as="h2" className="h2">{t("How our advisor shapes Align.")}</Reveal>
+            <DataReveal as="span" className="eyebrow">{t("Where the guidance lands")}</DataReveal>
+            <DataReveal as="h2" className="h2">{t("How our advisor shapes Align.")}</DataReveal>
           </div>
           <div className="grid3 areas-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '20px', marginTop: '46px', perspective: '1200px' }}>
             {AREAS.map((a, i) => <AreaCard key={a[0]} a={a} i={i} />)}
@@ -126,16 +121,16 @@ export default function OurAdvisors() {
         <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 80% 0%,rgba(26,86,219,.24),transparent 55%)' }} />
         <div className="why-grid" style={{ maxWidth: '1080px', margin: '0 auto', position: 'relative', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '56px', alignItems: 'center' }}>
           <div>
-            <Reveal as="span" className="eyebrow light">{t("Why it matters")}</Reveal>
-            <Reveal as="h2" className="h2" style={{ color: '#fff' }}>{t("A sounding board for the decisions that shape a company.")}</Reveal>
-            <Reveal as="p" className="lede" style={{ fontSize: '16px', color: '#b7c2d6', margin: '18px 0 0' }}>{t("How our advisor helps Align pressure-test big calls — when to build vs. partner, how to price, where to focus the roadmap, and how to grow the team without losing what makes the work good.")}</Reveal>
+            <DataReveal as="span" className="eyebrow light">{t("Why it matters")}</DataReveal>
+            <DataReveal as="h2" className="h2" style={{ color: '#fff' }}>{t("A sounding board for the decisions that shape a company.")}</DataReveal>
+            <DataReveal as="p" className="lede" style={{ fontSize: '16px', color: '#b7c2d6', margin: '18px 0 0' }}>{t("How our advisor helps Align pressure-test big calls — when to build vs. partner, how to price, where to focus the roadmap, and how to grow the team without losing what makes the work good.")}</DataReveal>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
             {PILLARS.map((p) => (
-              <Reveal key={p[0]} style={{ display: 'flex', gap: '16px', alignItems: 'flex-start', background: '#131c2e', border: '1px solid rgba(255,255,255,.08)', borderRadius: '16px', padding: '20px 22px' }}>
+              <DataReveal key={p[0]} style={{ display: 'flex', gap: '16px', alignItems: 'flex-start', background: '#131c2e', border: '1px solid rgba(255,255,255,.08)', borderRadius: '16px', padding: '20px 22px' }}>
                 <div style={{ width: '40px', height: '40px', flexShrink: 0, borderRadius: '11px', background: 'rgba(26,86,219,.18)', color: '#7aa7ff', display: 'grid', placeItems: 'center' }}><Icon name={p[2]} /></div>
                 <div><div style={{ fontSize: '16px', fontWeight: 700, color: '#fff' }}>{t(p[0])}</div><p style={{ fontSize: '13.5px', lineHeight: 1.6, color: '#96a2ba', margin: '5px 0 0' }}>{t(p[1])}</p></div>
-              </Reveal>
+              </DataReveal>
             ))}
           </div>
         </div>
@@ -145,9 +140,9 @@ export default function OurAdvisors() {
       <section className="sec" style={{ background: '#fff', borderTop: '1px solid #eef1f6' }}>
         <div style={{ maxWidth: '920px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto' }}>
-            <Reveal as="span" className="eyebrow">{t("Background")}</Reveal>
-            <Reveal as="h2" className="h2">{t("A track record worth learning from.")}</Reveal>
-            <Reveal as="p" style={{ fontSize: '14px', color: 'var(--faint)', margin: '12px 0 0' }}>{t("Career milestones TBD — confirm with advisor")}</Reveal>
+            <DataReveal as="span" className="eyebrow">{t("Background")}</DataReveal>
+            <DataReveal as="h2" className="h2">{t("A track record worth learning from.")}</DataReveal>
+            <DataReveal as="p" style={{ fontSize: '14px', color: 'var(--faint)', margin: '12px 0 0' }}>{t("Career milestones TBD — confirm with advisor")}</DataReveal>
           </div>
           <Timeline />
         </div>
@@ -155,7 +150,7 @@ export default function OurAdvisors() {
 
       {/* CTA */}
       <section className="sec" style={{ background: 'var(--tint)', padding: '90px 32px 110px' }}>
-        <Reveal style={{ maxWidth: '1100px', margin: '0 auto', background: 'linear-gradient(135deg,#1a56db,#123f9e)', borderRadius: '28px', padding: '64px 48px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+        <DataReveal style={{ maxWidth: '1100px', margin: '0 auto', background: 'linear-gradient(135deg,#1a56db,#123f9e)', borderRadius: '28px', padding: '64px 48px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
           <div style={{ position: 'absolute', inset: 0, opacity: 0.12, backgroundImage: 'linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px)', backgroundSize: '40px 40px' }} />
           <h2 style={{ position: 'relative', fontSize: 'clamp(26px,3.5vw,32px)', fontWeight: 800, color: '#fff', margin: 0, letterSpacing: '-.6px' }}>{t("Backed by experience. Built by our team.")}</h2>
           <p style={{ position: 'relative', fontSize: '16px', color: '#cfdcff', margin: '12px auto 0', maxWidth: '560px' }}>{t("See what that combination builds — take a walkthrough of the Align platform.")}</p>
@@ -163,7 +158,7 @@ export default function OurAdvisors() {
             <SmartLink href="/contact-us.html" style={{ background: '#fff', color: '#1a56db', fontSize: '15px', fontWeight: 700, padding: '15px 32px', borderRadius: '999px' }}>{t("Book a Demo")}</SmartLink>
             <SmartLink href="/about-us.html" style={{ background: 'rgba(255,255,255,.12)', color: '#fff', fontSize: '15px', fontWeight: 600, padding: '15px 32px', borderRadius: '999px', border: '1.5px solid rgba(255,255,255,.4)' }}>{t("Back to About")}</SmartLink>
           </div>
-        </Reveal>
+        </DataReveal>
       </section>
     </main>
   );

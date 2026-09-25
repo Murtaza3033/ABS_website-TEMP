@@ -1,4 +1,4 @@
-/* About Us — data + icon helper (mirrors about-us.runtime.js). */
+/* About Us — data + icon helper. */
 
 const ICON_PATHS = {
   layers: <><path d="M12 2 2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" /></>,
@@ -61,10 +61,4 @@ export const NET = [
   { title: 'Our Advisors', tag: 'Guidance', accent: '#7c5cff', tint: 'rgba(124,92,255,.12)', line: 'The guidance shaping how Align grows and where it goes next.', href: '/our-advisors.html', img: 'ceo.webp' },
   { title: 'Our Partners', tag: 'Ecosystem', accent: '#d4a017', tint: 'rgba(212,160,23,.14)', line: 'A network of trusted companies we build and grow alongside.', href: '/our-partners.html', img: 'brochure.webp' },
   { title: 'Our Clients', tag: 'Who we serve', accent: '#1a9d55', tint: 'rgba(26,157,85,.12)', line: 'The businesses that run their operations on Align every day.', href: '/our-clients.html', img: 'booth-demo.webp' },
-];
-
-export const PRODMETA = [
-  { name: 'BusinessFlo', accent: '#1a56db', tint: 'rgba(26,86,219,.14)', url: 'app.businessflo.com', img: 'dash-businessflo', topTitle: 'PO-2041 approved', topSub: 'Warehouse notified', botLabel: 'Payment received', botValue: 'Rs 84,500', botDelta: '↑ Cleared just now' },
-  { name: 'PeopleNest', accent: '#7c5cff', tint: 'rgba(124,92,255,.14)', url: 'app.peoplenest.com', img: 'dash-peoplenest', topTitle: 'Leave approved', topSub: 'Casual · 2 days', botLabel: 'New hires this month', botValue: '12', botDelta: '↑ Onboarded' },
-  { name: 'Field Force', accent: '#1a9d55', tint: 'rgba(26,157,85,.14)', url: 'app.pharmafieldflo.com', img: 'dash-pharmafieldflo', topTitle: 'Visit logged', topSub: 'Dr. review · 4:20 PM', botLabel: 'Coverage today', botValue: '87%', botDelta: '↑ 6% vs target' },
 ];

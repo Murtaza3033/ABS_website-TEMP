@@ -1,6 +1,6 @@
 import { useReducer, useRef, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import { submitContact } from '../pages/ContactUs/contactData';
+import { submitContact, validEmail } from '../lib/contactApi';
 import Turnstile from './Turnstile';
 
 // Real number only — never a placeholder. Unset until VITE_WHATSAPP_NUMBER is
@@ -18,7 +18,6 @@ const TINT = '#f7faff';
 const LS = 'alignBot';
 
 const load = () => { try { return JSON.parse(localStorage.getItem(LS) || '{}'); } catch { return {}; } };
-const validEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((v || '').trim());
 
 const persisted = load();
 const initialState = {

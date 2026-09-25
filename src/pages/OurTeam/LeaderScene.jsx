@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { getSanityImageUrl } from '../../lib/sanity';
-import CountUp from './CountUp';
+import CountUp from '../../components/CountUp';
 import { DESC } from './teamData';
 
 const fcardBase = {
