@@ -1,0 +1,171 @@
+SECTION,ITEM,DETAILS,STATUS,PRIORITY
+OVERVIEW,Total Data Items,~40-50 pieces needed,In Progress,HIGH
+OVERVIEW,Time Estimate,1-2 weeks to collect,Planning,HIGH
+OVERVIEW,Week 1,Update Products + Add Team + Cases + Industries,Start Here,CRITICAL
+OVERVIEW,Week 2,Add Advisors + Partners + Events + FAQ,After Week 1,IMPORTANT
+OVERVIEW,Week 3,Add Blog + Testimonials + Services,Nice-to-Have,LOW
+
+SITE SETTINGS,Company Name,[Enter name],Needed,MEDIUM
+SITE SETTINGS,Company Tagline,[Enter tagline],Needed,MEDIUM
+SITE SETTINGS,Company Description (1-2 paragraphs),[Enter description],Needed,MEDIUM
+SITE SETTINGS,Office Address,[Enter address],Needed,MEDIUM
+SITE SETTINGS,Phone Number(s),[Enter phone],Needed,MEDIUM
+SITE SETTINGS,Support Email,[Enter email],Needed,MEDIUM
+SITE SETTINGS,Sales Email,[Enter email],Needed,MEDIUM
+SITE SETTINGS,Company Logo File,[Upload: logo.png],Needed,HIGH
+SITE SETTINGS,LinkedIn URL,[Enter URL],Needed,MEDIUM
+SITE SETTINGS,Twitter/X Handle,[Enter handle],Needed,MEDIUM
+SITE SETTINGS,Facebook Page URL,[Enter URL],Needed,MEDIUM
+SITE SETTINGS,Instagram Handle,[Enter handle],Needed,MEDIUM
+
+PRODUCTS,BusinessFlo - Short Description,[1 sentence],Needed,CRITICAL
+PRODUCTS,BusinessFlo - Long Description,[2-3 paragraphs],Needed,CRITICAL
+PRODUCTS,BusinessFlo - Feature 1,[Enter feature],Needed,CRITICAL
+PRODUCTS,BusinessFlo - Feature 2,[Enter feature],Needed,CRITICAL
+PRODUCTS,BusinessFlo - Feature 3,[Enter feature],Needed,CRITICAL
+PRODUCTS,BusinessFlo - Feature 4,[Enter feature],Needed,CRITICAL
+PRODUCTS,BusinessFlo - Feature 5,[Enter feature],Needed,HIGH
+PRODUCTS,BusinessFlo - Use Case 1,[Enter use case],Needed,HIGH
+PRODUCTS,BusinessFlo - Use Case 2,[Enter use case],Needed,HIGH
+PRODUCTS,BusinessFlo - Use Case 3,[Enter use case],Needed,HIGH
+PRODUCTS,PeopleNest - Short Description,[1 sentence],Needed,CRITICAL
+PRODUCTS,PeopleNest - Long Description,[2-3 paragraphs],Needed,CRITICAL
+PRODUCTS,PeopleNest - Feature 1,[Enter feature],Needed,CRITICAL
+PRODUCTS,PeopleNest - Feature 2,[Enter feature],Needed,CRITICAL
+PRODUCTS,PeopleNest - Feature 3,[Enter feature],Needed,CRITICAL
+PRODUCTS,PeopleNest - Feature 4,[Enter feature],Needed,CRITICAL
+PRODUCTS,PeopleNest - Feature 5,[Enter feature],Needed,HIGH
+PRODUCTS,PeopleNest - Use Case 1,[Enter use case],Needed,HIGH
+PRODUCTS,PeopleNest - Use Case 2,[Enter use case],Needed,HIGH
+PRODUCTS,PeopleNest - Use Case 3,[Enter use case],Needed,HIGH
+PRODUCTS,Field Force - Short Description,[1 sentence],Needed,CRITICAL
+PRODUCTS,Field Force - Long Description,[2-3 paragraphs],Needed,CRITICAL
+PRODUCTS,Field Force - Feature 1,[Enter feature],Needed,CRITICAL
+PRODUCTS,Field Force - Feature 2,[Enter feature],Needed,CRITICAL
+PRODUCTS,Field Force - Feature 3,[Enter feature],Needed,CRITICAL
+PRODUCTS,Field Force - Feature 4,[Enter feature],Needed,CRITICAL
+PRODUCTS,Field Force - Feature 5,[Enter feature],Needed,HIGH
+PRODUCTS,Field Force - Use Case 1,[Enter use case],Needed,HIGH
+PRODUCTS,Field Force - Use Case 2,[Enter use case],Needed,HIGH
+PRODUCTS,Field Force - Use Case 3,[Enter use case],Needed,HIGH
+
+TEAM MEMBERS,Person 1 - Name,[Full name],Needed,CRITICAL
+TEAM MEMBERS,Person 1 - Title,[Job title],Needed,CRITICAL
+TEAM MEMBERS,Person 1 - Department,[Department],Needed,CRITICAL
+TEAM MEMBERS,Person 1 - Email,[Email address],Needed,CRITICAL
+TEAM MEMBERS,Person 1 - Phone,[Phone number],Needed,MEDIUM
+TEAM MEMBERS,Person 1 - Photo,[Photo file - .jpg or .png],Needed,CRITICAL
+TEAM MEMBERS,Person 1 - Bio,[2-3 sentences],Needed,CRITICAL
+TEAM MEMBERS,Person 1 - LinkedIn,[LinkedIn URL],Needed,MEDIUM
+TEAM MEMBERS,Person 1 - Skills/Tags,[Comma separated],Needed,MEDIUM
+TEAM MEMBERS,Person 2 - Name,[Full name],Needed,CRITICAL
+TEAM MEMBERS,Person 2 - Title,[Job title],Needed,CRITICAL
+TEAM MEMBERS,Person 2 - Department,[Department],Needed,CRITICAL
+TEAM MEMBERS,Person 2 - Email,[Email address],Needed,CRITICAL
+TEAM MEMBERS,Person 2 - Photo,[Photo file - .jpg or .png],Needed,CRITICAL
+TEAM MEMBERS,Person 2 - Bio,[2-3 sentences],Needed,CRITICAL
+TEAM MEMBERS,Person 3 - Name,[Full name],Needed,CRITICAL
+TEAM MEMBERS,Person 3 - Title,[Job title],Needed,CRITICAL
+TEAM MEMBERS,Person 3 - Department,[Department],Needed,CRITICAL
+TEAM MEMBERS,Person 3 - Email,[Email address],Needed,CRITICAL
+TEAM MEMBERS,Person 3 - Photo,[Photo file - .jpg or .png],Needed,CRITICAL
+TEAM MEMBERS,Person 3 - Bio,[2-3 sentences],Needed,CRITICAL
+
+CASE STUDIES,Case Study 1 - Company Name,[Company name],Needed,CRITICAL
+CASE STUDIES,Case Study 1 - Company Logo,[Logo file],Needed,CRITICAL
+CASE STUDIES,Case Study 1 - Industry,[Industry type],Needed,CRITICAL
+CASE STUDIES,Case Study 1 - Company Size,[Number of employees],Needed,CRITICAL
+CASE STUDIES,Case Study 1 - Location,[Country/City],Needed,CRITICAL
+CASE STUDIES,Case Study 1 - Challenge,[Problem they faced - 2-3 sentences],Needed,CRITICAL
+CASE STUDIES,Case Study 1 - Solution,[How you solved it - 2-3 sentences],Needed,CRITICAL
+CASE STUDIES,Case Study 1 - Result 1,[Specific metric with number],Needed,CRITICAL
+CASE STUDIES,Case Study 1 - Result 2,[Specific metric with number],Needed,CRITICAL
+CASE STUDIES,Case Study 1 - Testimonial Quote,[Client quote - 1-2 sentences],Needed,CRITICAL
+CASE STUDIES,Case Study 1 - Image,[Before/after screenshot],Needed,HIGH
+CASE STUDIES,Case Study 2 - Company Name,[Company name],Needed,CRITICAL
+CASE STUDIES,Case Study 2 - Company Logo,[Logo file],Needed,CRITICAL
+CASE STUDIES,Case Study 2 - Industry,[Industry type],Needed,CRITICAL
+CASE STUDIES,Case Study 2 - Challenge,[Problem they faced - 2-3 sentences],Needed,CRITICAL
+CASE STUDIES,Case Study 2 - Solution,[How you solved it - 2-3 sentences],Needed,CRITICAL
+CASE STUDIES,Case Study 2 - Result 1,[Specific metric with number],Needed,CRITICAL
+CASE STUDIES,Case Study 2 - Result 2,[Specific metric with number],Needed,CRITICAL
+CASE STUDIES,Case Study 2 - Testimonial Quote,[Client quote - 1-2 sentences],Needed,CRITICAL
+CASE STUDIES,Case Study 3 - Company Name,[Company name],Needed,CRITICAL
+CASE STUDIES,Case Study 3 - Industry,[Industry type],Needed,CRITICAL
+CASE STUDIES,Case Study 3 - Challenge,[Problem they faced],Needed,CRITICAL
+CASE STUDIES,Case Study 3 - Solution,[How you solved it],Needed,CRITICAL
+
+INDUSTRIES,Manufacturing - Description,[2-3 sentences about industry],Needed,CRITICAL
+INDUSTRIES,Manufacturing - Challenges,[3 key challenges solved],Needed,CRITICAL
+INDUSTRIES,Manufacturing - Key Features,[3-4 most relevant features],Needed,HIGH
+INDUSTRIES,Pharmaceutical - Description,[2-3 sentences about industry],Needed,CRITICAL
+INDUSTRIES,Pharmaceutical - Challenges,[3 key challenges solved],Needed,CRITICAL
+INDUSTRIES,Pharmaceutical - Key Features,[3-4 most relevant features],Needed,HIGH
+INDUSTRIES,Retail - Description,[2-3 sentences about industry],Needed,CRITICAL
+INDUSTRIES,Retail - Challenges,[3 key challenges solved],Needed,CRITICAL
+INDUSTRIES,Retail - Key Features,[3-4 most relevant features],Needed,HIGH
+INDUSTRIES,Distribution - Description,[2-3 sentences about industry],Needed,CRITICAL
+INDUSTRIES,Distribution - Challenges,[3 key challenges solved],Needed,CRITICAL
+INDUSTRIES,Distribution - Key Features,[3-4 most relevant features],Needed,HIGH
+INDUSTRIES,HR & Workforce - Description,[2-3 sentences about industry],Needed,CRITICAL
+INDUSTRIES,HR & Workforce - Challenges,[3 key challenges solved],Needed,CRITICAL
+INDUSTRIES,HR & Workforce - Key Features,[3-4 most relevant features],Needed,HIGH
+INDUSTRIES,Enterprise - Description,[2-3 sentences about industry],Needed,CRITICAL
+INDUSTRIES,Enterprise - Challenges,[3 key challenges solved],Needed,CRITICAL
+INDUSTRIES,Enterprise - Key Features,[3-4 most relevant features],Needed,HIGH
+INDUSTRIES,Services - Description,[2-3 sentences about industry],Needed,CRITICAL
+INDUSTRIES,Services - Challenges,[3 key challenges solved],Needed,CRITICAL
+INDUSTRIES,Services - Key Features,[3-4 most relevant features],Needed,HIGH
+
+ADVISORS & PARTNERS,Person 1 - Name,[Full name],Needed,MEDIUM
+ADVISORS & PARTNERS,Person 1 - Title,[Title/Expertise],Needed,MEDIUM
+ADVISORS & PARTNERS,Person 1 - Company,[Company name],Needed,MEDIUM
+ADVISORS & PARTNERS,Person 1 - Bio,[1-2 sentences],Needed,MEDIUM
+ADVISORS & PARTNERS,Person 1 - LinkedIn/Website,[URL],Needed,MEDIUM
+ADVISORS & PARTNERS,Partner 1 - Company Name,[Company name],Needed,MEDIUM
+ADVISORS & PARTNERS,Partner 1 - Partnership Type,[Type of partnership],Needed,MEDIUM
+ADVISORS & PARTNERS,Partner 1 - Logo,[Logo file],Needed,MEDIUM
+
+EVENTS,Event 1 - Title,[Event title],Needed,MEDIUM
+EVENTS,Event 1 - Type,[Webinar/Conference/Workshop],Needed,MEDIUM
+EVENTS,Event 1 - Date,[Date: YYYY-MM-DD],Needed,MEDIUM
+EVENTS,Event 1 - Time,[Time: HH:MM],Needed,MEDIUM
+EVENTS,Event 1 - Location,[City or Online],Needed,MEDIUM
+EVENTS,Event 1 - Description,[2-3 sentences],Needed,MEDIUM
+EVENTS,Event 1 - Registration Link,[URL to register],Needed,MEDIUM
+EVENTS,Event 1 - Speakers,[Speaker names and titles],Needed,MEDIUM
+
+CAREERS,Job 1 - Title,[Job title],Needed,MEDIUM
+CAREERS,Job 1 - Department,[Department],Needed,MEDIUM
+CAREERS,Job 1 - Location,[City/Remote],Needed,MEDIUM
+CAREERS,Job 1 - Job Type,[Full-time/Contract/etc],Needed,MEDIUM
+CAREERS,Job 1 - Experience Level,[Junior/Mid/Senior],Needed,MEDIUM
+CAREERS,Job 1 - Description,[Full job description],Needed,MEDIUM
+CAREERS,Job 1 - Requirements,[3-5 must-have requirements],Needed,MEDIUM
+CAREERS,Job 1 - Preferred Skills,[3-5 nice-to-have skills],Needed,MEDIUM
+CAREERS,Job 1 - Benefits,[3-5 key benefits],Needed,MEDIUM
+
+FAQ,FAQ 1 - Question,[The question],Needed,LOW
+FAQ,FAQ 1 - Answer,[Detailed answer],Needed,LOW
+FAQ,FAQ 1 - Category,[Topic/Category],Needed,LOW
+FAQ,FAQ 2 - Question,[The question],Needed,LOW
+FAQ,FAQ 2 - Answer,[Detailed answer],Needed,LOW
+FAQ,FAQ 2 - Category,[Topic/Category],Needed,LOW
+
+BLOG POSTS,Post 1 - Title,[Post title],Needed,LOW
+BLOG POSTS,Post 1 - Slug,[URL-friendly title],Needed,LOW
+BLOG POSTS,Post 1 - Author,[Author name],Needed,LOW
+BLOG POSTS,Post 1 - Date,[Date: YYYY-MM-DD],Needed,LOW
+BLOG POSTS,Post 1 - Summary,[2-3 sentences],Needed,LOW
+BLOG POSTS,Post 1 - Category,[Category/Tag],Needed,LOW
+
+TESTIMONIALS,Quote 1 - Quote,[1-2 sentence quote],Needed,LOW
+TESTIMONIALS,Quote 1 - Author Name,[Full name],Needed,LOW
+TESTIMONIALS,Quote 1 - Author Title,[Job title/Company],Needed,LOW
+TESTIMONIALS,Quote 1 - Product,[Which product they used],Needed,LOW
+TESTIMONIALS,Quote 1 - Rating,[1-5 stars],Needed,LOW
+
+NOTES,FILE UPDATED - Hero images removed,Already have hero section coded,ACTION,CRITICAL
+NOTES,All CRITICAL items,MUST complete before Week 1 launch,ACTION REQUIRED,CRITICAL
+NOTES,Image files,Use PNG/JPG format max 5MB,REMINDER,HIGH
+NOTES,Save as you go,Do not lose data,REMINDER,HIGH

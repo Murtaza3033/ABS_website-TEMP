@@ -57,6 +57,7 @@ button{font-family:inherit;}
    back to the top of the page. */
 .site-header.nav-hidden{transform:translateY(-100%);}
 .nav-inner{max-width:1400px;margin:0 auto;padding:0 34px;height:78px;display:flex;align-items:center;gap:24px;}
+@media (max-width:768px){.nav-inner{padding:0 16px;gap:12px;}}
 .nav-logo{display:flex;align-items:center;flex:1;}
 .nav-logo img{height:38px;}
 
@@ -132,7 +133,10 @@ button{font-family:inherit;}
 .site-footer{font-family:var(--font-sans);background:#0b1220;color:#eaf0fb;opacity:0;transform:translateY(24px);}
 .site-footer.reveal{transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.3,1);opacity:1;transform:translateY(0);}
 .ft-inner{max-width:1300px;margin:0 auto;padding:52px 34px 32px;}
+@media (max-width:768px){.ft-inner{padding:52px 22px 32px;}}
+@media (max-width:768px){.ft-inner{padding:52px 22px 32px;}}
 @media (min-width:901px){.ft-inner{padding-left:170px;}}
+@media (max-width:768px){.ft-main{grid-template-columns:1fr;gap:24px;}}
 .ft-main{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr 1.2fr;gap:40px;}
 .ft-logo{height:40px;filter:brightness(0) invert(1);}
 .ft-lede{font-size:14px;line-height:1.7;color:#96a2ba;margin:20px 0 0;max-width:300px;}
@@ -190,3 +194,28 @@ button{font-family:inherit;}
    352px wide, cropping off the left edge on any phone narrower than ~376px. */
 @media (max-width:520px){.ab-panel{width:calc(100vw - 24px) !important;height:calc(100vh - 96px) !important;}}
 @media (prefers-reduced-motion:reduce){.ab-launcher{animation:none !important;}}
+
+/* ============================================================ */
+/* RESPONSIVE FIXES - MOBILE & TABLET                           */
+/* ============================================================ */
+@media (max-width:768px){
+  body{padding-top:66px;}
+  .site-header{height:66px;}
+  .nav-burger{display:flex;}
+  .nav-logo img{height:32px;}
+  .btn-cta{padding:11px 18px;font-size:13px;}
+  .scroll-top,.scroll-bottom{width:44px;height:44px;right:16px;}
+  .scroll-bottom{bottom:130px;}
+}
+
+@media (max-width:480px){
+  body{padding-top:60px;}
+  .site-header{height:60px;}
+  .nav-logo img{height:28px;}
+  .nav-inner{padding:0 12px;gap:8px;}
+  .btn-cta{padding:10px 16px;font-size:12px;}
+  .scroll-top,.scroll-bottom{width:40px;height:40px;right:12px;bottom:20px;}
+  .scroll-bottom{bottom:100px;}
+  .scroll-top svg,.scroll-bottom svg{width:18px;height:18px;}
+  .nav-sep{display:none;}
+}
