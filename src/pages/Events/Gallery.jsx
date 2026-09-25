@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { DataReveal } from '../../components/Reveal';
 import { useEvent } from '../../hooks/useCms';
@@ -30,20 +30,42 @@ export default function Gallery() {
 
   const [gi, setGi] = useState(0);
   const [lbOpen, setLbOpen] = useState(false);
+  const lboxRef = useRef(null);
+  const closeRef = useRef(null);
 
   const go = (d) => setGi((g) => (g + d + gallery.length) % gallery.length);
 
+  /* Lightbox = modal dialog: focus moves to its close button on open, Tab is
+     trapped inside, Esc closes, and focus returns to whatever opened it. */
   useEffect(() => {
     if (!lbOpen) return undefined;
+    const opener = document.activeElement;
     document.body.style.overflow = 'hidden';
+    closeRef.current?.focus();
     const onKey = (e) => {
       if (e.key === 'Escape') setLbOpen(false);
       else if (e.key === 'ArrowRight') go(1);
       else if (e.key === 'ArrowLeft') go(-1);
+      else if (e.key === 'Tab' && lboxRef.current) {
+        const f = [...lboxRef.current.querySelectorAll('button')];
+        if (!f.length) return;
+        const first = f[0]; const last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+        else if (!lboxRef.current.contains(document.activeElement)) { e.preventDefault(); first.focus(); }
+      }
     };
     window.addEventListener('keydown', onKey);
-    return () => { document.body.style.overflow = ''; window.removeEventListener('keydown', onKey); };
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', onKey);
+      if (opener && typeof opener.focus === 'function' && document.contains(opener)) opener.focus();
+    };
   }, [lbOpen]);
+
+  const onThumbKey = (i) => (e) => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setGi(i); }
+  };
 
   return (
     <>
@@ -93,7 +115,7 @@ export default function Gallery() {
           {/* thumbnails */}
           <DataReveal className="thumbs" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '16px', marginTop: '20px' }}>
             {gallery.map((g, i) => (
-              <div key={g[0]} className={`evVisual evGThumb${i === gi ? ' active' : ''}`} onClick={() => setGi(i)} style={{ background: '#0f1729', boxShadow: '0 20px 44px -30px rgba(15,23,41,.4)' }}>
+              <div key={g[0]} className={`evVisual evGThumb${i === gi ? ' active' : ''}`} role="button" tabIndex={0} aria-pressed={i === gi} aria-label={`${t(g[2])} — ${t('Show photo')} ${i + 1}`} onClick={() => setGi(i)} onKeyDown={onThumbKey(i)} style={{ background: '#0f1729', boxShadow: '0 20px 44px -30px rgba(15,23,41,.4)' }}>
                 <div className="evShot" style={{ position: 'absolute', inset: 0, backgroundImage: `url('${gsrc(i)}')`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
                 <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(0deg,rgba(15,23,41,.5),transparent 55%)' }} />
                 <span style={{ position: 'absolute', left: '14px', bottom: '12px', fontSize: '10px', fontWeight: 700, letterSpacing: '1px', color: '#fff', textTransform: 'uppercase' }}>{t(g[2])}</span>
@@ -104,9 +126,9 @@ export default function Gallery() {
       </section>
 
       {/* Lightbox */}
-      <div className={`lbox${lbOpen ? ' open' : ''}`} aria-hidden={!lbOpen} onClick={(e) => { if (e.target === e.currentTarget) setLbOpen(false); }}>
+      <div ref={lboxRef} className={`lbox${lbOpen ? ' open' : ''}`} role="dialog" aria-modal="true" aria-label={t('Event photo')} aria-hidden={!lbOpen} onClick={(e) => { if (e.target === e.currentTarget) setLbOpen(false); }}>
         <div className="lboxInner" onClick={(e) => { if (e.target === e.currentTarget) setLbOpen(false); }}>
-          <button className="lboxClose" aria-label="Close" onClick={() => setLbOpen(false)}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18" /><path d="M6 6l12 12" /></svg></button>
+          <button ref={closeRef} className="lboxClose" aria-label={t('Close')} onClick={() => setLbOpen(false)}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18" /><path d="M6 6l12 12" /></svg></button>
           <button className="lboxNav lboxPrev" aria-label="Previous" onClick={() => go(-1)}>‹</button>
           <img className="lboxImg" src={gsrc(gi)} alt="Event photo" />
           <button className="lboxNav lboxNext" aria-label="Next" onClick={() => go(1)}>›</button>

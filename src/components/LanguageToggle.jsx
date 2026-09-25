@@ -1,8 +1,9 @@
 import { useLanguage } from '../context/LanguageContext';
 
-// EN / عربي pill.
-export default function LanguageToggle() {
-  const { lang, setLang } = useLanguage();
+// EN / عربي pill. Rendered twice (desktop header bar + mobile menu), so the
+// id is overridable to keep ids unique.
+export default function LanguageToggle({ id = 'alignI18nToggle' }) {
+  const { lang, setLang, t } = useLanguage();
 
   const wrap = {
     display: 'inline-flex', alignItems: 'center', gap: '2px', marginInlineStart: '10px',
@@ -16,14 +17,20 @@ export default function LanguageToggle() {
   const off = { background: 'transparent', color: '#5b6472' };
 
   return (
-    <div id="alignI18nToggle" style={wrap}>
+    <div id={id} role="group" aria-label={t('Language')} style={wrap}>
       <button
+        type="button"
+        lang="en"
+        aria-pressed={lang === 'en'}
         onClick={() => setLang('en')}
         style={{ ...base, fontSize: '12px', ...(lang === 'en' ? on : off) }}
       >
         EN
       </button>
       <button
+        type="button"
+        lang="ar"
+        aria-pressed={lang === 'ar'}
         onClick={() => setLang('ar')}
         style={{ ...base, fontSize: '13px', fontFamily: "'Cairo',sans-serif", ...(lang === 'ar' ? on : off) }}
       >

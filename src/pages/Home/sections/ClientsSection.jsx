@@ -1,8 +1,9 @@
-import LogoSlot from './LogoSlot';
+import LogoSlot, { useLogoRotation } from './LogoSlot';
 import { useLanguage } from '../../../context/LanguageContext';
 
 export default function ClientsSection() {
   const { t } = useLanguage();
+  const logos = useLogoRotation(12); // 12 slots, always 12 different logos
   return (
     <>
       <section data-screen-label="Clients" className="ag" style={{background: '#ffffff', borderTop: '1px solid #f0f3f8', overflow: 'hidden'}}>
@@ -10,14 +11,14 @@ export default function ClientsSection() {
             <div style={{position: 'relative'}}>
               <div className="hm-logogrid" style={{display: 'grid', gridTemplateColumns: 'repeat(12,1fr)', gridAutoRows: '100px', gap: '12px'}}>
               <div style={{background: '#1a56db', borderRadius: '50%'}}></div>
-              <LogoSlot />
+              <LogoSlot logo={logos[0]} />
               <div style={{background: '#e8effc', borderRadius: '18px'}}></div>
               <div></div>
               <div style={{background: '#e8effc', borderRadius: '50%'}}></div>
-              <LogoSlot />
-              <LogoSlot />
+              <LogoSlot logo={logos[1]} />
+              <LogoSlot logo={logos[2]} />
               <div style={{background: '#e8effc', borderRadius: '18px'}}></div>
-              <LogoSlot />
+              <LogoSlot logo={logos[3]} />
               <div style={{background: '#1a56db', borderRadius: '18px'}}></div>
               <div style={{background: '#e8effc', borderRadius: '18px'}}></div>
               <div style={{background: '#e8effc', borderRadius: '18px 60% 18px 18px'}}></div>
@@ -35,7 +36,7 @@ export default function ClientsSection() {
               <div style={{background: '#dce7fb', borderRadius: '18px 18px 60% 18px'}}></div>
               <div style={{background: '#e8effc', borderRadius: '18px'}}></div>
               <div style={{background: '#1a56db', borderRadius: '50%'}}></div>
-              <LogoSlot />
+              <LogoSlot logo={logos[4]} />
               <div></div>
               <div></div>
               <div></div>
@@ -46,8 +47,8 @@ export default function ClientsSection() {
               <div style={{background: '#dce7fb', borderRadius: '50%'}}></div>
               <div style={{background: '#e8effc', borderRadius: '18px'}}></div>
               <div style={{background: '#dce7fb', borderRadius: '18px'}}></div>
-              <LogoSlot />
-              <LogoSlot />
+              <LogoSlot logo={logos[5]} />
+              <LogoSlot logo={logos[6]} />
               <div></div>
               <div></div>
               <div></div>
@@ -57,16 +58,16 @@ export default function ClientsSection() {
               <div></div>
               <div style={{background: '#e8effc', borderRadius: '18px'}}></div>
               <div style={{background: '#1a56db', borderRadius: '18px'}}></div>
-              <LogoSlot />
+              <LogoSlot logo={logos[7]} />
               <div></div>
               <div style={{background: '#1a56db', borderRadius: '18px'}}></div>
-              <LogoSlot />
-              <LogoSlot />
+              <LogoSlot logo={logos[8]} />
+              <LogoSlot logo={logos[9]} />
               <div></div>
               <div style={{background: '#e8effc', borderRadius: '50%'}}></div>
-              <LogoSlot />
+              <LogoSlot logo={logos[10]} />
               <div style={{background: '#1a56db', borderRadius: '18px'}}></div>
-              <LogoSlot />
+              <LogoSlot logo={logos[11]} />
               <div></div>
               <div></div>
               </div>

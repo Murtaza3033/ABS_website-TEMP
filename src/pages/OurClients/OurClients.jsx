@@ -46,7 +46,7 @@ export default function OurClients() {
             {HEAD.map((w, i) => (
               <Fragment key={i}>
                 <span className={hw} style={{ animationDelay: `${i * 85}ms` }}>
-                  {w === 'proud' ? <span className="cave" style={{ fontSize: '1.22em' }}>{t("proud")}</span> : t(w)}
+                  {w === 'proud' ? <span className="cave cave-sp" style={{ fontSize: '1.22em' }}>{t("proud")}</span> : t(w)}
                 </span>
                 {i < HEAD.length - 1 ? ' ' : null}
               </Fragment>

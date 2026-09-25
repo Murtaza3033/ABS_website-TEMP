@@ -297,7 +297,7 @@ export default function SalesBot() {
           </div>
 
           <div style={{ padding: '10px 12px', borderTop: '1px solid #eef1f6', background: '#fff', display: 'flex', gap: '8px', alignItems: 'center' }}>
-            <input ref={inputRef} type="text" placeholder={t('Type a message…')} onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); send(); } }}
+            <input ref={inputRef} type="text" aria-label={t('Type a message…')} placeholder={t('Type a message…')} onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); send(); } }}
               style={{ flex: 1, fontFamily: 'Outfit,sans-serif', fontSize: '14px', border: '1.5px solid #e3e9f3', borderRadius: '12px', padding: '11px 13px', outline: 'none', color: SLATE }} />
             <button aria-label={t('Send message')} onClick={send} style={{ width: '42px', height: '42px', flexShrink: 0, borderRadius: '12px', border: 'none', background: BLUE, color: '#fff', cursor: 'pointer', display: 'grid', placeItems: 'center' }}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m22 2-7 20-4-9-9-4Z" /><path d="M22 2 11 13" /></svg>

@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 
 /* Clients mosaic slot — idiomatic replacement for the runtime's imperative
-   setLogo() DOM injection. Each slot owns its own rotation state + interval
-   (staggered so the grid rotates gently, as the original did by cycling 3
-   slots every 2.2s). Image paths stay as public/ strings per the scope
-   decision. Missing logos hide via state, not DOM mutation. */
+   setLogo() DOM injection. The rotation state lives in useLogoRotation()
+   (one per mosaic) so every slot's next logo is picked from the ones NOT
+   currently shown: no logo ever appears in two slots at the same time. Each
+   slot still ticks on its own staggered interval so the grid rotates gently.
+   Image paths stay as public/ strings per the scope decision. Missing logos
+   hide via state, not DOM mutation. */
 const LOGOS = [
   ['Dipitt', 'dipitt-logo'], ['Danpak', 'danpak-logo'], ['Noon', 'noon-logo'],
   ['Nectek', 'nectek-logo'], ['Zamanat', 'zamanat-logo'], ['Greeeno', 'greeeno-logo'],
@@ -32,19 +34,44 @@ function LogoImg({ file, name }) {
       alt={name}
       style={IMG_STYLE}
       className="logo-fade"
+      loading="lazy"
+      decoding="async"
       onError={() => setBroken(true)}
     />
   );
 }
 
-export default function LogoSlot() {
-  const [i, setI] = useState(() => Math.floor(Math.random() * LOGOS.length));
+/* Returns "count" distinct LOGOS indices (random start). Each slot advances
+   on its own 4.2–7.4s interval to the next logo that no other slot shows. */
+export function useLogoRotation(count) {
+  const n = Math.min(count, LOGOS.length);
+  const [slots, setSlots] = useState(() => {
+    const order = LOGOS.map((_, i) => i);
+    for (let i = order.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [order[i], order[j]] = [order[j], order[i]];
+    }
+    return order.slice(0, n);
+  });
   useEffect(() => {
-    const period = 4200 + Math.floor(Math.random() * 3200); // stagger 4.2–7.4s
-    const id = setInterval(() => setI((p) => (p + 1) % LOGOS.length), period);
-    return () => clearInterval(id);
-  }, []);
-  const [name, file] = LOGOS[i];
+    const ids = Array.from({ length: n }, (_, k) => {
+      const period = 4200 + Math.floor(Math.random() * 3200); // stagger 4.2–7.4s
+      return setInterval(() => setSlots((prev) => {
+        const shown = new Set(prev);
+        let next = prev[k];
+        do { next = (next + 1) % LOGOS.length; } while (shown.has(next) && next !== prev[k]);
+        if (next === prev[k]) return prev;
+        const copy = prev.slice(); copy[k] = next;
+        return copy;
+      }), period);
+    });
+    return () => ids.forEach(clearInterval);
+  }, [n]);
+  return slots;
+}
+
+export default function LogoSlot({ logo = 0 }) {
+  const [name, file] = LOGOS[logo % LOGOS.length];
   return (
     <div data-hv="hv-7" style={SLOT_STYLE}>
       {/* key by file so the fade-in animation replays on each logo change */}

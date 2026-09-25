@@ -15,7 +15,7 @@ function ClientLogo({ name, logo, file }) {
   const [srcIndex, setSrcIndex] = useState(0);
   const wordmark = { fontSize: '22px', fontWeight: 800, letterSpacing: '-.5px', color: '#0f1729', textAlign: 'center' };
   if (srcIndex >= sources.length) return <span style={wordmark}>{name}</span>;
-  return <img className="clLogo" src={sources[srcIndex]} alt={name} onError={() => setSrcIndex((i) => i + 1)} style={{ width: '100%', height: '82px', objectFit: 'contain' }} />;
+  return <img className="clLogo" src={sources[srcIndex]} loading="lazy" decoding="async" alt={name} onError={() => setSrcIndex((i) => i + 1)} style={{ width: '100%', height: '82px', objectFit: 'contain' }} />;
 }
 
 /* Static CLIENTS reshaped to look like a Sanity `client` document list, so it

@@ -21,6 +21,9 @@ const queryClient = new QueryClient({
 // clean up fully (intervals/timeouts/rAF/listeners all torn down), so StrictMode's
 // dev-only double-invocation is safe — no double-initialized DOM, no leaked timers.
 const render = () => {
+  // index.html's static <title> is only the no-JS default; drop it so the
+  // <title> React/Helmet hoists into <head> is the only one (no duplicates).
+  document.getElementById('static-title')?.remove();
   createRoot(document.getElementById('root')).render(
     <StrictMode>
       <QueryClientProvider client={queryClient}>

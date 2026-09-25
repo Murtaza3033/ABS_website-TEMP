@@ -9,6 +9,10 @@ import { loc } from '../../lib/loc';
 import SEO, { resolveSeo } from '../../components/SEO';
 import { Icon, HERO, LEADERS, WAY, SEN, ROLES, PAL } from './teamData';
 
+/* Sections tracked by the scroll scan (secRefs 0-8). */
+const SECTION_COUNT = 9;
+const SPINE_ITEMS = Array.from({ length: SECTION_COUNT }, (_, i) => i);
+
 const SPINE_PATH = 'M18,12 C70,180 20,340 72,480 C24,620 74,760 30,900 C33,955 46,984 56,1000';
 
 /* Static LEADERS reshaped to look like a Sanity `teamMember` document list —
@@ -57,10 +61,10 @@ export default function OurTeam() {
   const fillRef = useRef(null);
   const pathRef = useRef(null);
   const svgRef = useRef(null);
-  const revealedRef = useRef(Array(9).fill(false));
+  const revealedRef = useRef(Array(SECTION_COUNT).fill(false));
   const activeRef = useRef(0);
   const hiddenRef = useRef(false);
-  const [revealed, setRevealed] = useState(() => Array(9).fill(false));
+  const [revealed, setRevealed] = useState(() => Array(SECTION_COUNT).fill(false));
   const [activeIdx, setActiveIdx] = useState(0);
   const [spineHidden, setSpineHidden] = useState(false);
 
@@ -144,10 +148,12 @@ export default function OurTeam() {
       <ParticleCanvas />
 
       {/* spine nav */}
-      <nav className="tSpine" aria-label="Section navigation" style={{ opacity: spineHidden ? 0 : 1, transform: spineHidden ? 'translateY(-50%) translateX(-40px)' : 'translateY(-50%) translateX(0)', pointerEvents: spineHidden ? 'none' : 'auto' }}>
+      <nav className="tSpine" aria-label={t('Section navigation')} style={{ opacity: spineHidden ? 0 : 1, transform: spineHidden ? `translateY(-50%) translateX(${lang === 'ar' ? 40 : -40}px)` : 'translateY(-50%) translateX(0)', pointerEvents: spineHidden ? 'none' : 'auto' }}>
         <span className="rail"><i ref={fillRef} style={{ height: '0%' }} /></span>
-        {[0, 1, 2, 3, 4, 5].map((n) => (
-          <button key={n} className="spineBtn" onClick={() => jumpTo(n)} style={{ color: activeIdx === n ? '#4b8bff' : '#5f6f8c' }}>{String(n).padStart(2, '0')}</button>
+        {/* one item per tracked section (hero, 4 leaders, 4 closing sections)
+            so whichever section is centred always has a lit spine item */}
+        {SPINE_ITEMS.map((n) => (
+          <button key={n} type="button" className="spineBtn" aria-current={activeIdx === n ? 'true' : undefined} onClick={() => jumpTo(n)} style={{ color: activeIdx === n ? '#4b8bff' : '#5f6f8c' }}>{String(n).padStart(2, '0')}</button>
         ))}
       </nav>
 

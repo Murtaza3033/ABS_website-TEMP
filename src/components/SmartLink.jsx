@@ -12,6 +12,7 @@ export const LEGACY_ROUTES = {
   '/industries.html': '/industries',
   '/events.html': '/events',
   '/careers.html': '/careers',
+  '/products.html': '/products',
 };
 
 // A bare internal path with no ".html" suffix — e.g. "/products",

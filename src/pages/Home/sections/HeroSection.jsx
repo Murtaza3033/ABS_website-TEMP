@@ -1,6 +1,13 @@
 import { useHome } from '../HomeContext';
 import { useLanguage } from '../../../context/LanguageContext';
 
+/* "Show tips" / "Hide tips" pill (toggles the hand-drawn tour annotations). */
+const TIP_PILL = {position: 'absolute', top: '120px', insetInlineEnd: '40px', zIndex: '60', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '7px', background: '#ffffff', border: '1px solid #c9d8f5', color: '#1a56db', fontFamily: 'Outfit,sans-serif', fontSize: '13px', fontWeight: '600', borderRadius: '99px', padding: '9px 16px', boxShadow: '0 8px 20px -10px rgba(15,23,41,.2)'};
+
+/* The mockup's demo menu links are href="#" placeholders — swallow the click
+   so they never push "#" into the URL/history or jump the page to the top. */
+const swallowDemoLink = (e) => { if (e.target.closest('a[href="#"]')) e.preventDefault(); };
+
 export default function HeroSection() {
   const { c, b, act, state } = useHome();
   const { t } = useLanguage();
@@ -19,7 +26,7 @@ export default function HeroSection() {
   const pill = (i) => PILL[state.rows[i]] || PILL.approved;
   return (
     <>
-      <section data-screen-label="Hero" data-product={state.product} data-aitab={state.aiTab} data-pnview={state.pnView} data-pnmenu={state.pnMenu || 'none'} style={{position: 'relative', overflow: 'hidden', background: 'linear-gradient(180deg,#ffffff 0%,#f7faff 100%)'}}>
+      <section data-screen-label="Hero" data-product={state.product} data-aitab={state.aiTab} data-pnview={state.pnView} data-pnmenu={state.pnMenu || 'none'} onClick={swallowDemoLink} style={{position: 'relative', overflow: 'hidden', background: 'linear-gradient(180deg,#ffffff 0%,#f7faff 100%)'}}>
           {c('tourOn') && (<>
             <div className="hm-annotate" style={{position: 'absolute', inset: '0', zIndex: '60', pointerEvents: 'none', fontFamily: 'Outfit,sans-serif'}}>
               
@@ -33,8 +40,11 @@ export default function HeroSection() {
             </div>
           </>)}
           {c('tourHidden') && (<>
-            <div onClick={() => act('showTour')} className="hm-annotate" style={{position: 'absolute', top: '120px', insetInlineEnd: '40px', zIndex: '60', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '7px', background: '#ffffff', border: '1px solid #c9d8f5', color: '#1a56db', fontSize: '13px', fontWeight: '600', borderRadius: '99px', padding: '9px 16px', boxShadow: '0 8px 20px -10px rgba(15,23,41,.2)'}}>{t("💡 Show tips")}</div>
+            <button type="button" onClick={() => act('showTour')} className="hm-annotate" style={TIP_PILL}>{t("💡 Show tips")}</button>
           </>)}
+          {c('tourOn') && (
+            <button type="button" onClick={() => act('hideTour')} className="hm-annotate" style={TIP_PILL}>{t("✕ Hide tips")}</button>
+          )}
           <div style={{position: 'absolute', top: '-220px', insetInlineStart: '50%', marginInlineStart: '-320px', width: '640px', height: '640px', borderRadius: '50%', background: 'radial-gradient(circle,rgba(26,86,219,.08) 0%,rgba(26,86,219,0) 65%)'}}></div>
           <div style={{maxWidth: '900px', margin: '0 auto', padding: '70px 32px 0', textAlign: 'center'}}>
             <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px', marginTop: '4px', position: 'relative', zIndex: '40'}}>
@@ -146,7 +156,7 @@ export default function HeroSection() {
                 </div>
               </div>
               </div>
-              <div className="hm-annotate" style={{position: 'absolute', top: '-186px', insetInlineStart: '-14px', width: '300px', textAlign: 'center', zIndex: '7', pointerEvents: 'none'}}>
+              <div className="hm-annotate" style={{position: 'absolute', top: '-186px', insetInlineStart: '-14px', width: '300px', textAlign: 'center', zIndex: '7', pointerEvents: 'none', display: state.tour ? undefined : 'none'}}>
                 <div style={{fontFamily: 'Caveat,cursive', fontWeight: '700', fontSize: '38px', letterSpacing: '.5px', color: '#1a56db', lineHeight: '1', transform: 'rotate(-3deg)'}}>{t("AI Hub")}</div>
                 <div style={{fontFamily: 'Outfit,sans-serif', fontSize: '12px', fontWeight: '500', color: '#1a56db', lineHeight: '1.4', marginTop: '4px'}}>{t("AI chat, support tickets & quick help —")}<br />{t("built into every interactive field")}</div>
                 <svg width="84" height="74" viewBox="0 0 84 74" fill="none" style={{marginTop: '2px', marginInlineStart: '104px'}}><path d="M44 8 C 10 6, 8 44, 38 38 C 60 34, 48 60, 44 70" stroke="#1a56db" strokeWidth="5" fill="none" strokeLinecap="round" strokeLinejoin="round" style={{strokeDasharray: '240', animation: 'drawCurve 2.6s ease-in-out infinite'}}></path><path d="M44 70 L 33 56 M44 70 L 56 58" stroke="#1a56db" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" style={{animation: 'drawHead 2.6s ease-in-out infinite'}}></path></svg>

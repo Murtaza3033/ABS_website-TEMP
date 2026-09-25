@@ -181,6 +181,13 @@
     transform-origin:top left !important;
     transform:scale(max(.65,min(1,calc((100vw - 64px) / var(--hm-w,900px))))) !important;
   }
+  /* RTL: the wrap inherits direction:rtl, where only overflow on the LEFT is
+     scrollable — so pin + scale the panel from the right edge instead, letting
+     it overflow leftwards into the scrollable side (starts at the right, as
+     Arabic reads). */
+  html[dir="rtl"] .rtl-mock .hm-scale-scroll{
+    left:auto !important;right:0 !important;transform-origin:top right !important;
+  }
   .hm-scale-scroll-wrap::-webkit-scrollbar{height:8px;}
   .hm-scale-scroll-wrap::-webkit-scrollbar-track{background:#eef1f6;border-radius:99px;}
   .hm-scale-scroll-wrap::-webkit-scrollbar-thumb{background:#9fb4d8;border-radius:99px;}
@@ -251,11 +258,25 @@
        bottom edge — drop it here so the scrollbar stays fully visible. */
     -webkit-mask-image:none !important;mask-image:none !important;
   }
-  .hm-svc-scroll>div{min-width:280px;}
+  /* No forced min-width (it pushed titles out of the ~205px column) — the
+     card box/thumbnail slim down on phones instead (see below) so each
+     title fits its row. */
   .hm-svc-scroll::-webkit-scrollbar{height:8px;}
   .hm-svc-scroll::-webkit-scrollbar-track{background:#eef1f6;border-radius:99px;}
   .hm-svc-scroll::-webkit-scrollbar-thumb{background:#9fb4d8;border-radius:99px;}
   .hm-svc-scroll::-webkit-scrollbar-thumb:hover{background:#7a94c4;}
+}
+
+@media (max-width:600px){
+  .hm-svc-outer{padding-left:16px !important;padding-right:16px !important;}
+  .hm-svc-box{padding:36px 18px !important;border-radius:26px !important;}
+  .hm-svc-card{gap:12px !important;padding:14px 14px 14px 12px !important;}
+  .hm-svc-thumb{width:64px !important;height:52px !important;border-radius:11px !important;}
+  .hm-svc-card .hm-svc-title{font-size:16px !important;}
+  /* service modal: stack image over text instead of a squeezed 2-col grid */
+  .hm-svc-modal{grid-template-columns:1fr !important;max-height:calc(100vh - 48px);overflow-y:auto !important;}
+  .hm-svc-modal-img{min-height:170px !important;}
+  .hm-svc-modal-body{padding:28px 22px !important;}
 }
 
 /* ---- data-sh hover effects (converted to CSS) ---- */

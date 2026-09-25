@@ -160,6 +160,7 @@ export default function Industries() {
       <section ref={showcaseRef} className="sec" style={{ background: '#fff', padding: '36px 32px 90px' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <DataReveal
+            className="iTabs"
             tabIndex={0}
             onKeyDown={(e) => { if (e.key === 'ArrowRight') { e.preventDefault(); select(curRef.current + 1, true); } else if (e.key === 'ArrowLeft') { e.preventDefault(); select(curRef.current - 1, true); } }}
             style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '10px', padding: '8px', background: 'var(--tint)', border: '1px solid #eef1f6', borderRadius: '999px', width: 'fit-content', margin: '0 auto', maxWidth: '100%', overflowX: 'auto' }}
@@ -184,7 +185,7 @@ export default function Industries() {
         <div style={{ maxWidth: '1080px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center' }}>
             <DataReveal as="span" className="eyebrow">{t("One platform, every sector")}</DataReveal>
-            <DataReveal as="h2" className="h2">{t("Six industries.")} <span className="cave" style={{ fontSize: '1.28em' }}>{t("One")}</span> {t("Align.")}</DataReveal>
+            <DataReveal as="h2" className="h2">{t("Six industries.")} <span className="cave cave-sp" style={{ fontSize: '1.28em' }}>{t("One")}</span> {t("Align.")}</DataReveal>
             <DataReveal as="p" style={{ fontSize: '16px', lineHeight: 1.6, color: '#5b6472', margin: '14px auto 0', maxWidth: '600px' }}>{t("Every sector runs on the same platform — finance, people, inventory, field ops and reporting flowing into one source of truth.")}</DataReveal>
           </div>
           <Convergence onJump={jumpFromNode} />

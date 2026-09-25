@@ -1,8 +1,8 @@
 import { useRef, useLayoutEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { DataReveal } from '../../components/Reveal';
-import RolesAccordion from './RolesAccordion';
-import { Icon, CULTURE, ROLES, STEPS } from './careersData';
+import RolesAccordion, { useRoleDocs } from './RolesAccordion';
+import { Icon, CULTURE, STEPS } from './careersData';
 import SEO, { resolveSeo } from '../../components/SEO';
 import { usePage } from '../../hooks/useCms';
 
@@ -20,6 +20,7 @@ export default function Careers() {
   const { data: cmsPage } = usePage('careers');
   const seo = resolveSeo(cmsPage?.seo, lang);
   const rolesRef = useRef(null);
+  const openRoles = useRoleDocs().length;
 
   useLayoutEffect(() => {
     const prev = document.body.style.background;
@@ -55,7 +56,7 @@ export default function Careers() {
           <DataReveal className="jobstat">
             <span className="live"><i />{t("Hiring now")}</span>
             <span className="sep" />
-            <span><b>{ROLES.length}</b> {t(ROLES.length !== 1 ? "open roles" : "open role")}</span>
+            <span><b>{openRoles}</b> {t(openRoles !== 1 ? "open roles" : "open role")}</span>
             <span className="sep" />
             <span>{t("On-site · Karachi")}</span>
           </DataReveal>

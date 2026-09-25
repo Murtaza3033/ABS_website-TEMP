@@ -53,10 +53,15 @@ export default function PresenceMap() {
             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'fill' }}
           />
           {PINS.map((p) => (
-            <div
+            <button
+              type="button"
               key={p.city}
+              className="presence-pin"
+              aria-label={`${t(p.city)} — ${t(p.tag)}`}
               onMouseEnter={() => setActive(p)}
               onMouseLeave={() => setActive((cur) => (cur === p ? null : cur))}
+              onFocus={() => setActive(p)}
+              onBlur={() => setActive((cur) => (cur === p ? null : cur))}
               onClick={() => focusPin(p)}
               style={{ position: 'absolute', left: `${p.x}%`, top: `${p.y}%`, width: `${p.hit}px`, height: `${p.hit}px`, transform: 'translate(-50%,-50%)', borderRadius: '50%', zIndex: 3, cursor: 'pointer' }}
             />

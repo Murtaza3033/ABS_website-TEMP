@@ -47,7 +47,7 @@ export default function Footer() {
         <div className="ft-main">
           
           <div>
-            <img className="ft-logo" src={logoSrc} alt={logoAlt} />
+            <img className="ft-logo" src={logoSrc} loading="lazy" decoding="async" alt={logoAlt} />
             <p className="ft-lede">{lede}</p>
             <div className="ft-rule"></div>
             <div className="ft-contact">

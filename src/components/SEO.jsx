@@ -13,6 +13,11 @@ const DEFAULT_DESCRIPTION =
    skipped entirely otherwise rather than guessing a production domain. */
 const SITE_URL = (import.meta.env.VITE_SITE_URL || '').replace(/\/+$/, '');
 
+/* Static share-image fallback (public/ logo) for when neither the page nor
+   CMS siteSettings supplies one — absolute when a site URL is configured,
+   root-relative otherwise. */
+const STATIC_OG_IMAGE = `${SITE_URL}/assets/images/logos/logo-1783092411267.png`;
+
 /* Reusable per-page <head> metadata via react-helmet-async (provider already
    wraps the app in main.jsx). Every value is optional and falls back safely:
    no prop -> site-wide default -> omitted entirely (never a guessed value). */
@@ -34,7 +39,7 @@ export default function SEO({
   const desc = description || DEFAULT_DESCRIPTION;
   const resolvedCanonical = canonical || (SITE_URL ? `${SITE_URL}${location.pathname}` : undefined);
   const defaultOgImage = getSanityImageUrl(cmsSettings?.logo, { width: 1200 });
-  const resolvedOgImage = ogImage || defaultOgImage || undefined;
+  const resolvedOgImage = ogImage || defaultOgImage || STATIC_OG_IMAGE;
   const ogLocale = lang === 'ar' ? 'ar_AR' : 'en_US';
 
   return (

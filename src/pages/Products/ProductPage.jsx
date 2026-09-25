@@ -28,7 +28,7 @@ export default function ProductPage() {
       <main style={{ minHeight: '60vh', display: 'grid', placeItems: 'center', padding: '140px 32px', textAlign: 'center' }}>
         <SEO title={t('Product not found')} noIndex />
         <div>
-          <div style={{ fontFamily: 'var(--font-hand)', fontSize: 40, color: 'var(--blue)' }}>{t('Product not found')}</div>
+          <h1 style={{ fontFamily: 'var(--font-hand)', fontSize: 40, color: 'var(--blue)', fontWeight: 'inherit', lineHeight: 'inherit', letterSpacing: 'inherit', margin: 0 }}>{t('Product not found')}</h1>
           <p style={{ color: 'var(--muted)', marginTop: 12 }}>
             <Link to="/products" style={{ color: 'var(--blue)', fontWeight: 600 }}>{t('← All Products')}</Link>
           </p>

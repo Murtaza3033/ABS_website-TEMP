@@ -85,6 +85,8 @@ function reducer(s, a) {
       return { ...s, pnMenu: s.pnMenu === a.menu ? null : a.menu };
     case 'SHOW_TOUR':
       return { ...s, tour: true };
+    case 'HIDE_TOUR':
+      return { ...s, tour: false };
     case 'ROW_ACT': {
       if (s.rows[a.i] !== 'open') return s;
       const rows = s.rows.slice(); rows[a.i] = a.kind;
@@ -260,6 +262,7 @@ export function HomeProvider({ children }) {
     if (name === 'setEmp') return dispatch({ type: 'PN_VIEW', view: 'emp' });
     if (name === 'setMgmt') return dispatch({ type: 'PN_VIEW', view: 'mgmt' });
     if (name === 'showTour') return dispatch({ type: 'SHOW_TOUR' });
+    if (name === 'hideTour') return dispatch({ type: 'HIDE_TOUR' });
     // §2-7
     const pm = /^setProd(\d)$/.exec(name);
     if (pm) return dispatch({ type: 'PROD_TAB', n: +pm[1] });

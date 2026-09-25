@@ -3,8 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Align Business Systems</title>
-    <!-- Per-page <title>/description/canonical/OG tags are managed by src/components/SEO.jsx
+    <title id="static-title">Align Business Systems</title>
+    <!-- The static <title> above is the no-JS default only: src/main.jsx removes it
+         before React mounts so SEO.jsx's Helmet <title> is the only one in <head>.
+         Per-page <title>/description/canonical/OG tags are managed by src/components/SEO.jsx
          via react-helmet-async — no static meta description here so it can't shadow Helmet's. -->
 
     <!-- Brand fonts: Outfit + Caveat, plus Cairo for Arabic (applied under html[dir="rtl"] by styles/i18n.css) -->

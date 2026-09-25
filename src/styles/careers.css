@@ -18,6 +18,7 @@
 .crRole{background:#fff;border:1px solid #eaeef5;border-radius:18px;box-shadow:0 14px 36px -30px rgba(15,23,41,.24);overflow:hidden;transition:background .35s ease,border-color .35s ease,box-shadow .3s ease;}
 .crRole:hover{border-color:#c9d8f5;box-shadow:0 22px 48px -30px rgba(26,86,219,.3);}
 .r-head{cursor:pointer;display:flex;align-items:center;gap:16px;padding:20px 24px;}
+.r-head:focus-visible{outline:2px solid #4b8bff;outline-offset:-2px;border-radius:18px;}
 .r-icon{width:44px;height:44px;flex-shrink:0;border-radius:12px;background:#e8effc;color:#1a56db;display:grid;place-items:center;transition:background .35s,color .35s;}
 .r-title{font-size:17px;font-weight:700;color:#0f1729;transition:color .35s;}
 .r-chev{color:#1a56db;font-size:18px;flex-shrink:0;transition:color .35s,transform .3s cubic-bezier(.2,.7,.3,1);}

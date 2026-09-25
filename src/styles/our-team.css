@@ -41,13 +41,17 @@
 .tSpine{position:fixed;left:26px;top:50%;transform:translateY(-50%);z-index:60;display:flex;flex-direction:column;align-items:center;gap:26px;transition:opacity .5s ease,transform .5s ease;}
 .tSpine .rail{position:absolute;left:50%;transform:translateX(-50%);top:-30px;bottom:-30px;width:2px;background:rgba(255,255,255,.12);border-radius:2px;overflow:hidden;}
 .tSpine .rail i{position:absolute;top:0;left:0;width:100%;height:0%;background:linear-gradient(#1a56db,#4b8bff);box-shadow:0 0 8px rgba(26,86,219,.8);}
+html[dir="rtl"] .tSpine{left:auto;right:26px;}
+.spineBtn:focus-visible{outline:2px solid #4b8bff;outline-offset:4px;border-radius:4px;}
 .spineBtn{position:relative;background:none;border:none;cursor:pointer;font-size:12px;font-weight:700;letter-spacing:1px;color:#5f6f8c;padding:0;transition:color .3s ease;}
 
 @media (max-width:900px){
   .tSpine{display:none !important;}
   .sceneGrid{grid-template-columns:1fr !important;}
   .cardWrap{position:relative !important;inset:auto !important;display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:24px;transform:none !important;}
-  .cardWrap .fcard{position:relative !important;inset:auto !important;}
+  /* stacked on small screens: drop the float bob so neighbouring cards'
+     opposite-phase offsets can't push them into each other */
+  .cardWrap .fcard{position:relative !important;inset:auto !important;animation:none !important;}
   .grid5{grid-template-columns:1fr 1fr !important;}.grid6{grid-template-columns:1fr 1fr 1fr !important;}
   .aw-grid{grid-template-columns:1fr 1fr !important;}
 }

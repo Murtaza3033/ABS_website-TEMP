@@ -40,6 +40,8 @@
 .evStageBtn:hover{background:#1a56db;transform:scale(1.06);}
 .evGThumb{position:relative;height:150px;border-radius:16px;overflow:hidden;cursor:pointer;outline:2px solid transparent;outline-offset:2px;transition:outline-color .25s ease,transform .3s cubic-bezier(.2,.7,.3,1),box-shadow .3s ease;}
 .evGThumb.active{outline-color:#1a56db;}
+.evGThumb:focus-visible{outline-color:#4b8bff;outline-width:3px;}
+.lboxClose:focus-visible,.lboxNav:focus-visible{outline:3px solid #8fb8ff;outline-offset:2px;}
 .evGThumb:hover{transform:translateY(-5px);box-shadow:0 30px 56px -26px rgba(15,23,41,.5);}
 .lbox{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;background:rgba(9,14,26,.88);padding:32px;opacity:0;transition:opacity .3s ease;}
 .lbox.open{display:flex;opacity:1;}

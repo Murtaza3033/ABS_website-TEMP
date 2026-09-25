@@ -42,6 +42,28 @@ export const FALLBACK_PRODUCTS = [
   },
 ];
 
+/* Local product logos (public/) used when the CMS doc has no logo image.
+   They're wide wordmarks, so `w`/`h` (natural size) + `icon` ([x0,y0,x1,y1]
+   px box of the symbol) let the 48px tile show just the symbol, legibly.
+   Products without a local logo keep the letter tile. */
+export const LOCAL_LOGOS = {
+  businessflo: { src: '/assets/images/logos/businessflo-logo-6e685b87.png', w: 2501, h: 626, icon: [70, 136, 503, 489] },
+  peoplenest: { src: '/assets/images/logos/people-nest-logo.png', w: 1050, h: 215, icon: [0, 0, 259, 186] },
+};
+
+/* Inline style that crops a LOCAL_LOGOS wordmark to its symbol, centred in a
+   `box`-px square (the <img> sits inside an overflow:hidden box that size). */
+export function logoIconStyle(logo, box) {
+  const [x0, y0, x1, y1] = logo.icon;
+  const s = box / Math.max(x1 - x0, y1 - y0);
+  return {
+    position: 'absolute', maxWidth: 'none',
+    width: `${logo.w * s}px`, height: `${logo.h * s}px`,
+    left: `${(box - (x1 - x0) * s) / 2 - x0 * s}px`,
+    top: `${(box - (y1 - y0) * s) / 2 - y0 * s}px`,
+  };
+}
+
 /* Resolves a `description` field that may be plain text (FALLBACK_PRODUCTS)
    or Sanity's Portable Text localeBlock shape ({en:[block...], ar:[block...]}). */
 export function resolveDescription(doc, lang) {

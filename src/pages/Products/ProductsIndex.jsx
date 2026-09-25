@@ -6,7 +6,7 @@ import { useProducts } from '../../hooks/useCms';
 import { loc } from '../../lib/loc';
 import { getSanityImageUrl } from '../../lib/sanity';
 import SEO from '../../components/SEO';
-import { FALLBACK_PRODUCTS, withMeta, slugOf, mergeProducts } from './productsData';
+import { FALLBACK_PRODUCTS, withMeta, slugOf, mergeProducts, LOCAL_LOGOS, logoIconStyle } from './productsData';
 
 export default function ProductsIndex() {
   const { t, lang } = useLanguage();
@@ -42,6 +42,7 @@ export default function ProductsIndex() {
               const tagline = loc(p.tagline, lang);
               const slug = slugOf(p);
               const logoUrl = getSanityImageUrl(p.logo, { width: 96 });
+              const localLogo = logoUrl ? null : LOCAL_LOGOS[slug];
               return (
                 <DataReveal
                   key={slugOf(p)}
@@ -51,7 +52,9 @@ export default function ProductsIndex() {
                   style={{ display: 'block', background: '#fff', border: '1px solid #eef2f8', borderRadius: '22px', padding: '28px', boxShadow: '0 20px 46px -30px rgba(15,23,41,.28)' }}
                 >
                   <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: p.meta.tint, color: p.meta.accent, display: 'grid', placeItems: 'center', fontWeight: 800, fontSize: '18px', overflow: 'hidden' }}>
-                    {logoUrl ? <img src={logoUrl} alt={name} style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '7px' }} /> : name.charAt(0)}
+                    {logoUrl ? <img src={logoUrl} alt={name} style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '7px' }} />
+                      : localLogo ? <span style={{ position: 'relative', width: '32px', height: '32px', overflow: 'hidden' }}><img src={localLogo.src} alt={name} style={logoIconStyle(localLogo, 32)} /></span>
+                      : name.charAt(0)}
                   </div>
                   <div style={{ fontSize: '20px', fontWeight: 800, color: '#0f1729', marginTop: '18px', letterSpacing: '-.4px' }}>{name}</div>
                   <p style={{ fontSize: '14.5px', lineHeight: 1.6, color: '#5b6472', margin: '10px 0 0', minHeight: '48px' }}>{tagline}</p>

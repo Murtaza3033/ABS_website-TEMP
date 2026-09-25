@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import SmartLink from './SmartLink';
 import LanguageToggle from './LanguageToggle';
 import { useLanguage } from '../context/LanguageContext';
@@ -78,6 +79,69 @@ export default function Header() {
 
   useEffect(() => { if (mobileOpen) setNavHidden(false); }, [mobileOpen]);
 
+  /* Mega menus: desktop hover stays pure CSS (.nav-group:hover). On top of
+     that, `openMenu` lets the trigger button toggle a menu (Enter/Space/click,
+     reflected in aria-expanded) and CSS :focus-within opens it for keyboard
+     focus. `closedMenu` force-hides a menu right after one of its items is
+     used (or Esc) even while the pointer/focus is still inside it; it is
+     cleared once the pointer leaves or focus moves out of that group. */
+  const [openMenu, setOpenMenu] = useState(null);
+  const [closedMenu, setClosedMenu] = useState(null);
+  const location = useLocation();
+  const burgerRef = useRef(null);
+
+  // Route change closes any open menu (desktop mega + mobile).
+  useEffect(() => { setOpenMenu(null); setMobileOpen(false); }, [location.pathname]);
+
+  // Esc closes the mobile menu and returns focus to the burger.
+  useEffect(() => {
+    if (!mobileOpen) return undefined;
+    const onKey = (e) => {
+      if (e.key === 'Escape') { setMobileOpen(false); burgerRef.current?.focus(); }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [mobileOpen]);
+
+  const groupProps = (key) => ({
+    className: `nav-group${openMenu === key ? ' open' : ''}${closedMenu === key ? ' closed' : ''}`,
+    onMouseLeave: () => {
+      if (openMenu === key) setOpenMenu(null);
+      if (closedMenu === key) setClosedMenu(null);
+    },
+    onBlur: (e) => {
+      if (e.currentTarget.contains(e.relatedTarget)) return;
+      if (openMenu === key) setOpenMenu(null);
+      if (closedMenu === key) setClosedMenu(null);
+    },
+    onKeyDown: (e) => {
+      if (e.key !== 'Escape') return;
+      setOpenMenu(null);
+      setClosedMenu(key);
+      e.currentTarget.querySelector('button.navlink')?.focus();
+    },
+    // Mouse clicks never park focus inside the group (so :focus-within can't
+    // pin a menu open after the pointer leaves) — keyboard focus still works.
+    onMouseDown: (e) => { if (e.target.closest('a, button')) e.preventDefault(); },
+    onClick: (e) => {
+      if (!e.target.closest('.mega-wrap a')) return;
+      setOpenMenu(null);
+      setClosedMenu(key);
+      if (e.currentTarget.contains(document.activeElement)) document.activeElement.blur();
+    },
+  });
+
+  const triggerProps = (key) => ({
+    type: 'button',
+    'aria-haspopup': 'true',
+    'aria-expanded': openMenu === key,
+    'aria-controls': `mega-${key}`,
+    onClick: () => {
+      if (openMenu === key) { setOpenMenu(null); setClosedMenu(key); }
+      else { setOpenMenu(key); setClosedMenu(null); }
+    },
+  });
+
   return (
     <>
       <header className={`site-header ${scrolled ? 'is-scrolled' : ''} ${navHidden ? 'nav-hidden' : ''}`}>
@@ -93,12 +157,12 @@ export default function Header() {
             </SmartLink>
       
             
-            <div className="nav-group">
-              <button className="navlink">
+            <div {...groupProps('company')}>
+              <button className="navlink" {...triggerProps('company')}>
                 <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="2" width="16" height="20" rx="1"></rect><path d="M9 22v-4h6v4"></path><path d="M8 6h.01M12 6h.01M16 6h.01M8 10h.01M12 10h.01M16 10h.01"></path></svg>
                 <span style={{display: 'flex', alignItems: 'center', gap: '6px'}}>{nl('company', 'Company')} <span className="chev">&#9660;</span></span>
               </button>
-              <div className="mega-wrap">
+              <div className="mega-wrap" id="mega-company">
                 <div className="mega">
                   <div>
                     <div className="mega-title">{t("About Align")}</div>
@@ -122,12 +186,12 @@ export default function Header() {
             </div>
       
             
-            <div className="nav-group">
-              <button className="navlink">
+            <div {...groupProps('products')}>
+              <button className="navlink" {...triggerProps('products')}>
                 <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
                 <span style={{display: 'flex', alignItems: 'center', gap: '6px'}}>{nl('products', 'Products')} <span className="chev">&#9660;</span></span>
               </button>
-              <div className="mega-wrap">
+              <div className="mega-wrap" id="mega-products">
                 <div className="mega">
                   <div>
                     <div className="mega-title">{t("Our Products")}</div>
@@ -137,19 +201,19 @@ export default function Header() {
                   </div>
                   <div>
                     <div className="mega-title">{t("Spotlight")}</div>
-                    <div className="mega-spot"><div className="hand">{t("✦ One platform.")}</div><p>{t("All Align products are built to work together — so your business stays connected.")}</p><SmartLink href="/about-us.html" style={{display: 'inline-block', marginTop: '12px', fontSize: '13px', fontWeight: '600', color: 'var(--blue)'}}>{t("Explore all products →")}</SmartLink></div>
+                    <div className="mega-spot"><div className="hand">{t("✦ One platform.")}</div><p>{t("All Align products are built to work together — so your business stays connected.")}</p><SmartLink href="/products" style={{display: 'inline-block', marginTop: '12px', fontSize: '13px', fontWeight: '600', color: 'var(--blue)'}}>{t("Explore all products →")}</SmartLink></div>
                   </div>
                 </div>
               </div>
             </div>
       
             
-            <div className="nav-group">
-              <button className="navlink">
+            <div {...groupProps('resources')}>
+              <button className="navlink" {...triggerProps('resources')}>
                 <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path><path d="M8 13h8"></path><path d="M8 17h8"></path></svg>
                 <span style={{display: 'flex', alignItems: 'center', gap: '6px'}}>{nl('resources', 'Resources')} <span className="chev">&#9660;</span></span>
               </button>
-              <div className="mega-wrap">
+              <div className="mega-wrap" id="mega-resources">
                 <div className="mega mega--narrow">
                   <div>
                     <div className="mega-title">{t("Resources")}</div>
@@ -179,10 +243,10 @@ export default function Header() {
               <SmartLink href="/contact-us.html" className="btn-cta">{t('Book a Demo')} <span>&rarr;</span></SmartLink>
           </div>
       
-          <button className={`nav-burger ${mobileOpen ? 'open' : ''}`} aria-label="Menu" onClick={() => setMobileOpen(o => !o)}><span></span><span></span><span></span></button>
+          <button ref={burgerRef} type="button" className={`nav-burger ${mobileOpen ? 'open' : ''}`} aria-label={t('Menu')} aria-expanded={mobileOpen} aria-controls="navMobile" onClick={() => setMobileOpen(o => !o)}><span></span><span></span><span></span></button>
         </div>
       
-        <div className={`nav-mobile ${mobileOpen ? 'open' : ''}`} onClick={(e) => { if (e.target.closest('a')) setMobileOpen(false); }}>
+        <div id="navMobile" className={`nav-mobile ${mobileOpen ? 'open' : ''}`} onClick={(e) => { if (e.target.closest('a')) setMobileOpen(false); }}>
           <div className="grp">{nl('company', 'Company')}</div>
           <SmartLink href={nh('home', '/index.html')} className="strong">{nl('home', 'Home')}</SmartLink>
           <SmartLink href={nh('our-team', '/our-team.html')}>{nl('our-team', 'Our Team')}</SmartLink>
@@ -200,6 +264,7 @@ export default function Header() {
           <SmartLink href={nh('about-us', '/about-us.html')} className="strong">{nl('about-us', 'About Us')}</SmartLink>
           <SmartLink href={nh('clients-flat', '/our-clients.html')} className="strong">{nl('clients-flat', 'Clients')}</SmartLink>
           <SmartLink href={nh('contact-us-flat', '/contact-us.html')} className="strong">{nl('contact-us-flat', 'Contact Us')}</SmartLink>
+          <div className="m-lang"><LanguageToggle id="alignI18nToggleMobile" /></div>
           <SmartLink href="/contact-us.html" className="m-cta">{t("Book a Demo →")}</SmartLink>
         </div>
       </header>

@@ -27,7 +27,7 @@ const MAX = {
 // Mirrors src/pages/ContactUs/contactData.js's client-side rules — the
 // server re-checks independently rather than trusting the browser.
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const NAME_RE = /^[A-Za-z][A-Za-z .'-]*$/;
+const NAME_RE = /^\p{L}[\p{L}\p{M} .'-]*$/u; // Unicode letters (Arabic, accents, …)
 
 function trimStr(v) {
   return typeof v === 'string' ? v.trim() : '';

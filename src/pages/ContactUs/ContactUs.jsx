@@ -149,7 +149,19 @@ export default function ContactUs() {
     // this form) gets a fresh one instead of being rejected as a duplicate.
     turnstileRef.current?.reset();
     if (result.ok) dispatch({ type: 'SUBMIT_SUCCESS' });
-    else dispatch({ type: 'SUBMIT_ERROR', error: result.error });
+    else {
+      dispatch({ type: 'SUBMIT_ERROR', error: result.error });
+      // Server-side validation_failed: mark the offending fields it named.
+      const f = result.fields || {};
+      const serverErrs = {};
+      if (f.name) serverErrs.name = 'Enter a valid name (letters only).';
+      if (f.email) serverErrs.email = 'Enter a valid email address.';
+      if (f.phone) serverErrs.phone = phoneErr(state.country);
+      if (Object.keys(serverErrs).length) {
+        setClassicErr((prev) => ({ ...prev, ...serverErrs }));
+        dispatch({ type: 'TOUCH', fields: Object.keys(serverErrs) });
+      }
+    }
   };
 
   /* ---- guided chat ---- */
@@ -313,42 +325,42 @@ export default function ContactUs() {
                 </div>
                 <div className="cGrid2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginTop: '22px' }}>
                   <div>
-                    <label style={{ fontSize: '12px', fontWeight: 600, color: '#5b6472' }}>{t("Name")}</label>
-                    <input value={state.name} onChange={(e) => setField('name', e.target.value)} className={`cInput${classicErr.name ? ' cErr' : ''}`} placeholder="Your name" style={{ marginTop: '6px' }} />
+                    <label htmlFor="cf-name" style={{ fontSize: '12px', fontWeight: 600, color: '#5b6472' }}>{t("Name")}</label>
+                    <input id="cf-name" value={state.name} onChange={(e) => setField('name', e.target.value)} className={`cInput${classicErr.name ? ' cErr' : ''}`} placeholder="Your name" style={{ marginTop: '6px' }} />
                     {classicErr.name && <div className="cErrMsg">⚠ {classicErr.name}</div>}
                   </div>
                   <div>
-                    <label style={{ fontSize: '12px', fontWeight: 600, color: '#5b6472' }}>{t("Company")} <span style={{ color: '#aeb8c8' }}>{t("(optional)")}</span></label>
-                    <input value={state.company} onChange={(e) => setField('company', e.target.value)} className="cInput" placeholder="Company" style={{ marginTop: '6px' }} />
+                    <label htmlFor="cf-company" style={{ fontSize: '12px', fontWeight: 600, color: '#5b6472' }}>{t("Company")} <span style={{ color: '#aeb8c8' }}>{t("(optional)")}</span></label>
+                    <input id="cf-company" value={state.company} onChange={(e) => setField('company', e.target.value)} className="cInput" placeholder="Company" style={{ marginTop: '6px' }} />
                   </div>
                   <div>
-                    <label style={{ fontSize: '12px', fontWeight: 600, color: '#5b6472' }}>{t("Reason for contact")}</label>
-                    <select value={state.reason} onChange={(e) => setField('reason', e.target.value)} className="cInput" style={{ marginTop: '6px' }}>
+                    <label htmlFor="cf-reason" style={{ fontSize: '12px', fontWeight: 600, color: '#5b6472' }}>{t("Reason for contact")}</label>
+                    <select id="cf-reason" value={state.reason} onChange={(e) => setField('reason', e.target.value)} className="cInput" style={{ marginTop: '6px' }}>
                       {REASON_OPTS.map((o) => <option key={o}>{o}</option>)}
                     </select>
                   </div>
                   <div>
-                    <label style={{ fontSize: '12px', fontWeight: 600, color: '#5b6472' }}>{t("Product interest")} <span style={{ color: '#aeb8c8' }}>{t("(optional)")}</span></label>
-                    <select value={state.product} onChange={(e) => setField('product', e.target.value)} className="cInput" style={{ marginTop: '6px' }}>
+                    <label htmlFor="cf-product" style={{ fontSize: '12px', fontWeight: 600, color: '#5b6472' }}>{t("Product interest")} <span style={{ color: '#aeb8c8' }}>{t("(optional)")}</span></label>
+                    <select id="cf-product" value={state.product} onChange={(e) => setField('product', e.target.value)} className="cInput" style={{ marginTop: '6px' }}>
                       {PRODUCT_OPTS.map((o) => <option key={o}>{o}</option>)}
                     </select>
                   </div>
                   <div>
-                    <label style={{ fontSize: '12px', fontWeight: 600, color: '#5b6472' }}>{t("Email")}</label>
-                    <input value={state.email} onChange={(e) => setField('email', e.target.value)} type="email" className={`cInput${classicErr.email ? ' cErr' : ''}`} placeholder="you@company.com" style={{ marginTop: '6px' }} />
+                    <label htmlFor="cf-email" style={{ fontSize: '12px', fontWeight: 600, color: '#5b6472' }}>{t("Email")}</label>
+                    <input id="cf-email" value={state.email} onChange={(e) => setField('email', e.target.value)} type="email" className={`cInput${classicErr.email ? ' cErr' : ''}`} placeholder="you@company.com" style={{ marginTop: '6px' }} />
                     {classicErr.email && <div className="cErrMsg">⚠ {classicErr.email}</div>}
                   </div>
                   <div>
-                    <label style={{ fontSize: '12px', fontWeight: 600, color: '#5b6472' }}>{t("Phone")} <span style={{ color: '#aeb8c8' }}>{t("(optional)")}</span></label>
+                    <label htmlFor="cf-phone" style={{ fontSize: '12px', fontWeight: 600, color: '#5b6472' }}>{t("Phone")} <span style={{ color: '#aeb8c8' }}>{t("(optional)")}</span></label>
                     <div style={{ marginTop: '6px' }}>
-                      <PhoneField country={state.country} phone={state.phone}
+                      <PhoneField id="cf-phone" country={state.country} phone={state.phone}
                         onCountry={(v) => dispatch({ type: 'COUNTRY', value: v })} onPhone={(v) => setField('phone', v)}
                         error={classicErr.phone || ''} />
                     </div>
                   </div>
                   <div style={{ gridColumn: '1/-1' }}>
-                    <label style={{ fontSize: '12px', fontWeight: 600, color: '#5b6472' }}>{t("Message")} <span style={{ color: '#aeb8c8' }}>{t("(optional)")}</span></label>
-                    <textarea value={state.message} onChange={(e) => setField('message', e.target.value)} className="cInput" rows={4} placeholder="How can we help?" style={{ marginTop: '6px', resize: 'vertical' }} />
+                    <label htmlFor="cf-message" style={{ fontSize: '12px', fontWeight: 600, color: '#5b6472' }}>{t("Message")} <span style={{ color: '#aeb8c8' }}>{t("(optional)")}</span></label>
+                    <textarea id="cf-message" value={state.message} onChange={(e) => setField('message', e.target.value)} className="cInput" rows={4} placeholder="How can we help?" style={{ marginTop: '6px', resize: 'vertical' }} />
                   </div>
                 </div>
                 <Turnstile ref={turnstileRef} action="contact_form" />

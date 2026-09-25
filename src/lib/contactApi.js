@@ -4,7 +4,9 @@
 export const validEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((v || '').trim());
 export const validName = (v) => {
   const t = (v || '').trim();
-  return t.length >= 2 && /^[A-Za-z][A-Za-z .'-]*$/.test(t);
+  // Any script's letters (Arabic, accented Latin, …) + combining marks;
+  // same space/dot/apostrophe/hyphen rules as before. Mirrored server-side.
+  return t.length >= 2 && /^\p{L}[\p{L}\p{M} .'-]*$/u.test(t);
 };
 
 /* Posts a Contact form submission to the /api/contact backend. Returns a plain
