@@ -11,7 +11,7 @@ function Member({ name, file }) {
   return (
     <div style={{ height: '52px', minWidth: '96px', padding: '0 16px', background: '#fff', border: '1px solid #eef2f8', borderRadius: '12px', boxShadow: '0 12px 28px -22px rgba(15,23,41,.4)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       {file && !broken
-        ? <img src={`${T}${file}.png`} alt={name} onError={() => setBroken(true)} style={{ width: '82px', height: '34px', objectFit: 'contain' }} />
+        ? <img src={`${T}${file}.webp`} alt={name} onError={() => setBroken(true)} style={{ width: '82px', height: '34px', objectFit: 'contain' }} />
         : <span style={{ fontSize: '15px', fontWeight: 800, color: '#0f1729' }}>{name}</span>}
     </div>
   );
@@ -25,7 +25,7 @@ export default function IndustryPanel({ d, parallaxRef }) {
     <>
       <div style={{ position: 'relative', borderRadius: '26px', overflow: 'hidden', height: '460px', boxShadow: '0 40px 90px -44px rgba(15,23,41,.5)', background: '#0f1729', animation: 'slideInR .5s cubic-bezier(.2,.7,.3,1) both' }}>
         <div ref={parallaxRef} data-ind-parallax style={{ position: 'absolute', left: 0, right: 0, top: '-8%', height: '116%', willChange: 'transform' }}>
-          <div style={{ position: 'absolute', inset: 0, backgroundImage: `url('${d.imgUrl || `/assets/images/industries/${d.img}.png`}')`, backgroundSize: 'cover', backgroundPosition: 'center', animation: 'kenBurns 12s ease-in-out infinite alternate' }} />
+          <div style={{ position: 'absolute', inset: 0, backgroundImage: `url('${d.imgUrl || `/assets/images/industries/${d.img}.webp`}')`, backgroundSize: 'cover', backgroundPosition: 'center', animation: 'kenBurns 12s ease-in-out infinite alternate' }} />
         </div>
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(150deg,rgba(15,23,41,.30),rgba(26,86,219,.30))' }} />
         <div style={{ position: 'absolute', inset: 0, opacity: 0.10, backgroundImage: 'linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px)', backgroundSize: '40px 40px' }} />

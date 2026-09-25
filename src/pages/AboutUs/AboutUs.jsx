@@ -29,7 +29,7 @@ export default function AboutUs() {
       {/* 1. HERO */}
       <section className="sec" style={{ padding: '96px 32px 40px', background: 'linear-gradient(180deg,var(--tint) 0%,#fff 100%)', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: '-120px', left: '50%', transform: 'translateX(-50%)', width: '900px', height: '520px', background: 'radial-gradient(ellipse at center,rgba(26,86,219,.09),transparent 62%)', pointerEvents: 'none' }} />
-        <img src="/assets/images/about/team-laptop.png" alt="" aria-hidden="true" onError={(e) => e.currentTarget.remove()} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.06, pointerEvents: 'none', WebkitMaskImage: 'linear-gradient(180deg,#000 0%,transparent 72%)', maskImage: 'linear-gradient(180deg,#000 0%,transparent 72%)' }} />
+        <img src="/assets/images/about/team-laptop.webp" alt="" aria-hidden="true" onError={(e) => e.currentTarget.remove()} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.06, pointerEvents: 'none', WebkitMaskImage: 'linear-gradient(180deg,#000 0%,transparent 72%)', maskImage: 'linear-gradient(180deg,#000 0%,transparent 72%)' }} />
         <div style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center', position: 'relative' }}>
           <Reveal as="span" className="eyebrow">{t("About Align")}</Reveal>
           <Reveal as="h1" className="h1">{t("We Build the Systems")}<br />{t("Businesses Run On")}</Reveal>
@@ -43,7 +43,7 @@ export default function AboutUs() {
           <div className="strip__track">
             {STRIP.concat(STRIP).map((s, i) => (
               <div key={i} className="strip__card" style={{ background: `linear-gradient(160deg,${STRIP_TINTS[i % STRIP_TINTS.length]},#0f1729)` }}>
-                <img src={`/assets/images/about/${s[1]}.png`} alt="" onError={(e) => e.currentTarget.remove()} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={`/assets/images/about/${s[1]}.webp`} alt="" onError={(e) => e.currentTarget.remove()} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
                 <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg,rgba(15,23,41,0) 42%,rgba(15,23,41,.8) 100%)' }} />
                 <span>{t(s[0])}</span>
               </div>
@@ -63,7 +63,7 @@ export default function AboutUs() {
           <Reveal style={{ position: 'relative', aspectRatio: '4/3' }}>
             <div style={{ position: 'absolute', inset: 0, borderRadius: '24px', overflow: 'hidden', border: '1px solid #e0e9f8', boxShadow: '0 30px 70px -34px rgba(15,23,41,.45)', background: 'linear-gradient(150deg,#1a56db,#0f1729)', display: 'grid', placeItems: 'center', color: 'rgba(255,255,255,.9)' }}>
               <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" /><path d="M8 21h8" /><path d="M12 17v4" /></svg>
-              <img src="/assets/images/about/team-monitor.png" alt="Align engineering team" onError={(e) => e.currentTarget.remove()} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src="/assets/images/about/team-monitor.webp" alt="Align engineering team" onError={(e) => e.currentTarget.remove()} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
             <div className="mobile-hide-float" style={{ position: 'absolute', left: '-26px', bottom: '-24px', width: '262px', background: '#fff', border: '1px solid #eaeef5', borderRadius: '18px', padding: '16px', boxShadow: '0 30px 64px -28px rgba(15,23,41,.5)', animation: 'abFloat 6.5s ease-in-out infinite' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -121,10 +121,10 @@ export default function AboutUs() {
             <Reveal as="p" className="lede" style={{ color: '#b7c2d6', margin: '16px auto 0', maxWidth: '640px' }}>{t("From exhibiting at ITCN Asia to earning a Tech destiNATION Pakistan recognition award — Align shows up where Pakistan's software industry gathers, and demos BusinessFlo live to the businesses that need it.")}</Reveal>
           </div>
           <Reveal className="rec-gallery" style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr 1fr', gridTemplateRows: '180px 180px', gap: '16px', marginTop: '44px' }}>
-            <div style={{ gridRow: 'span 2', borderRadius: '20px', overflow: 'hidden', position: 'relative', background: '#131c2e' }}><img src="/assets/images/about/award.png" alt="Tech destiNATION Pakistan recognition award" onError={(e) => e.currentTarget.remove()} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /><div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, padding: '16px', background: 'linear-gradient(0deg,rgba(15,23,41,.85),transparent)' }}><div style={{ fontSize: '16px', fontWeight: 700, color: '#fff' }}>{t("Recognition Award")}</div><div style={{ fontSize: '12px', color: '#b7c2d6', marginTop: '2px' }}>Tech destiNATION Pakistan</div></div></div>
-            {[['booth-team', 'ITCN Asia'], ['booth-demo', 'Live Demos'], ['itcn-wall.jpg', 'ITCN Asia 2023'], ['brochure', 'In Conversation']].map((g, i) => (
+            <div style={{ gridRow: 'span 2', borderRadius: '20px', overflow: 'hidden', position: 'relative', background: '#131c2e' }}><img src="/assets/images/about/award.webp" alt="Tech destiNATION Pakistan recognition award" onError={(e) => e.currentTarget.remove()} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /><div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, padding: '16px', background: 'linear-gradient(0deg,rgba(15,23,41,.85),transparent)' }}><div style={{ fontSize: '16px', fontWeight: 700, color: '#fff' }}>{t("Recognition Award")}</div><div style={{ fontSize: '12px', color: '#b7c2d6', marginTop: '2px' }}>Tech destiNATION Pakistan</div></div></div>
+            {[['booth-team', 'ITCN Asia'], ['booth-demo', 'Live Demos'], ['itcn-wall.webp', 'ITCN Asia 2023'], ['brochure', 'In Conversation']].map((g, i) => (
               <div key={i} style={{ borderRadius: '20px', overflow: 'hidden', position: 'relative', background: '#131c2e' }}>
-                <img src={`/assets/images/about/${g[0].includes('.') ? g[0] : `${g[0]}.png`}`} alt={g[1]} onError={(e) => e.currentTarget.remove()} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={`/assets/images/about/${g[0].includes('.') ? g[0] : `${g[0]}.webp`}`} alt={g[1]} onError={(e) => e.currentTarget.remove()} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 <span style={{ position: 'absolute', left: '12px', bottom: '12px', fontSize: '10px', fontWeight: 700, letterSpacing: '1px', color: '#fff', textTransform: 'uppercase' }}>{g[1]}</span>
               </div>
             ))}

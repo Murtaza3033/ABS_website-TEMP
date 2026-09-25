@@ -33,7 +33,7 @@ function mergeGallery(paths, sanityImages) {
     const sanityImage = sanityImages?.[i];
     if (!path) return [...base, sanityImage];
     const m = path.match(/\/([^/]+)\.([a-zA-Z0-9]+)$/);
-    return m ? [m[1], m[2], base[2], base[3], sanityImage] : [...base, sanityImage];
+    return m ? [m[1], base[1], base[2], base[3], sanityImage] : [...base, sanityImage]; // ext from local data: CMS *Path strings may carry a stale .png/.jpg
   });
 }
 

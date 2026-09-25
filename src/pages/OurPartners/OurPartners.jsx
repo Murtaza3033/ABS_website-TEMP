@@ -85,7 +85,7 @@ export default function OurPartners() {
           {/* two-way value concept */}
           <Reveal style={{ position: 'relative', height: '340px', perspective: '1100px' }}>
             <div ref={cardRef} className="tilt3d" style={{ position: 'absolute', inset: 0, borderRadius: '26px', overflow: 'hidden', background: '#0f1729', boxShadow: '0 40px 90px -40px rgba(15,23,41,.6)', transformStyle: 'preserve-3d' }}>
-              <img src="/assets/images/about/brochure.png" alt="" onError={(e) => e.currentTarget.remove()} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(1) contrast(1.05)', opacity: 0.5 }} />
+              <img src="/assets/images/about/brochure.webp" alt="" onError={(e) => e.currentTarget.remove()} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(1) contrast(1.05)', opacity: 0.5 }} />
               <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(150deg,rgba(26,86,219,.72),rgba(15,23,41,.62))', mixBlendMode: 'multiply' }} />
               <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(150deg,rgba(26,86,219,.4),transparent 60%)' }} />
               <svg viewBox="0 0 400 340" fill="none" preserveAspectRatio="none" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', overflow: 'visible' }}>
@@ -142,7 +142,7 @@ export default function OurPartners() {
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11px', fontWeight: 700, color: '#1a9d55' }}><span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#1a9d55', animation: 'pDot 1.8s ease-in-out infinite' }} />{t("Active")}</span>
               </div>
               <div style={{ height: '88px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '20px 0 6px' }}>
-                <img src="/assets/images/clients/xpedite-logo.png" alt="Xpedite Technology Solutions" onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextElementSibling.style.display = 'grid'; }} style={{ maxHeight: '76px', maxWidth: '100%', objectFit: 'contain' }} />
+                <img src="/assets/images/clients/xpedite-logo.webp" alt="Xpedite Technology Solutions" onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextElementSibling.style.display = 'grid'; }} style={{ maxHeight: '76px', maxWidth: '100%', objectFit: 'contain' }} />
                 <div style={{ display: 'none', width: '100%', height: '76px', placeItems: 'center', background: 'linear-gradient(135deg,#1a56db,#4b8bff)', color: '#fff', borderRadius: '12px', fontSize: '22px', fontWeight: 800, letterSpacing: '.5px' }}>Xpedite</div>
               </div>
               <div style={{ fontSize: '18px', fontWeight: 700, textAlign: 'center' }}>Xpedite Technology Solutions</div>

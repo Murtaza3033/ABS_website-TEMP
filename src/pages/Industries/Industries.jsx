@@ -26,7 +26,7 @@ const FALLBACK_INDUSTRIES = IND.map((ind, i) => ({
   _id: `fallback-${i}`,
   name: ind.name,
   description: `${ind.head} ${ind.para}`,
-  illustrationPath: `/assets/images/industries/${ind.img}.png`,
+  illustrationPath: `/assets/images/industries/${ind.img}.webp`,
   order: i + 1,
 }));
 
@@ -47,7 +47,7 @@ function mergeIndustry(doc, i, lang) {
     ...base,
     name: loc(doc.name, lang) || base.name,
     img,
-    imgUrl: getSanityImageUrl(doc.illustration, { width: 1200 }) || `/assets/images/industries/${img}.png`,
+    imgUrl: getSanityImageUrl(doc.illustration, { width: 1200 }) || `/assets/images/industries/${img}.webp`,
   };
 }
 

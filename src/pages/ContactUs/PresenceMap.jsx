@@ -47,7 +47,7 @@ export default function PresenceMap() {
       <div ref={vpRef} style={{ position: 'relative', aspectRatio: '1672 / 941', maxHeight: '560px', overflow: 'hidden', background: '#fbfdff' }}>
         <div style={{ position: 'absolute', inset: 0, transformOrigin: `${map.ox}% ${map.oy}%`, transform: `scale(${map.zoom})`, transition: 'transform .3s cubic-bezier(.2,.7,.3,1)', touchAction: 'none' }}>
           <img
-            src="/assets/images/contact/worldmap-labeled.png"
+            src="/assets/images/contact/worldmap-labeled.webp"
             alt="Align global presence map"
             onError={(e) => { e.currentTarget.style.display = 'none'; }}
             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'fill' }}

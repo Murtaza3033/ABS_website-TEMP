@@ -28,7 +28,7 @@ function LogoImg({ file, name }) {
   if (broken) return null;
   return (
     <img
-      src={`/assets/images/clients/${file}.png`}
+      src={`/assets/images/clients/${file}.webp`}
       alt={name}
       style={IMG_STYLE}
       className="logo-fade"

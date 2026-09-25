@@ -192,7 +192,7 @@ export default function ContactUs() {
       />
       {/* HERO */}
       <section style={{ position: 'relative', overflow: 'hidden', background: 'linear-gradient(180deg,var(--tint) 0%,#fff 100%)', padding: '90px 32px 30px', textAlign: 'center' }}>
-        <div style={{ position: 'absolute', inset: 0, backgroundImage: "url('/assets/images/about/meeting.png')", backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.07, pointerEvents: 'none', WebkitMaskImage: 'linear-gradient(180deg,#000 0%,transparent 88%)', maskImage: 'linear-gradient(180deg,#000 0%,transparent 88%)' }} />
+        <div style={{ position: 'absolute', inset: 0, backgroundImage: "url('/assets/images/about/meeting.webp')", backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.07, pointerEvents: 'none', WebkitMaskImage: 'linear-gradient(180deg,#000 0%,transparent 88%)', maskImage: 'linear-gradient(180deg,#000 0%,transparent 88%)' }} />
         <div className="cReveal cin" style={{ position: 'relative', maxWidth: '720px', margin: '0 auto' }}>
           <span className="hero-eyebrow">{t("Contact Us")}</span>
           <h1 style={{ fontSize: 'clamp(38px,6vw,56px)', lineHeight: 1.05, letterSpacing: '-1.6px', fontWeight: 800, margin: '14px 0 0', color: 'var(--ink)' }}>{t("Let's")} <span style={{ fontFamily: 'var(--font-hand)', fontWeight: 700, color: 'var(--blue)', fontSize: '1.18em' }}>{t("start the conversation.")}</span></h1>

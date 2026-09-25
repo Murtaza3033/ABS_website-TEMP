@@ -27,11 +27,11 @@ export const STRIP = [
 export const STRIP_TINTS = ['#1a56db', '#0f1729', '#d4a017', '#1a9d55', '#123f9e', '#4b8bff', '#7c5cff', '#1648b8'];
 
 export const MILES = [
-  ['Year TBD', 'Align founded', '#1a56db', 'team-laptop.png'],
-  ['Year TBD', 'BusinessFlo launch', '#1a56db', 'presentation.png'],
-  ['2023', 'ITCN Asia exhibitor', '#d4a017', 'itcn-wall.jpg'],
-  ['Year TBD', 'PeopleNest & Field Force', '#1a56db', 'meeting.png'],
-  ['Today', 'One connected platform', '#1a9d55', 'team-monitor.png'],
+  ['Year TBD', 'Align founded', '#1a56db', 'team-laptop.webp'],
+  ['Year TBD', 'BusinessFlo launch', '#1a56db', 'presentation.webp'],
+  ['2023', 'ITCN Asia exhibitor', '#d4a017', 'itcn-wall.webp'],
+  ['Year TBD', 'PeopleNest & Field Force', '#1a56db', 'meeting.webp'],
+  ['Today', 'One connected platform', '#1a9d55', 'team-monitor.webp'],
 ];
 
 export const STATS = [
@@ -57,10 +57,10 @@ export const VALS = [
 ];
 
 export const NET = [
-  { title: 'Our Team', tag: 'The builders', accent: '#1a56db', tint: 'rgba(26,86,219,.1)', line: 'The engineers, consultants and operators who build and run Align.', href: '/our-team.html', img: 'team-laptop.png' },
-  { title: 'Our Advisors', tag: 'Guidance', accent: '#7c5cff', tint: 'rgba(124,92,255,.12)', line: 'The guidance shaping how Align grows and where it goes next.', href: '/our-advisors.html', img: 'ceo.png' },
-  { title: 'Our Partners', tag: 'Ecosystem', accent: '#d4a017', tint: 'rgba(212,160,23,.14)', line: 'A network of trusted companies we build and grow alongside.', href: '/our-partners.html', img: 'brochure.png' },
-  { title: 'Our Clients', tag: 'Who we serve', accent: '#1a9d55', tint: 'rgba(26,157,85,.12)', line: 'The businesses that run their operations on Align every day.', href: '/our-clients.html', img: 'booth-demo.png' },
+  { title: 'Our Team', tag: 'The builders', accent: '#1a56db', tint: 'rgba(26,86,219,.1)', line: 'The engineers, consultants and operators who build and run Align.', href: '/our-team.html', img: 'team-laptop.webp' },
+  { title: 'Our Advisors', tag: 'Guidance', accent: '#7c5cff', tint: 'rgba(124,92,255,.12)', line: 'The guidance shaping how Align grows and where it goes next.', href: '/our-advisors.html', img: 'ceo.webp' },
+  { title: 'Our Partners', tag: 'Ecosystem', accent: '#d4a017', tint: 'rgba(212,160,23,.14)', line: 'A network of trusted companies we build and grow alongside.', href: '/our-partners.html', img: 'brochure.webp' },
+  { title: 'Our Clients', tag: 'Who we serve', accent: '#1a9d55', tint: 'rgba(26,157,85,.12)', line: 'The businesses that run their operations on Align every day.', href: '/our-clients.html', img: 'booth-demo.webp' },
 ];
 
 export const PRODMETA = [

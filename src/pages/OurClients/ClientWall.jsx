@@ -10,7 +10,7 @@ import { CLIENTS, SHORT, INDOF, DURS, DELS } from './clientsData';
    the text wordmark — advancing one step each time the current src 404s. */
 function ClientLogo({ name, logo, file }) {
   const sanitySrc = getSanityImageUrl(logo, { width: 400 });
-  const pathSrc = file ? `/assets/images/clients/${file}.png` : null;
+  const pathSrc = file ? `/assets/images/clients/${file}.webp` : null;
   const sources = [sanitySrc, pathSrc].filter(Boolean);
   const [srcIndex, setSrcIndex] = useState(0);
   const wordmark = { fontSize: '22px', fontWeight: 800, letterSpacing: '-.5px', color: '#0f1729', textAlign: 'center' };
@@ -24,7 +24,7 @@ function ClientLogo({ name, logo, file }) {
 const FALLBACK_CLIENTS = CLIENTS.map(([name, file], i) => ({
   _id: `fallback-${i}`,
   name,
-  logoPath: file ? `/assets/images/clients/${file}.png` : undefined,
+  logoPath: file ? `/assets/images/clients/${file}.webp` : undefined,
   order: i + 1,
 }));
 

@@ -30,7 +30,7 @@ export default function LeaderScene({ L, i, even, revealed, refCb }) {
     setGlow({ x: e.clientX - r.left, y: e.clientY - r.top, on: true });
   };
 
-  const portraitSrc = getSanityImageUrl(L.sanityPhoto, { width: 600 }) || `/assets/images/team/${L.photo}.png`;
+  const portraitSrc = getSanityImageUrl(L.sanityPhoto, { width: 600 }) || `/assets/images/team/${L.photo}.webp`;
 
   const c1pos = even ? { top: '3%', right: '2%' } : { top: '3%', left: '2%' };
   const c2pos = even ? { bottom: '5%', right: '2%' } : { bottom: '5%', left: '2%' };

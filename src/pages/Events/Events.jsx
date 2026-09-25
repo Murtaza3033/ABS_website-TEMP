@@ -26,7 +26,7 @@ function mergeGallery(paths, sanityImages) {
     const sanityImage = sanityImages?.[i];
     if (!path) return [...base, sanityImage];
     const m = path.match(/\/([^/]+)\.([a-zA-Z0-9]+)$/);
-    return m ? [m[1], m[2], base[2], base[3], sanityImage] : [...base, sanityImage];
+    return m ? [m[1], base[1], base[2], base[3], sanityImage] : [...base, sanityImage]; // ext from local data: CMS *Path strings may carry a stale .png/.jpg
   });
 }
 
@@ -109,7 +109,7 @@ export default function Events() {
             {WHY.map((c) => (
               <Reveal key={c[0]} className="evWhy" style={{ background: '#fff', border: '1px solid #eef2f8', borderRadius: '22px', overflow: 'hidden', boxShadow: '0 22px 52px -32px rgba(15,23,41,.3)' }}>
                 <div className="evVisual" style={{ overflow: 'hidden' }}>
-                  <div className="evShot" style={{ width: '100%', paddingBottom: '46%', backgroundImage: `url('/assets/images/events/${c[5]}.png')`, backgroundSize: 'cover', backgroundPosition: 'center top' }} />
+                  <div className="evShot" style={{ width: '100%', paddingBottom: '46%', backgroundImage: `url('/assets/images/events/${c[5]}.webp')`, backgroundSize: 'cover', backgroundPosition: 'center top' }} />
                 </div>
                 <div style={{ padding: '24px 26px 26px' }}>
                   <div style={{ fontSize: '19px', fontWeight: 700, color: '#0f1729' }}>{t(c[0])}</div>
@@ -125,7 +125,7 @@ export default function Events() {
       {/* UPCOMING */}
       <section className="sec" style={{ background: '#fff', padding: '76px 32px' }}>
         <Reveal style={{ position: 'relative', maxWidth: '820px', margin: '0 auto', border: '1px dashed #cddaf0', borderRadius: '22px', padding: '40px 36px', textAlign: 'center', overflow: 'hidden', background: 'var(--tint)' }}>
-          <div style={{ position: 'absolute', inset: 0, backgroundImage: "url('/assets/images/about/booth-team.png')", backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.12 }} />
+          <div style={{ position: 'absolute', inset: 0, backgroundImage: "url('/assets/images/about/booth-team.webp')", backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.12 }} />
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg,rgba(247,250,255,.62),rgba(247,250,255,.82))' }} />
           <div style={{ position: 'relative' }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '11px', fontWeight: 700, letterSpacing: '1.5px', color: '#1a56db', textTransform: 'uppercase' }}><span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#1a56db', animation: 'evDot 1.8s ease-in-out infinite' }} />{t("What's next")}</div>

@@ -20,7 +20,7 @@ const FALLBACK_TEAM = LEADERS.map((L, i) => ({
   name: L.name,
   role: L.role,
   bio: L.quote,
-  photoPath: `/assets/images/team/${L.photo}.png`,
+  photoPath: `/assets/images/team/${L.photo}.webp`,
   order: i + 1,
 }));
 

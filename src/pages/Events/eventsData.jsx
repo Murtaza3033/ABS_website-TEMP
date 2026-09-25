@@ -22,10 +22,10 @@ export const FACTS = [
 ];
 
 export const GALLERY = [
-  ['itcn-wall', 'jpg', 'Event Photo', 'The main stand at ITCN Asia 2023, Karachi Expo Centre'],
-  ['booth-team', 'png', 'At the booth', 'The Align team at ITCN Asia 2023'],
-  ['booth-demo', 'png', 'Live demos', 'Walking a visitor through the platform, live'],
-  ['brochure', 'png', 'In conversation', 'Talking operations — one conversation at a time'],
+  ['itcn-wall', 'webp', 'Event Photo', 'The main stand at ITCN Asia 2023, Karachi Expo Centre'],
+  ['booth-team', 'webp', 'At the booth', 'The Align team at ITCN Asia 2023'],
+  ['booth-demo', 'webp', 'Live demos', 'Walking a visitor through the platform, live'],
+  ['brochure', 'webp', 'In conversation', 'Talking operations — one conversation at a time'],
 ];
 export const gsrc = (i) => `/assets/images/about/${GALLERY[i][0]}.${GALLERY[i][1]}`;
 

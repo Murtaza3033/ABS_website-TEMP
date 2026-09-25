@@ -55,7 +55,7 @@ export default function ProductCarousel() {
               {PRODMETA.map((x) => (
                 <div key={x.name} style={{ flex: '0 0 100%' }}>
                   <div style={{ position: 'relative', width: '100%', paddingBottom: '62%', background: '#eef2f8', overflow: 'hidden' }}>
-                    <img src={`/assets/images/about/${x.img}.png`} alt={`${x.name} dashboard`} onError={(e) => { e.currentTarget.style.opacity = 0; }} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top left' }} />
+                    <img src={`/assets/images/about/${x.img}.webp`} alt={`${x.name} dashboard`} onError={(e) => { e.currentTarget.style.opacity = 0; }} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top left' }} />
                   </div>
                 </div>
               ))}

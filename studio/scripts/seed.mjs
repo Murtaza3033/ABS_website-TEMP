@@ -385,8 +385,8 @@ const productDocs = [
       'Field Force plans field visits, tracks calls, manages doctors and pharmacies, and turns territory activity into live field performance analytics — visible the moment it happens.',
     ),
     // no dash-pharmafieldflo product-logo asset exists in public/assets/images/logos —
-    // only the About-page dashboard screenshot (dash-pharmafieldflo.png) does.
-    logoPath: '/assets/images/about/dash-pharmafieldflo.png',
+    // only the About-page dashboard screenshot (dash-pharmafieldflo.webp) does.
+    logoPath: '/assets/images/about/dash-pharmafieldflo.webp',
     order: 3,
   },
 ]
@@ -430,7 +430,7 @@ const teamMemberDocs = LEADERS.map((leader, i) => ({
   name: bi(leader.name),
   role: bi(leader.role),
   bio: bi(leader.quote),
-  photoPath: `/assets/images/team/${leader.photo}.png`,
+  photoPath: `/assets/images/team/${leader.photo}.webp`,
   order: i + 1,
 }))
 
@@ -489,7 +489,7 @@ const industryDocs = INDUSTRIES.map((ind, i) => ({
   name: bi(ind.name),
   slug: slugField(ind.slug),
   description: bi(`${ind.head} ${ind.para}`),
-  illustrationPath: `/assets/images/industries/${ind.img}.png`,
+  illustrationPath: `/assets/images/industries/${ind.img}.webp`,
   order: i + 1,
 }))
 
@@ -551,7 +551,7 @@ const clientDocs = CLIENTS.map(([name, logoSlug], i) => {
     _type: 'client',
     name,
     ...(industrySlug ? {industry: refTo(`industry-${industrySlug}`)} : {}),
-    ...(logoSlug ? {logoPath: `/assets/images/clients/${logoSlug}.png`} : {}),
+    ...(logoSlug ? {logoPath: `/assets/images/clients/${logoSlug}.webp`} : {}),
     order: i + 1,
   }
 })
@@ -571,12 +571,12 @@ const eventDocs = [
     description: biBlock(
       "Align Business Systems exhibited at ITCN Asia 2023, Pakistan's leading IT & telecom expo, at Hall 1 · Booth A-30, Karachi Expo Centre.",
     ),
-    coverImagePath: '/assets/images/about/itcn-wall.jpg',
+    coverImagePath: '/assets/images/about/itcn-wall.webp',
     galleryPaths: [
-      '/assets/images/about/itcn-wall.jpg',
-      '/assets/images/about/booth-team.png',
-      '/assets/images/about/booth-demo.png',
-      '/assets/images/about/brochure.png',
+      '/assets/images/about/itcn-wall.webp',
+      '/assets/images/about/booth-team.webp',
+      '/assets/images/about/booth-demo.webp',
+      '/assets/images/about/brochure.webp',
     ],
   },
 ]

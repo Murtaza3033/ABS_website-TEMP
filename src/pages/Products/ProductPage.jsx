@@ -95,7 +95,7 @@ export default function ProductPage() {
             </div>
             <div style={{ position: 'relative', width: '100%', paddingBottom: '56%', background: '#eef2f8', borderRadius: '12px', overflow: 'hidden' }}>
               <img
-                src={`/assets/images/about/${meta.img}.png`}
+                src={`/assets/images/about/${meta.img}.webp`}
                 alt={`${name} dashboard`}
                 onError={(e) => { e.currentTarget.style.display = 'none'; }}
                 style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top left' }}

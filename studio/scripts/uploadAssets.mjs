@@ -87,12 +87,16 @@ const FIELD_MAP = [
 ]
 
 // product-pharmafieldflo's logoPath is actually an About-page dashboard
-// screenshot (dash-pharmafieldflo.png), not a real product logo — skip this
+// screenshot (dash-pharmafieldflo.webp), not a real product logo — skip this
 // one patch until a proper logo asset exists, per explicit instruction.
 const SKIP_PATCHES = new Set(['product-pharmafieldflo:logo'])
 
 function resolveLocalPath(publicPath) {
-  return path.join(PUBLIC_DIR, publicPath.replace(/^\/+/, ''))
+  const abs = path.join(PUBLIC_DIR, publicPath.replace(/^\/+/, ''))
+  // Local images were converted .png/.jpg -> .webp; *Path strings already
+  // seeded into Sanity may still carry the old extension.
+  const webp = abs.replace(/\.(png|jpe?g)$/i, '.webp')
+  return !fs.existsSync(abs) && fs.existsSync(webp) ? webp : abs
 }
 
 function isSingleImagePopulated(value) {
