@@ -35,7 +35,7 @@ export default function ProblemsSection() {
                   <svg width="15" height="19" viewBox="0 0 15 19" fill="none" style={{animation: 'nudgeR 1.4s ease-in-out .3s infinite'}}><path d="M2 4 L10 9.5 L2 15" stroke="#1a56db" strokeWidth="2.8" fill="none" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </span>
                 <span style={{fontSize: '14.5px', fontWeight: '700', color: 'var(--wLabel,#1a56db)', transition: 'color .35s ease'}}><span>{t(b('togLabel'))}</span></span>
-                <button onClick={() => act('toggleAbs')} aria-label="Toggle Align on or off" style={{position: 'relative', width: '62px', height: '33px', border: 'none', borderRadius: '99px', background: 'var(--wTrack,#1a56db)', cursor: 'pointer', transition: 'background .35s ease', padding: '0'}}>
+                <button onClick={() => act('toggleAbs')} aria-label={t('Toggle Align on or off')} style={{position: 'relative', width: '62px', height: '33px', border: 'none', borderRadius: '99px', background: 'var(--wTrack,#1a56db)', cursor: 'pointer', transition: 'background .35s ease', padding: '0'}}>
                   <span style={{position: 'absolute', top: '4px', insetInlineStart: '4px', width: '25px', height: '25px', borderRadius: '50%', background: '#ffffff', transform: 'var(--wKnob,translateX(29px))', transition: 'transform .35s cubic-bezier(.5,1.6,.4,1)', boxShadow: '0 2px 7px rgba(15,23,41,.3)'}}></span>
                 </button>
               </div>

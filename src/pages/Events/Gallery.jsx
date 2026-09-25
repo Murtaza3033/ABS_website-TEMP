@@ -82,7 +82,7 @@ export default function Gallery() {
             <DataReveal onClick={() => setLbOpen(true)} style={{ position: 'relative', borderRadius: '26px', overflow: 'hidden', minHeight: '460px', background: '#0f1729', boxShadow: '0 40px 90px -44px rgba(15,23,41,.55)', cursor: 'zoom-in' }}>
               <div key={gi} style={{ position: 'absolute', inset: 0, backgroundImage: `url('${gsrc(gi)}')`, backgroundSize: 'cover', backgroundPosition: 'center', animation: 'evFade .4s ease, kenBurns 14s ease-in-out infinite alternate' }} />
               <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(155deg,rgba(15,23,41,.35),rgba(26,86,219,.34))', pointerEvents: 'none' }} />
-              <button className="evStageBtn" aria-label="View full size" onClick={(e) => { e.stopPropagation(); setLbOpen(true); }}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h6v6" /><path d="M9 21H3v-6" /><path d="M21 3l-7 7" /><path d="M3 21l7-7" /></svg></button>
+              <button className="evStageBtn" aria-label={t("View full size")} onClick={(e) => { e.stopPropagation(); setLbOpen(true); }}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h6v6" /><path d="M9 21H3v-6" /><path d="M21 3l-7 7" /><path d="M3 21l7-7" /></svg></button>
               <span style={{ position: 'absolute', left: '20px', top: '18px', fontSize: '10.5px', fontWeight: 700, letterSpacing: '1.5px', color: '#fff', background: 'rgba(15,23,41,.5)', borderRadius: '999px', padding: '6px 13px', textTransform: 'uppercase', zIndex: 2 }}>{t(gallery[gi][2])}</span>
               <div style={{ position: 'absolute', left: '22px', bottom: '22px', background: '#fff', borderRadius: '16px', padding: '16px 18px', boxShadow: '0 26px 52px -22px rgba(15,23,41,.6)', animation: 'floatY 6.5s ease-in-out infinite', maxWidth: '230px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#1a9d55', animation: 'evDot 1.8s ease-in-out infinite' }} /><span style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '1px', color: '#8a94a6', textTransform: 'uppercase' }}>{t("Exhibited")}</span></div>
@@ -91,7 +91,7 @@ export default function Gallery() {
               </div>
               <div style={{ position: 'absolute', right: '22px', top: '64px', background: '#0f1729', color: '#fff', borderRadius: '14px', padding: '12px 15px', boxShadow: '0 24px 48px -20px rgba(15,23,41,.65)', animation: 'floatY2 5.6s ease-in-out infinite' }}>
                 <div style={{ fontSize: '9.5px', fontWeight: 700, letterSpacing: '1px', color: '#8fb8ff', textTransform: 'uppercase' }}>{t("Find us at")}</div>
-                <div style={{ fontSize: '15px', fontWeight: 700, marginTop: '4px' }}>Hall 1 · Booth A-30</div>
+                <div style={{ fontSize: '15px', fontWeight: 700, marginTop: '4px' }}>{t('Hall 1 · Booth A-30')}</div>
               </div>
             </DataReveal>
 
@@ -129,9 +129,9 @@ export default function Gallery() {
       <div ref={lboxRef} className={`lbox${lbOpen ? ' open' : ''}`} role="dialog" aria-modal="true" aria-label={t('Event photo')} aria-hidden={!lbOpen} onClick={(e) => { if (e.target === e.currentTarget) setLbOpen(false); }}>
         <div className="lboxInner" onClick={(e) => { if (e.target === e.currentTarget) setLbOpen(false); }}>
           <button ref={closeRef} className="lboxClose" aria-label={t('Close')} onClick={() => setLbOpen(false)}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18" /><path d="M6 6l12 12" /></svg></button>
-          <button className="lboxNav lboxPrev" aria-label="Previous" onClick={() => go(-1)}>‹</button>
-          <img className="lboxImg" src={gsrc(gi)} alt="Event photo" />
-          <button className="lboxNav lboxNext" aria-label="Next" onClick={() => go(1)}>›</button>
+          <button className="lboxNav lboxPrev" aria-label={t("Previous")} onClick={() => go(-1)}>‹</button>
+          <img className="lboxImg" src={gsrc(gi)} alt={t("Event photo")} />
+          <button className="lboxNav lboxNext" aria-label={t("Next")} onClick={() => go(1)}>›</button>
           <div className="lboxCap"><b>{t(gallery[gi][2])}</b> — {t(gallery[gi][3])}</div>
         </div>
       </div>

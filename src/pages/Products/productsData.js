@@ -66,11 +66,14 @@ export function logoIconStyle(logo, box) {
 
 /* Resolves a `description` field that may be plain text (FALLBACK_PRODUCTS)
    or Sanity's Portable Text localeBlock shape ({en:[block...], ar:[block...]}). */
-export function resolveDescription(doc, lang) {
+export function resolveDescription(doc, lang, t) {
   const value = doc?.description;
   if (!value) return '';
-  if (typeof value === 'string') return value;
-  return blocksToText(value, lang);
+  // Arabic requested but only English present: run it through the dictionary.
+  const tr = (s) => (lang === 'ar' && t ? t(s) : s);
+  if (typeof value === 'string') return tr(value);
+  const hasAr = Array.isArray(value.ar) && value.ar.length > 0;
+  return hasAr ? blocksToText(value, lang) : tr(blocksToText(value, 'en'));
 }
 
 /* Attaches the matching PRODMETA entry (by position — Sanity was seeded in

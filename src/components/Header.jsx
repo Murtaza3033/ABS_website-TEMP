@@ -175,7 +175,7 @@ export default function Header() {
                   </div>
                   <div>
                     <div className="mega-title">{t("Spotlight")}</div>
-                    <div className="mega-spot"><div className="hand">{t("★ Built for growth.")}</div><p>Align brings ERP, HR and field-force together in one powerful platform.</p><SmartLink href="/about-us.html" style={{display: 'inline-block', marginTop: '12px', fontSize: '13px', fontWeight: '600', color: 'var(--blue)'}}>{t("See how we help →")}</SmartLink></div>
+                    <div className="mega-spot"><div className="hand">{t("★ Built for growth.")}</div><p>{t("Align brings ERP, HR and field-force together in one powerful platform.")}</p><SmartLink href="/about-us.html" style={{display: 'inline-block', marginTop: '12px', fontSize: '13px', fontWeight: '600', color: 'var(--blue)'}}>{t("See how we help →")}</SmartLink></div>
                     <div className="mega-title muted" style={{margin: '20px 0 10px'}}>{t("Explore More")}</div>
                     <SmartLink href={nh('our-presence', '/industries.html')} className="mega-mini"><span className="mi"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20"></path><path d="M12 2a15 15 0 0 1 0 20"></path><path d="M12 2a15 15 0 0 0 0 20"></path></svg></span><span style={{flex: '1', fontSize: '14px', fontWeight: '600', color: 'var(--ink)'}}>{nl('our-presence', 'Our Presence')}</span><span style={{color: 'var(--faint)'}}>&rarr;</span></SmartLink>
                     <SmartLink href={nh('careers', '/careers.html')} className="mega-mini"><span className="mi"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"></rect><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"></path></svg></span><span style={{flex: '1', fontSize: '14px', fontWeight: '600', color: 'var(--ink)'}}>{nl('careers', 'Careers')}</span><span style={{color: 'var(--faint)'}}>&rarr;</span></SmartLink>
@@ -269,8 +269,8 @@ export default function Header() {
         </div>
       </header>
 
-      <button className={`scroll-top ${showTop ? 'show' : ''}`} aria-label="Back to top" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M12 19V5"></path><path d="M5 12l7-7 7 7"></path></svg></button>
-      <button className={`scroll-bottom ${showBottom ? 'show' : ''}`} aria-label="Scroll to bottom" onClick={() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' })}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14"></path><path d="M19 12l-7 7-7-7"></path></svg></button>
+      <button className={`scroll-top ${showTop ? 'show' : ''}`} aria-label={t('Back to top')} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M12 19V5"></path><path d="M5 12l7-7 7 7"></path></svg></button>
+      <button className={`scroll-bottom ${showBottom ? 'show' : ''}`} aria-label={t('Scroll to bottom')} onClick={() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' })}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14"></path><path d="M19 12l-7 7-7-7"></path></svg></button>
     </>
   );
 }

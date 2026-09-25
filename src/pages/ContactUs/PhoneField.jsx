@@ -28,7 +28,7 @@ export default function PhoneField({ country, phone, onCountry, onPhone, onBlur,
           onChange={(e) => onPhone(e.target.value)}
           onBlur={onBlur}
           className={`cInput${error ? ' cErr' : ''}`}
-          placeholder={phonePH(country)}
+          placeholder={phonePH(country, t)}
         />
       </div>
       {error && <div className="cErrMsg">⚠ {error}</div>}

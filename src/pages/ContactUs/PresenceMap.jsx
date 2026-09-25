@@ -48,7 +48,7 @@ export default function PresenceMap() {
         <div style={{ position: 'absolute', inset: 0, transformOrigin: `${map.ox}% ${map.oy}%`, transform: `scale(${map.zoom})`, transition: 'transform .3s cubic-bezier(.2,.7,.3,1)', touchAction: 'none' }}>
           <img
             src="/assets/images/contact/worldmap-labeled.webp"
-            alt="Align global presence map"
+            alt={t("Align global presence map")}
             onError={(e) => { e.currentTarget.style.display = 'none'; }}
             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'fill' }}
           />
@@ -80,9 +80,9 @@ export default function PresenceMap() {
         )}
 
         <div style={{ position: 'absolute', right: '18px', top: '18px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <button onClick={zoomIn} aria-label="Zoom in" style={btn}>+</button>
-          <button onClick={zoomOut} aria-label="Zoom out" style={btn}>−</button>
-          <button onClick={resetView} aria-label="Reset view" title="Reset view" style={{ ...btn, display: 'grid', placeItems: 'center', fontSize: '17px' }}>
+          <button onClick={zoomIn} aria-label={t("Zoom in")} style={btn}>+</button>
+          <button onClick={zoomOut} aria-label={t("Zoom out")} style={btn}>−</button>
+          <button onClick={resetView} aria-label={t("Reset view")} title={t("Reset view")} style={{ ...btn, display: 'grid', placeItems: 'center', fontSize: '17px' }}>
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9 9 0 0 0-6.4 2.6L3 8" /><path d="M3 4v4h4" /></svg>
           </button>
         </div>

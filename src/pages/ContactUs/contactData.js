@@ -36,15 +36,20 @@ export const COUNTRIES = [
 const byIso = Object.fromEntries(COUNTRIES.map((c) => [c.iso, c]));
 export const cc = (iso) => byIso[iso] || byIso.PK;
 
-const lenText = (iso) => {
+/* `t` is the LanguageContext translator (identity by default / in English);
+   the templates below are dictionary keys with {placeholders}. */
+const id = (s) => s;
+const lenText = (iso, t = id) => {
   const c = cc(iso);
-  return c.len[0] === c.len[1] ? `${c.len[0]} digits` : `${c.len[0]}–${c.len[1]} digits`;
+  const n = c.len[0] === c.len[1] ? `${c.len[0]}` : `${c.len[0]}–${c.len[1]}`;
+  return t('{n} digits').replace('{n}', n);
 };
-export const phonePH = (iso) => {
+export const phonePH = (iso, t = id) => {
   const c = cc(iso);
-  return c.len[0] === c.len[1] ? `${c.len[0]}-digit number` : lenText(iso);
+  return c.len[0] === c.len[1] ? t('{n}-digit number').replace('{n}', `${c.len[0]}`) : lenText(iso, t);
 };
-export const phoneErr = (iso) => `Enter a valid ${cc(iso).name} number (${lenText(iso)}).`;
+export const phoneErr = (iso, t = id) => t('Enter a valid {country} number ({len}).')
+  .replace('{country}', t(cc(iso).name)).replace('{len}', lenText(iso, t));
 
 export const validPhone = (v, iso) => {
   if (!v || !v.trim()) return true; // phone is optional

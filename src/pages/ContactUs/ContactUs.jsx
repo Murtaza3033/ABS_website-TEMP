@@ -44,6 +44,7 @@ function reducer(s, a) {
 
 /* ---- copy-to-clipboard button (local state, no DOM mutation) ---- */
 function CopyButton({ text }) {
+  const { t } = useLanguage();
   const [copied, setCopied] = useState(false);
   useEffect(() => {
     if (!copied) return undefined;
@@ -55,7 +56,7 @@ function CopyButton({ text }) {
     catch { setCopied(true); }
   };
   return (
-    <button onClick={copy} aria-label="Copy email" title="Copy"
+    <button onClick={copy} aria-label={t('Copy email')} title={t('Copy')}
       style={{ display: 'inline-grid', placeItems: 'center', width: '24px', height: '24px', borderRadius: '7px', border: '1px solid #e3e9f3', background: '#fff', color: copied ? '#1a9d55' : '#8a94a6', cursor: 'pointer' }}>
       {copied ? '✓' : '⎘'}
     </button>
@@ -156,7 +157,7 @@ export default function ContactUs() {
       const serverErrs = {};
       if (f.name) serverErrs.name = 'Enter a valid name (letters only).';
       if (f.email) serverErrs.email = 'Enter a valid email address.';
-      if (f.phone) serverErrs.phone = phoneErr(state.country);
+      if (f.phone) serverErrs.phone = phoneErr(state.country, t);
       if (Object.keys(serverErrs).length) {
         setClassicErr((prev) => ({ ...prev, ...serverErrs }));
         dispatch({ type: 'TOUCH', fields: Object.keys(serverErrs) });
@@ -186,7 +187,7 @@ export default function ContactUs() {
     if (!validName(state.name)) errs.name = 'Enter a valid name (letters only).';
     if (!state.email.trim()) errs.email = 'Email is required so we can reply.';
     else if (!validEmail(state.email)) errs.email = 'Enter a valid email address.';
-    if (!validPhone(state.phone, state.country)) errs.phone = phoneErr(state.country);
+    if (!validPhone(state.phone, state.country)) errs.phone = phoneErr(state.country, t);
     setClassicErr(errs);
     if (Object.keys(errs).length === 0) doSubmit();
   };
@@ -251,27 +252,27 @@ export default function ContactUs() {
 
               <div style={{ minHeight: '230px', display: 'flex', flexDirection: 'column', justifyContent: 'center', marginTop: '24px' }}>
                 <div key={state.step} style={{ animation: 'cSlideR .45s cubic-bezier(.2,.7,.3,1) both' }}>
-                  <div style={{ fontSize: '24px', fontWeight: 800, letterSpacing: '-.5px', color: 'var(--ink)' }}>{Q_TITLES[key]}</div>
+                  <div style={{ fontSize: '24px', fontWeight: 800, letterSpacing: '-.5px', color: 'var(--ink)' }}>{t(Q_TITLES[key])}</div>
 
                   {(key === 'name' || key === 'company') && (
                     <>
                       <input autoFocus value={key === 'name' ? state.name : state.company}
                         onChange={(e) => setField(key, e.target.value)} onKeyDown={onEnter}
                         className={`cInput${nameBad ? ' cErr' : ''}`}
-                        placeholder={key === 'name' ? 'Your name' : 'Company (optional)'} style={{ marginTop: '18px' }} />
+                        placeholder={key === 'name' ? t('Your name') : t('Company (optional)')} style={{ marginTop: '18px' }} />
                       {nameBad && <div className="cErrMsg">{t("⚠ Enter a valid name (letters only).")}</div>}
                     </>
                   )}
 
                   {key === 'reason' && (
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '20px' }}>
-                      {REASON_OPTS.map((o) => <button key={o} className="cOpt" onClick={() => dispatch({ type: 'OPT', field: 'reason', value: o })}>{o}</button>)}
+                      {REASON_OPTS.map((o) => <button key={o} className="cOpt" onClick={() => dispatch({ type: 'OPT', field: 'reason', value: o })}>{t(o)}</button>)}
                     </div>
                   )}
 
                   {key === 'product' && (
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '20px' }}>
-                      {PRODUCT_OPTS.map((o) => <button key={o} className="cOpt" onClick={() => dispatch({ type: 'OPT', field: 'product', value: o })}>{o}</button>)}
+                      {PRODUCT_OPTS.map((o) => <button key={o} className="cOpt" onClick={() => dispatch({ type: 'OPT', field: 'product', value: o })}>{t(o)}</button>)}
                     </div>
                   )}
 
@@ -279,18 +280,18 @@ export default function ContactUs() {
                     <div style={{ marginTop: '18px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
                       <div>
                         <input value={state.email} onChange={(e) => setField('email', e.target.value)} onKeyDown={onEnter}
-                          type="email" className={`cInput${emailBad ? ' cErr' : ''}`} placeholder="you@company.com (required)" autoFocus />
-                        {emailBad && <div className="cErrMsg">⚠ {!state.email.trim() ? 'Email is required so we can reply.' : 'Enter a valid email address.'}</div>}
+                          type="email" className={`cInput${emailBad ? ' cErr' : ''}`} placeholder={t('you@company.com (required)')} autoFocus />
+                        {emailBad && <div className="cErrMsg">⚠ {!state.email.trim() ? t('Email is required so we can reply.') : t('Enter a valid email address.')}</div>}
                       </div>
                       <PhoneField country={state.country} phone={state.phone}
                         onCountry={(v) => dispatch({ type: 'COUNTRY', value: v })} onPhone={(v) => setField('phone', v)}
-                        error={phoneBad ? phoneErr(state.country) : ''} />
+                        error={phoneBad ? phoneErr(state.country, t) : ''} />
                     </div>
                   )}
 
                   {key === 'message' && (
                     <textarea value={state.message} onChange={(e) => setField('message', e.target.value)}
-                      className="cInput" placeholder="Optional — a line or two of context" rows={4} style={{ marginTop: '18px', resize: 'vertical' }} />
+                      className="cInput" placeholder={t('Optional — a line or two of context')} rows={4} style={{ marginTop: '18px', resize: 'vertical' }} />
                   )}
                 </div>
               </div>
@@ -319,36 +320,36 @@ export default function ContactUs() {
                     ignored by screen readers); any bot that autofills every field it can
                     find will fill this one, and the API rejects the submission silently. */}
                 <div style={{ position: 'absolute', left: '-9999px', width: '1px', height: '1px', overflow: 'hidden' }} aria-hidden="true">
-                  <label htmlFor="cf-company-site">Company website</label>
+                  <label htmlFor="cf-company-site">{t("Company website")}</label>
                   <input id="cf-company-site" type="text" tabIndex={-1} autoComplete="off"
                     value={state.honeypot} onChange={(e) => setField('honeypot', e.target.value)} />
                 </div>
                 <div className="cGrid2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginTop: '22px' }}>
                   <div>
                     <label htmlFor="cf-name" style={{ fontSize: '12px', fontWeight: 600, color: '#5b6472' }}>{t("Name")}</label>
-                    <input id="cf-name" value={state.name} onChange={(e) => setField('name', e.target.value)} className={`cInput${classicErr.name ? ' cErr' : ''}`} placeholder="Your name" style={{ marginTop: '6px' }} />
-                    {classicErr.name && <div className="cErrMsg">⚠ {classicErr.name}</div>}
+                    <input id="cf-name" value={state.name} onChange={(e) => setField('name', e.target.value)} className={`cInput${classicErr.name ? ' cErr' : ''}`} placeholder={t('Your name')} style={{ marginTop: '6px' }} />
+                    {classicErr.name && <div className="cErrMsg">⚠ {t(classicErr.name)}</div>}
                   </div>
                   <div>
                     <label htmlFor="cf-company" style={{ fontSize: '12px', fontWeight: 600, color: '#5b6472' }}>{t("Company")} <span style={{ color: '#aeb8c8' }}>{t("(optional)")}</span></label>
-                    <input id="cf-company" value={state.company} onChange={(e) => setField('company', e.target.value)} className="cInput" placeholder="Company" style={{ marginTop: '6px' }} />
+                    <input id="cf-company" value={state.company} onChange={(e) => setField('company', e.target.value)} className="cInput" placeholder={t('Company')} style={{ marginTop: '6px' }} />
                   </div>
                   <div>
                     <label htmlFor="cf-reason" style={{ fontSize: '12px', fontWeight: 600, color: '#5b6472' }}>{t("Reason for contact")}</label>
                     <select id="cf-reason" value={state.reason} onChange={(e) => setField('reason', e.target.value)} className="cInput" style={{ marginTop: '6px' }}>
-                      {REASON_OPTS.map((o) => <option key={o}>{o}</option>)}
+                      {REASON_OPTS.map((o) => <option key={o} value={o}>{t(o)}</option>)}
                     </select>
                   </div>
                   <div>
                     <label htmlFor="cf-product" style={{ fontSize: '12px', fontWeight: 600, color: '#5b6472' }}>{t("Product interest")} <span style={{ color: '#aeb8c8' }}>{t("(optional)")}</span></label>
                     <select id="cf-product" value={state.product} onChange={(e) => setField('product', e.target.value)} className="cInput" style={{ marginTop: '6px' }}>
-                      {PRODUCT_OPTS.map((o) => <option key={o}>{o}</option>)}
+                      {PRODUCT_OPTS.map((o) => <option key={o} value={o}>{t(o)}</option>)}
                     </select>
                   </div>
                   <div>
                     <label htmlFor="cf-email" style={{ fontSize: '12px', fontWeight: 600, color: '#5b6472' }}>{t("Email")}</label>
                     <input id="cf-email" value={state.email} onChange={(e) => setField('email', e.target.value)} type="email" className={`cInput${classicErr.email ? ' cErr' : ''}`} placeholder="you@company.com" style={{ marginTop: '6px' }} />
-                    {classicErr.email && <div className="cErrMsg">⚠ {classicErr.email}</div>}
+                    {classicErr.email && <div className="cErrMsg">⚠ {t(classicErr.email)}</div>}
                   </div>
                   <div>
                     <label htmlFor="cf-phone" style={{ fontSize: '12px', fontWeight: 600, color: '#5b6472' }}>{t("Phone")} <span style={{ color: '#aeb8c8' }}>{t("(optional)")}</span></label>
@@ -360,7 +361,7 @@ export default function ContactUs() {
                   </div>
                   <div style={{ gridColumn: '1/-1' }}>
                     <label htmlFor="cf-message" style={{ fontSize: '12px', fontWeight: 600, color: '#5b6472' }}>{t("Message")} <span style={{ color: '#aeb8c8' }}>{t("(optional)")}</span></label>
-                    <textarea id="cf-message" value={state.message} onChange={(e) => setField('message', e.target.value)} className="cInput" rows={4} placeholder="How can we help?" style={{ marginTop: '6px', resize: 'vertical' }} />
+                    <textarea id="cf-message" value={state.message} onChange={(e) => setField('message', e.target.value)} className="cInput" rows={4} placeholder={t('How can we help?')} style={{ marginTop: '6px', resize: 'vertical' }} />
                   </div>
                 </div>
                 <Turnstile ref={turnstileRef} action="contact_form" />
@@ -374,7 +375,7 @@ export default function ContactUs() {
           {state.view === 'done' && (
             <div style={{ textAlign: 'center', padding: '30px 0' }}>
               <div style={{ width: '76px', height: '76px', margin: '0 auto', borderRadius: '50%', background: '#e6f5ec', display: 'grid', placeItems: 'center', animation: 'cTick .5s cubic-bezier(.5,1.6,.4,1) both' }}><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#1a9d55" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5" /></svg></div>
-              <h2 style={{ fontSize: '28px', fontWeight: 800, letterSpacing: '-.6px', margin: '22px 0 0' }}>Thanks{state.name ? `, ${state.name.split(' ')[0]}` : ''} — message sent.</h2>
+              <h2 style={{ fontSize: '28px', fontWeight: 800, letterSpacing: '-.6px', margin: '22px 0 0' }}>{state.name ? t('Thanks, {name} — message sent.').replace('{name}', state.name.split(' ')[0]) : t('Thanks — message sent.')}</h2>
               <p style={{ fontSize: '16px', lineHeight: 1.6, color: '#4b5565', margin: '12px auto 0', maxWidth: '420px' }}>{t("Our team will be in touch shortly. We typically reply within one business day.")}</p>
               <button onClick={() => dispatch({ type: 'RESET' })} style={{ cursor: 'pointer', marginTop: '24px', background: '#eef4ff', color: 'var(--blue)', fontSize: '14.5px', fontWeight: 600, padding: '12px 24px', border: 'none', borderRadius: '12px' }}>{t("Send another message")}</button>
             </div>

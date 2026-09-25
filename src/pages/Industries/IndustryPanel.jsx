@@ -34,7 +34,7 @@ export default function IndustryPanel({ d, parallaxRef }) {
         <div style={{ position: 'absolute', left: '22px', bottom: '22px', background: '#fff', borderRadius: '16px', padding: '16px 18px', boxShadow: '0 26px 52px -22px rgba(15,23,41,.55)', animation: 'floatY 6.5s ease-in-out infinite', maxWidth: '240px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#1a9d55', animation: 'iDot 1.8s ease-in-out infinite' }} />
-            <span style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '1px', color: '#8a94a6', textTransform: 'uppercase' }}>Align × {d.short}</span>
+            <span style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '1px', color: '#8a94a6', textTransform: 'uppercase' }}>Align × {t(d.short)}</span>
           </div>
           <div style={{ fontSize: '17px', fontWeight: 700, color: '#0f1729', marginTop: '9px', lineHeight: 1.25 }}>{t(d.insight)}</div>
         </div>
@@ -47,7 +47,7 @@ export default function IndustryPanel({ d, parallaxRef }) {
         <div style={{ display: 'flex', alignItems: 'center', gap: '18px', marginTop: '18px', flexWrap: 'wrap' }}>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '7px' }}>
             <span style={{ fontSize: '28px', fontWeight: 800, color: '#0f1729', letterSpacing: '-.5px' }}>{d.members.length}</span>
-            <span style={{ fontSize: '12.5px', fontWeight: 600, color: '#8a94a6' }}>client{d.members.length > 1 ? 's' : ''} on Align</span>
+            <span style={{ fontSize: '12.5px', fontWeight: 600, color: '#8a94a6' }}>{t(`client${d.members.length > 1 ? 's' : ''} on Align`)}</span>
           </div>
           <span style={{ width: '1px', height: '28px', background: '#e4eaf3' }} />
           <div>

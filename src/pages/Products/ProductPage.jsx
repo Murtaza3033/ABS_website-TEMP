@@ -3,7 +3,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { DataReveal } from '../../components/Reveal';
 import SmartLink from '../../components/SmartLink';
 import { useProduct } from '../../hooks/useCms';
-import { loc } from '../../lib/loc';
+import { loc, locT } from '../../lib/loc';
 import { getSanityImageUrl } from '../../lib/sanity';
 import SEO, { resolveSeo } from '../../components/SEO';
 import { FALLBACK_PRODUCTS, resolveDescription, withMeta, findFallbackIndex, isValidProduct, validFeatures } from './productsData';
@@ -41,8 +41,8 @@ export default function ProductPage() {
 
   const meta = withMeta(doc, fallbackIndex).meta;
   const name = loc(doc.name, lang) || fallbackDoc.name;
-  const tagline = loc(doc.tagline, lang) || fallbackDoc.tagline;
-  const description = resolveDescription(doc, lang) || fallbackDoc.description;
+  const tagline = locT(doc.tagline, lang, t) || t(fallbackDoc.tagline);
+  const description = resolveDescription(doc, lang, t) || t(fallbackDoc.description);
   const features = validFeatures(doc.features);
   const seo = resolveSeo(doc.seo, lang);
 
@@ -90,7 +90,7 @@ export default function ProductPage() {
             <div style={{ position: 'relative', width: '100%', paddingBottom: '56%', background: '#eef2f8', borderRadius: '12px', overflow: 'hidden' }}>
               <img
                 src={`/assets/images/about/${meta.img}.webp`}
-                alt={`${name} dashboard`}
+                alt={`${name} ${t('dashboard')}`}
                 onError={(e) => { e.currentTarget.style.display = 'none'; }}
                 style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top left' }}
               />
@@ -125,8 +125,8 @@ export default function ProductPage() {
             <div className="prodFeatGrid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '18px', marginTop: '44px' }}>
               {features.map((f, i) => (
                 <div key={f._key || i} className="prodFeatCard" style={{ background: 'var(--tint)', border: '1px solid #eaeef5', borderRadius: '20px', padding: '26px 22px' }}>
-                  <div style={{ fontSize: '16.5px', fontWeight: 700 }}>{loc(f.title, lang)}</div>
-                  <p style={{ fontSize: '13.5px', lineHeight: 1.6, color: '#5b6472', margin: '9px 0 0' }}>{loc(f.description, lang)}</p>
+                  <div style={{ fontSize: '16.5px', fontWeight: 700 }}>{locT(f.title, lang, t)}</div>
+                  <p style={{ fontSize: '13.5px', lineHeight: 1.6, color: '#5b6472', margin: '9px 0 0' }}>{locT(f.description, lang, t)}</p>
                 </div>
               ))}
             </div>

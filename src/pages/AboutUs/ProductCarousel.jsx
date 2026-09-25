@@ -40,8 +40,8 @@ export default function ProductCarousel() {
       </Reveal>
 
       <Reveal data-reveal="" baseClass="" shownClass="in" style={{ position: 'relative', maxWidth: '940px', margin: '36px auto 0' }}>
-        <button className="carousel-arrow" onClick={() => goto(pb - 1)} aria-label="Previous product" style={{ position: 'absolute', left: '-20px', top: '46%', transform: 'translateY(-50%)', zIndex: 8, width: '48px', height: '48px', borderRadius: '50%', border: '1px solid #e3e9f3', background: '#fff', color: '#1a56db', fontSize: '19px', cursor: 'pointer', boxShadow: '0 14px 32px -14px rgba(15,23,41,.35)' }}>←</button>
-        <button className="carousel-arrow" onClick={() => goto(pb + 1)} aria-label="Next product" style={{ position: 'absolute', right: '-20px', top: '46%', transform: 'translateY(-50%)', zIndex: 8, width: '48px', height: '48px', borderRadius: '50%', border: '1px solid #e3e9f3', background: '#fff', color: '#1a56db', fontSize: '19px', cursor: 'pointer', boxShadow: '0 14px 32px -14px rgba(15,23,41,.35)' }}>→</button>
+        <button className="carousel-arrow" onClick={() => goto(pb - 1)} aria-label={t("Previous product")} style={{ position: 'absolute', left: '-20px', top: '46%', transform: 'translateY(-50%)', zIndex: 8, width: '48px', height: '48px', borderRadius: '50%', border: '1px solid #e3e9f3', background: '#fff', color: '#1a56db', fontSize: '19px', cursor: 'pointer', boxShadow: '0 14px 32px -14px rgba(15,23,41,.35)' }}>←</button>
+        <button className="carousel-arrow" onClick={() => goto(pb + 1)} aria-label={t("Next product")} style={{ position: 'absolute', right: '-20px', top: '46%', transform: 'translateY(-50%)', zIndex: 8, width: '48px', height: '48px', borderRadius: '50%', border: '1px solid #e3e9f3', background: '#fff', color: '#1a56db', fontSize: '19px', cursor: 'pointer', boxShadow: '0 14px 32px -14px rgba(15,23,41,.35)' }}>→</button>
 
         <div style={{ background: '#0f1729', borderRadius: '24px', padding: '14px', boxShadow: '0 46px 100px -48px rgba(15,23,41,.72)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '7px', padding: '2px 8px 12px' }}>
@@ -55,7 +55,7 @@ export default function ProductCarousel() {
               {PRODMETA.map((x) => (
                 <div key={x.name} style={{ flex: '0 0 100%' }}>
                   <div style={{ position: 'relative', width: '100%', paddingBottom: '62%', background: '#eef2f8', overflow: 'hidden' }}>
-                    <img src={`/assets/images/about/${x.img}.webp`} alt={`${x.name} dashboard`} onError={(e) => { e.currentTarget.style.opacity = 0; }} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top left' }} />
+                    <img src={`/assets/images/about/${x.img}.webp`} alt={`${x.name} ${t('dashboard')}`} onError={(e) => { e.currentTarget.style.opacity = 0; }} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top left' }} />
                   </div>
                 </div>
               ))}
@@ -79,7 +79,7 @@ export default function ProductCarousel() {
         <div className="mobile-hide-float" style={{ position: 'absolute', bottom: '80px', left: '26px', zIndex: 9, width: '34%', maxWidth: '322px', background: '#fff', border: '1px solid #eaeef5', borderRadius: '16px', padding: '15px 17px', boxShadow: '0 30px 66px -26px rgba(15,23,41,.6)', animation: 'abFloat 6.2s ease-in-out infinite' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <span style={{ fontSize: '9.5px', letterSpacing: '.5px', color: '#8a94a6', textTransform: 'uppercase' }}>{t(m.botLabel)}</span>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '9.5px', fontWeight: 700, color: '#1a9d55' }}><span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#1a9d55', animation: 'abDot 1.6s ease-in-out infinite' }} />LIVE</span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '9.5px', fontWeight: 700, color: '#1a9d55' }}><span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#1a9d55', animation: 'abDot 1.6s ease-in-out infinite' }} />{t('LIVE')}</span>
           </div>
           <div style={{ fontSize: '23px', fontWeight: 800, color: '#0f1729', marginTop: '6px', letterSpacing: '-.5px' }}>{m.botValue}</div>
           <div style={{ fontSize: '10.5px', fontWeight: 700, color: m.accent, marginTop: '3px' }}>{t(m.botDelta)}</div>

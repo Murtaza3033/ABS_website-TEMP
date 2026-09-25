@@ -31,12 +31,14 @@ export default function SEO({
   noIndex = false,
   type = 'website',
 }) {
-  const { lang } = useLanguage();
+  const { lang, t } = useLanguage();
   const location = useLocation();
   const { data: cmsSettings } = useSiteSettings();
 
-  const fullTitle = title ? `${title} | ${SITE_NAME}` : SITE_NAME;
-  const desc = description || DEFAULT_DESCRIPTION;
+  // t() is identity in English; in Arabic it localizes any English copy that
+  // reaches here untranslated (CMS fallbacks, the site-wide default).
+  const fullTitle = title ? `${t(title)} | ${SITE_NAME}` : SITE_NAME;
+  const desc = t(description || DEFAULT_DESCRIPTION);
   const resolvedCanonical = canonical || (SITE_URL ? `${SITE_URL}${location.pathname}` : undefined);
   const defaultOgImage = getSanityImageUrl(cmsSettings?.logo, { width: 1200 });
   const resolvedOgImage = ogImage || defaultOgImage || STATIC_OG_IMAGE;

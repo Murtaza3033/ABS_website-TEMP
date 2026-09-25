@@ -99,7 +99,7 @@ export default function RolesAccordion() {
     <>
       <DataReveal className="jfiltbar" style={{ marginTop: '36px' }}>
         {cats.map(([d, n]) => (
-          <button key={d} className={`jfilt${filter === d ? ' on' : ''}`} onClick={() => setFilter(d)}>{d} <span className="n">{n}</span></button>
+          <button key={d} className={`jfilt${filter === d ? ' on' : ''}`} onClick={() => setFilter(d)}>{t(d)} <span className="n">{n}</span></button>
         ))}
       </DataReveal>
 

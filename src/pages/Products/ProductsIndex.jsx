@@ -3,7 +3,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { DataReveal } from '../../components/Reveal';
 import SmartLink from '../../components/SmartLink';
 import { useProducts } from '../../hooks/useCms';
-import { loc } from '../../lib/loc';
+import { loc, locT } from '../../lib/loc';
 import { getSanityImageUrl } from '../../lib/sanity';
 import SEO from '../../components/SEO';
 import { FALLBACK_PRODUCTS, withMeta, slugOf, mergeProducts, LOCAL_LOGOS, logoIconStyle } from './productsData';
@@ -39,7 +39,7 @@ export default function ProductsIndex() {
           <div className="prodGrid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '24px' }}>
             {products.map((p) => {
               const name = loc(p.name, lang);
-              const tagline = loc(p.tagline, lang);
+              const tagline = locT(p.tagline, lang, t);
               const slug = slugOf(p);
               const logoUrl = getSanityImageUrl(p.logo, { width: 96 });
               const localLogo = logoUrl ? null : LOCAL_LOGOS[slug];

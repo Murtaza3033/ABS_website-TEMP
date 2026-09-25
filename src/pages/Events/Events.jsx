@@ -94,7 +94,7 @@ export default function Events() {
                 <div style={{ padding: '24px 26px 26px' }}>
                   <div style={{ fontSize: '19px', fontWeight: 700, color: '#0f1729' }}>{t(c[0])}</div>
                   <p style={{ fontSize: '14px', lineHeight: 1.65, color: '#5b6472', margin: '9px 0 0' }}>{t(c[1])}</p>
-                  <SmartLink href={c[3]} style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', marginTop: '16px', fontSize: '14px', fontWeight: 700, color: '#1a56db' }}>{c[2]} <span className="evArrow">→</span></SmartLink>
+                  <SmartLink href={c[3]} style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', marginTop: '16px', fontSize: '14px', fontWeight: 700, color: '#1a56db' }}>{t(c[2])} <span className="evArrow">→</span></SmartLink>
                 </div>
               </DataReveal>
             ))}

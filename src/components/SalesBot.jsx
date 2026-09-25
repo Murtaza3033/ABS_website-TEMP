@@ -119,14 +119,17 @@ export default function SalesBot() {
   // drop this message if the API responds before the 620ms typing delay).
   const botSayNow = (content, opts = null, extra = {}) => dispatch({ type: 'ADD', msg: { who: 'bot', content, opts, ...extra } });
 
-  const handoff = () => botSay("Here's how you can reach a real person on our team — pick whatever's easiest:", null, { channels: true });
+  // Fills {name}-style placeholders after translating (t() is identity in English).
+  const tf = (text, vars) => t(text).replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? '');
 
-  const showFaq = () => botSay('Sure — tap a question:', FAQ.map(([q, ans]) => ({
-    label: q,
+  const handoff = () => botSay(t("Here's how you can reach a real person on our team — pick whatever's easiest:"), null, { channels: true });
+
+  const showFaq = () => botSay(t('Sure — tap a question:'), FAQ.map(([q, ans]) => ({
+    label: t(q),
     onClick: () => {
-      addUser(q);
-      botSay(ans, [
-        { label: '👍 Yes, thanks', onClick: () => { addUser('Yes, thanks'); botSay('Glad that helped! Anything else?', mainMenu()); } },
+      addUser(t(q));
+      botSay(t(ans), [
+        { label: `👍 ${t('Yes, thanks')}`, onClick: () => { addUser(t('Yes, thanks')); botSay(t('Glad that helped! Anything else?'), mainMenu()); } },
         { label: `🙋 ${t('Talk to a human')}`, onClick: () => { addUser(t('Talk to a human')); handoff(); } },
       ]);
     },
@@ -135,13 +138,13 @@ export default function SalesBot() {
   const prod = (name, desc) => {
     addUser(name);
     dispatch({ type: 'PRODUCT', product: name });
-    botSay(<><b>{name}</b> — {desc}</>, [
+    botSay(<><b>{name}</b> — {t(desc)}</>, [
       { label: t('Book a demo'), onClick: () => { addUser(t('Book a demo')); startCapture('demo'); } },
       { label: t('Ask a question'), onClick: () => { addUser(t('Ask a question')); showFaq(); } },
-      { label: 'Back to menu', onClick: () => botSay('What else can I help with?', mainMenu()) },
+      { label: t('Back to menu'), onClick: () => botSay(t('What else can I help with?'), mainMenu()) },
     ]);
   };
-  const productMenu = () => botSay('Which one would you like to hear about?', [
+  const productMenu = () => botSay(t('Which one would you like to hear about?'), [
     { label: 'BusinessFlo', onClick: () => prod('BusinessFlo', 'Our ERP — finance, inventory, procurement and reporting in one connected flow.') },
     { label: 'PeopleNest', onClick: () => prod('PeopleNest', 'HR & workforce — attendance, leave, payroll and people analytics in one place.') },
     { label: 'Field Force', onClick: () => prod('Field Force', 'Field operations — visits, routes and live KPIs for teams on the ground.') },
@@ -152,7 +155,7 @@ export default function SalesBot() {
     { label: t('Learn about products'), onClick: () => { addUser(t('Learn about products')); productMenu(); } },
     { label: t('Ask a question'), onClick: () => { addUser(t('Ask a question')); showFaq(); } },
     { label: t('Partnership'), onClick: () => { addUser(t('Partnership')); startCapture('partner'); } },
-    { label: t('Careers'), onClick: () => { addUser(t('Careers')); botSay(<>{t("We'd love to hear from you! Send your CV to")} <b>talent@alignbsystems.com</b> {t("with the role in the subject line.")}</>, [{ label: 'Open Careers page', onClick: () => { window.location.href = '/careers'; } }, { label: 'Back to menu', onClick: () => botSay('What else can I help with?', mainMenu()) }]); } },
+    { label: t('Careers'), onClick: () => { addUser(t('Careers')); botSay(<>{t("We'd love to hear from you! Send your CV to")} <b>talent@alignbsystems.com</b> {t("with the role in the subject line.")}</>, [{ label: t('Open Careers page'), onClick: () => { window.location.href = '/careers'; } }, { label: t('Back to menu'), onClick: () => botSay(t('What else can I help with?'), mainMenu()) }]); } },
     { label: t('Talk to a human'), onClick: () => { addUser(t('Talk to a human')); handoff(); } },
   ];
 
@@ -183,26 +186,26 @@ export default function SalesBot() {
 
     if (result.ok) {
       if (path === 'partner') {
-        botSay(<>Thanks, {d.name}! Align partners with companies across the ecosystem — I&apos;ve passed your details to the team. Here&apos;s how to reach us directly too:</>, null, { channels: true });
+        botSay(tf("Thanks, {name}! Align partners with companies across the ecosystem — I've passed your details to the team. Here's how to reach us directly too:", { name: d.name }), null, { channels: true });
       } else {
-        botSay(<>Perfect, {d.name}! Our team will set up a demo of {product || 'the Align platform'} — I&apos;ve sent your details over. Here&apos;s how to reach us directly too:</>, null, { channels: true });
+        botSay(tf("Perfect, {name}! Our team will set up a demo of {product} — I've sent your details over. Here's how to reach us directly too:", { name: d.name, product: product || t('the Align platform') }), null, { channels: true });
       }
     } else {
-      botSay(<>Hmm, I couldn&apos;t send that through just now — but your details are saved, and here&apos;s how to reach our team directly:</>, null, { channels: true });
+      botSay(t("Hmm, I couldn't send that through just now — but your details are saved, and here's how to reach our team directly:"), null, { channels: true });
     }
   };
   const setSize = (sz) => { addUser(sz); dispatch({ type: 'MERGE_DATA', data: { size: sz } }); setTimeout(() => finishCapture('demo'), 0); };
   const askSizeOrFinish = () => {
     if (stateRef.current.afterCapture === 'demo') {
-      botSay('Roughly how many people work at your company?', ['1–25', '25–50', '50–100', '100–500', '500+'].map((sz) => ({ label: sz, onClick: () => setSize(sz) })));
+      botSay(t('Roughly how many people work at your company?'), ['1–25', '25–50', '50–100', '100–500', '500+'].map((sz) => ({ label: sz, onClick: () => setSize(sz) })));
     } else finishCapture(stateRef.current.afterCapture);
   };
 
   const startCapture = (path) => {
     dispatch({ type: 'AFTER', value: path });
     const d = stateRef.current.data;
-    if (!d.name) { dispatch({ type: 'AWAITING', value: 'name' }); botSay("Sure! First — what's your name?"); focusInput(); return; }
-    if (!d.email) { dispatch({ type: 'AWAITING', value: 'email' }); botSay(`Welcome back, ${d.name}! What's the best email to reach you?`); focusInput(); return; }
+    if (!d.name) { dispatch({ type: 'AWAITING', value: 'name' }); botSay(t("Sure! First — what's your name?")); focusInput(); return; }
+    if (!d.email) { dispatch({ type: 'AWAITING', value: 'email' }); botSay(tf("Welcome back, {name}! What's the best email to reach you?", { name: d.name })); focusInput(); return; }
     finishCapture(path);
   };
 
@@ -211,19 +214,19 @@ export default function SalesBot() {
     if (!v) return;
     const { awaiting } = stateRef.current;
     if (awaiting) {
-      if (awaiting === 'email' && !validEmail(v)) { addUser(v); botSay("Hmm, that doesn't look like a valid email — mind trying again?"); focusInput(); return; }
+      if (awaiting === 'email' && !validEmail(v)) { addUser(v); botSay(t("Hmm, that doesn't look like a valid email — mind trying again?")); focusInput(); return; }
       addUser(v);
-      if (awaiting === 'name') { dispatch({ type: 'MERGE_DATA', data: { name: v } }); dispatch({ type: 'AWAITING', value: 'company' }); botSay(<>Nice to meet you, {v}. What company are you with? <span style={{ color: '#8a94a6' }}>{t("(optional)")}</span></>, [{ label: 'Skip', onClick: () => { addUser('Skip'); dispatch({ type: 'AWAITING', value: 'email' }); botSay("No problem. What's the best email to reach you?"); focusInput(); } }]); focusInput(); return; }
-      if (awaiting === 'company') { dispatch({ type: 'MERGE_DATA', data: { company: v } }); dispatch({ type: 'AWAITING', value: 'email' }); botSay('Got it. And the best email to reach you?'); focusInput(); return; }
+      if (awaiting === 'name') { dispatch({ type: 'MERGE_DATA', data: { name: v } }); dispatch({ type: 'AWAITING', value: 'company' }); botSay(<>{tf('Nice to meet you, {name}. What company are you with?', { name: v })} <span style={{ color: '#8a94a6' }}>{t("(optional)")}</span></>, [{ label: t('Skip'), onClick: () => { addUser(t('Skip')); dispatch({ type: 'AWAITING', value: 'email' }); botSay(t("No problem. What's the best email to reach you?")); focusInput(); } }]); focusInput(); return; }
+      if (awaiting === 'company') { dispatch({ type: 'MERGE_DATA', data: { company: v } }); dispatch({ type: 'AWAITING', value: 'email' }); botSay(t('Got it. And the best email to reach you?')); focusInput(); return; }
       if (awaiting === 'email') { dispatch({ type: 'MERGE_DATA', data: { email: v } }); dispatch({ type: 'AWAITING', value: null }); setTimeout(askSizeOrFinish, 0); return; }
     }
     addUser(v);
-    botSay('I want to make sure you get the right answer — let me connect you with our team.', null, { channels: true });
+    botSay(t('I want to make sure you get the right answer — let me connect you with our team.'), null, { channels: true });
   };
 
   const openBot = () => {
     dispatch({ type: 'OPEN' });
-    if (!greetedRef.current) { greetedRef.current = true; dispatch({ type: 'GREETED' }); botSay("Hi! I'm the Align Assistant 👋 How can I help you today?", mainMenu()); }
+    if (!greetedRef.current) { greetedRef.current = true; dispatch({ type: 'GREETED' }); botSay(t("Hi! I'm the Align Assistant 👋 How can I help you today?"), mainMenu()); }
   };
   const send = () => {
     const v = inputRef.current?.value || '';
@@ -245,7 +248,7 @@ export default function SalesBot() {
           invisible (interaction-only), takes no layout space. */}
       <Turnstile ref={turnstileRef} action="salesbot" />
       {!state.open && (
-        <button className="ab-launcher" aria-label="Chat with Align Assistant" onClick={openBot}
+        <button className="ab-launcher" aria-label={t('Chat with Align Assistant')} onClick={openBot}
           style={{ position: 'fixed', right: '24px', bottom: '88px', zIndex: 940, width: '60px', height: '60px', borderRadius: '50%', border: 'none', background: BLUE, color: '#fff', cursor: 'pointer', boxShadow: '0 16px 34px -10px rgba(26,86,219,.6)', display: 'grid', placeItems: 'center', animation: 'abFloat 5s ease-in-out infinite' }}>
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
           <span style={{ position: 'absolute', top: '2px', right: '2px', width: '14px', height: '14px', borderRadius: '50%', background: '#d4a017', border: '2px solid #fff', animation: 'abPulse 1.8s ease-in-out infinite' }} />
@@ -266,7 +269,7 @@ export default function SalesBot() {
               <div style={{ fontSize: '15px', fontWeight: 700, lineHeight: 1.1 }}>{t('Align Assistant')}</div>
               <div style={{ fontSize: '11.5px', color: '#cfdcff', display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}><span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#4ade80', display: 'inline-block' }} />{t('Online now')}</div>
             </div>
-            <button aria-label="Close" onClick={() => dispatch({ type: 'CLOSE' })} style={{ width: '30px', height: '30px', borderRadius: '8px', border: 'none', background: 'rgba(255,255,255,.16)', color: '#fff', cursor: 'pointer', fontSize: '18px', lineHeight: 1 }}>×</button>
+            <button aria-label={t('Close')} onClick={() => dispatch({ type: 'CLOSE' })} style={{ width: '30px', height: '30px', borderRadius: '8px', border: 'none', background: 'rgba(255,255,255,.16)', color: '#fff', cursor: 'pointer', fontSize: '18px', lineHeight: 1 }}>×</button>
           </div>
 
           <div ref={msgsRef} className="ab-msgs" style={{ flex: 1, overflowY: 'auto', padding: '18px 16px', background: TINT, display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -310,15 +313,16 @@ export default function SalesBot() {
 }
 
 function Channels({ mailto }) {
+  const { t } = useLanguage();
   const items = [
-    ['✉️  Email Sales', mailto('sales@alignbsystems.com', 'Demo / enquiry — Align')],
-    ['🛟  Email Support', mailto('support@alignbsystems.com', 'Support request — Align')],
-    ['📞  Call Sales · +92 317 3822206', 'tel:+923173822206'],
-    ['📞  Call Support · +92 318 6944418', 'tel:+923186944418'],
+    [`✉️  ${t('Email Sales')}`, mailto('sales@alignbsystems.com', 'Demo / enquiry — Align')],
+    [`🛟  ${t('Email Support')}`, mailto('support@alignbsystems.com', 'Support request — Align')],
+    [`📞  ${t('Call Sales')} · +92 317 3822206`, 'tel:+923173822206'],
+    [`📞  ${t('Call Support')} · +92 318 6944418`, 'tel:+923186944418'],
     // Only shown once a real number is configured (VITE_WHATSAPP_NUMBER) —
     // never a placeholder pretending to be a working link.
-    ...(WHATSAPP_NUMBER ? [['💬  Chat on WhatsApp', `https://wa.me/${WHATSAPP_NUMBER}`]] : []),
-    ['💼  Careers · talent@alignbsystems.com', mailto('talent@alignbsystems.com', 'Application — Align')],
+    ...(WHATSAPP_NUMBER ? [[`💬  ${t('Chat on WhatsApp')}`, `https://wa.me/${WHATSAPP_NUMBER}`]] : []),
+    [`💼  ${t('Careers')} · talent@alignbsystems.com`, mailto('talent@alignbsystems.com', 'Application — Align')],
   ];
   const linkStyle = { display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', fontSize: '13px', fontWeight: 600, color: SLATE, background: '#fff', border: '1.5px solid #e3e9f3', borderRadius: '12px', padding: '10px 13px' };
   return (

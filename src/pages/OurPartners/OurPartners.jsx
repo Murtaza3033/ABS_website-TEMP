@@ -70,7 +70,7 @@ export default function OurPartners() {
             <DataReveal className="eyebrow" style={{ display: 'block' }}>{t("Partners")}</DataReveal>
             <h1 className="h1" data-headline>
               <span className={hw} style={{ animationDelay: '0ms' }}>{t("Growth")}</span>{' '}
-              <span className={hw} style={{ animationDelay: '90ms' }}>is</span>{' '}
+              <span className={hw} style={{ animationDelay: '90ms' }}>{t("is")}</span>{' '}
               <span className={hw} style={{ animationDelay: '180ms' }}>{t("better")}</span><br />
               <span className={hw} style={{ animationDelay: '270ms' }}>{t("built")}</span>{' '}
               <span className={hw} style={{ animationDelay: '360ms' }}><span className="cave" style={{ fontSize: '1.18em' }}>{t("together")}</span>.</span>

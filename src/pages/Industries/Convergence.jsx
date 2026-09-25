@@ -17,7 +17,7 @@ function ConvNode({ n, i, onJump, onHover }) {
   const { t } = useLanguage();
   return (
     <DataReveal
-      className="convNode" title={`Explore ${n[0]}`}
+      className="convNode" title={`${t('Explore')} ${t(n[0])}`}
       onMouseEnter={() => onHover(i)} onMouseLeave={() => onHover(null)} onClick={() => onJump(i)}
       style={{ background: '#fff', border: '1px solid #e9edf4', borderRadius: '18px', padding: '18px 20px', boxShadow: '0 20px 46px -26px rgba(15,23,41,.32)', cursor: 'pointer', animation: `floatY ${NODE_DURS[i % 6]} ease-in-out ${NODE_DELS[i % 6]} infinite` }}
     >
