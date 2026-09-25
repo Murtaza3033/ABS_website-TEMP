@@ -1,14 +1,16 @@
 /* Arabic / RTL layer — static CSS (replaces the runtime's JS-injected <style> + font <link>).
    Activated by html[dir="rtl"], which LanguageContext sets from state. Text translation is
    now React-driven (t()); this file handles font, shell mirroring and glyph-flip. */
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap');
+/* The Cairo webfont stylesheet is linked from index.html. */
 
 /* Cairo font while Arabic is active */
 html[dir="rtl"] body,
 html[dir="rtl"] button,
 html[dir="rtl"] input,
 html[dir="rtl"] textarea,
-html[dir="rtl"] select { font-family: "Cairo", "Outfit", system-ui, sans-serif !important; }
+html[dir="rtl"] select,
+/* header Book-a-Demo: .site-header sets Outfit explicitly, so it would not inherit Cairo */
+html[dir="rtl"] .site-header .btn-cta { font-family: "Cairo", "Outfit", system-ui, sans-serif !important; }
 
 /* The header/footer shell mirrors naturally from html[dir="rtl"] (flex reverses,
    nav sits right). But the page bodies are pixel-composed LTR designs — dashboards,
@@ -17,11 +19,6 @@ html[dir="rtl"] select { font-family: "Cairo", "Outfit", system-ui, sans-serif !
    content is swapped to Arabic (React-driven t()). */
 html[dir="rtl"] main,
 html[dir="rtl"] [data-page-root] { direction: ltr; }
-
-/* Marketing copy still reads right-to-left where it's translated: any element
-   carrying Arabic content can opt in with dir="rtl"/lang, and centered headings
-   are unaffected. */
-html[dir="rtl"] [lang="ar"] { direction: rtl; }
 
 /* Split-word hero headlines (each word in its own span) must flow right-to-left
    in Arabic so the words read in order, even on inner pages kept otherwise LTR. */
@@ -60,11 +57,11 @@ html[dir="rtl"] main.home-rtl .card-arw { display: inline-block; transform: scal
 html[dir="rtl"] main.home-rtl [data-screen-label="Clients"],
 html[dir="rtl"] main.home-rtl [data-screen-label="Problems We Solve"] { direction: ltr; }
 
-html[dir="rtl"] .i18n-flip { display: inline-block; transform: scaleX(-1); }
-
 /* Align Assistant widget mirrors to the left in RTL */
 html[dir="rtl"] .ab-launcher,
 html[dir="rtl"] .ab-panel { right: auto !important; left: 24px !important; }
 html[dir="rtl"] .ab-tip { right: auto !important; left: 96px !important; }
+/* Phone-width panel: equal 12px gutters (mirror of the rule in shared.css) */
+@media (max-width:520px) { html[dir="rtl"] .ab-panel { left: 12px !important; } }
 html[dir="rtl"] .ab-root,
 html[dir="rtl"] .ab-root * { font-family: "Cairo", system-ui, sans-serif !important; }

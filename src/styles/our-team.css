@@ -1,16 +1,3 @@
-
-:root{
-  --blue:rgb(26,86,219);--blue-hover:#1648b8;--slate:rgb(15,23,41);--tint:rgb(247,250,255);--white:#ffffff;
-  --ink:#0f1729;--muted:#5b6472;--faint:#8a94a6;--line:#eef1f6;--line-2:#e4eaf3;--gold:#d4a017;--green:#1a9d55;
-  --font-sans:'Outfit',system-ui,-apple-system,sans-serif;--font-hand:'Caveat',cursive;
-}
-*{box-sizing:border-box;}
-html,body{margin:0;padding:0;background:#0f1729;}
-body{font-family:var(--font-sans);color:#eaf0fb;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
-a{color:#4b8bff;text-decoration:none;}
-button{font-family:inherit;}
-h1,h2,h3{font-family:var(--font-sans);}
-
 @keyframes tmFloat1{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
 @keyframes tmFloat2{0%,100%{transform:translateY(-8px);}50%{transform:translateY(8px);}}
 @keyframes tmFloat3{0%,100%{transform:translateY(4px);}50%{transform:translateY(-10px);}}
@@ -23,8 +10,6 @@ h1,h2,h3{font-family:var(--font-sans);}
 .tsec.tin .anim{animation:tmEmerge .6s cubic-bezier(.2,.7,.3,1) both;}
 .tsec .mBar{height:0;transition:height 1s cubic-bezier(.2,.8,.3,1);}
 .tsec.tin .mBar{height:var(--h);}
-.crumb a{color:#96a2ba;}
-.crumb a:hover{color:#4b8bff;}
 
 /* leader portrait — grayscale cutout, colorizes on hover (design) */
 .tPortrait{width:300px;max-width:70vw;height:min(72vh,620px);background-position:bottom center;background-size:contain;background-repeat:no-repeat;filter:grayscale(.35) contrast(1.02) brightness(.94);transition:filter .5s ease,transform .5s ease;}
@@ -58,13 +43,6 @@ h1,h2,h3{font-family:var(--font-sans);}
 .tSpine .rail i{position:absolute;top:0;left:0;width:100%;height:0%;background:linear-gradient(#1a56db,#4b8bff);box-shadow:0 0 8px rgba(26,86,219,.8);}
 .spineBtn{position:relative;background:none;border:none;cursor:pointer;font-size:12px;font-weight:700;letter-spacing:1px;color:#5f6f8c;padding:0;transition:color .3s ease;}
 
-/* sibling hub-to-child cards */
-.sib-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:44px;}
-.sib-card{position:relative;overflow:hidden;background:#fff;border:1px solid #eaeef5;border-radius:20px;padding:26px;transition:transform .28s cubic-bezier(.2,.7,.3,1),box-shadow .28s ease,border-color .28s ease;color:#0f1729;}
-.sib-card:hover{transform:translateY(-6px);box-shadow:0 34px 66px -30px rgba(15,23,41,.34);border-color:#c9d8f5;}
-.sib-card:hover .hub-arrow{transform:translateX(4px);}
-.hub-arrow{display:inline-block;transition:transform .25s ease;}
-
 @media (max-width:900px){
   .tSpine{display:none !important;}
   .sceneGrid{grid-template-columns:1fr !important;}
@@ -74,7 +52,7 @@ h1,h2,h3{font-family:var(--font-sans);}
   .aw-grid{grid-template-columns:1fr 1fr !important;}
 }
 @media (max-width:560px){.grid6{grid-template-columns:1fr 1fr !important;}}
-@media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important;}.tsec .anim{opacity:1 !important;transform:none !important;}}
+@media (prefers-reduced-motion:reduce){.tsec .anim{opacity:1 !important;transform:none !important;}}
 
 /* scene parallax — pure CSS scroll-driven (replaces the runtime's scroll-transform).
    Uses the independent `translate` property so it never clashes with the float

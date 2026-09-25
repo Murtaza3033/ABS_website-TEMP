@@ -7,11 +7,12 @@
     <!-- Per-page <title>/description/canonical/OG tags are managed by src/components/SEO.jsx
          via react-helmet-async — no static meta description here so it can't shadow Helmet's. -->
 
-    <!-- Brand fonts: Outfit + Caveat (Cairo for Arabic is loaded at runtime by the RTL layer) -->
+    <!-- Brand fonts: Outfit + Caveat, plus Cairo for Arabic (applied under html[dir="rtl"] by styles/i18n.css) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   </head>
   <body>
     <div id="root"></div>

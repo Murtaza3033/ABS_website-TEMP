@@ -1,18 +1,6 @@
-/* Products index + detail pages. Base classes mirror the same names/values
-   every other page's stylesheet defines (industries.css, our-clients.css,
-   careers.css, …) — :root tokens and the reset already come from shared.css
-   (imported globally in App.jsx), so only the page-level classes are here. */
-
-.eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:2px;color:var(--blue);text-transform:uppercase;}
-.h1{font-size:clamp(38px,6vw,58px);line-height:1.05;letter-spacing:-1.7px;font-weight:800;margin:16px 0 0;color:var(--ink);}
-.h2{font-size:clamp(28px,4vw,36px);line-height:1.14;letter-spacing:-1px;font-weight:800;margin:14px 0 0;}
-.lede{font-size:18.5px;line-height:1.65;color:#4b5565;}
-.cave{font-family:var(--font-hand);color:var(--blue);font-weight:700;}
-.sec{padding:90px 32px;}
-.backlink{font-size:12px;font-weight:700;letter-spacing:1.5px;color:var(--blue);text-transform:uppercase;}
-
-[data-reveal]{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.7,.3,1);}
-[data-reveal].in{opacity:1;transform:none;}
+/* Products index + detail pages. :root tokens, the reset and the shared page
+   helpers (.eyebrow/.h1/.h2/.lede/.cave/.sec/.backlink/[data-reveal]) come from
+   shared.css (imported globally in App.jsx), so only page-level classes are here. */
 
 .prodCard{transition:transform .3s cubic-bezier(.2,.7,.3,1),box-shadow .3s ease,border-color .3s ease;}
 .prodCard:hover{transform:translateY(-6px);box-shadow:0 34px 64px -30px rgba(15,23,41,.4);border-color:#c9d8f5;}
@@ -24,10 +12,8 @@ html[dir="rtl"] .prodCard:hover .prodArrow{transform:translateX(-4px);}
 .prodFeatCard:hover{transform:translateY(-4px);box-shadow:0 26px 52px -28px rgba(15,23,41,.3);}
 
 @media (max-width:900px){
-  .sec{padding:64px 22px;}
   .prodGrid{grid-template-columns:1fr !important;}
   .prodShowcaseGrid{grid-template-columns:1fr !important;}
   .prodFeatGrid{grid-template-columns:1fr 1fr !important;}
 }
 @media (max-width:560px){.prodFeatGrid{grid-template-columns:1fr !important;}}
-@media (prefers-reduced-motion:reduce){[data-reveal]{opacity:1;transform:none;}}
