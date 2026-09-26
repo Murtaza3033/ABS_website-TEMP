@@ -213,7 +213,7 @@ export default function OurTeam() {
               {SEN.map((s) => (
                 <div key={s[1]} className="anim" style={{ background: '#fff', border: '1px solid #eaeef5', borderRadius: '18px', padding: '22px 18px', textAlign: 'center', boxShadow: '0 16px 40px -30px rgba(15,23,41,.28)' }}>
                   <div style={{ width: '64px', height: '64px', margin: '0 auto', borderRadius: '50%', background: 'linear-gradient(135deg,#e8effc,#dbe6ff)', display: 'grid', placeItems: 'center', color: '#1a56db', fontWeight: 800, fontSize: '20px' }}>{s[0]}</div>
-                  <div style={{ fontSize: '13px', fontWeight: 700, marginTop: '14px', color: '#b3bccb', letterSpacing: '.5px' }}>{t("NAME TBD")}</div>
+                  <div style={{ fontSize: '13px', fontWeight: 700, marginTop: '14px', color: '#657085', letterSpacing: '.5px' }}>{t("NAME TBD")}</div>
                   <div style={{ fontSize: '13px', fontWeight: 600, color: '#1a56db', marginTop: '4px', lineHeight: 1.3 }}>{t(s[1])}</div>
                   <p style={{ fontSize: '12px', lineHeight: 1.5, color: '#5b6472', margin: '8px 0 0' }}>{t(s[2])}</p>
                 </div>
@@ -235,7 +235,7 @@ export default function OurTeam() {
                 return (
                   <div key={r} className="anim" style={{ background: 'var(--tint)', border: '1px solid #eaeef5', borderRadius: '16px', padding: '18px 12px', textAlign: 'center' }}>
                     <div style={{ width: '52px', height: '52px', margin: '0 auto', borderRadius: '50%', background: c[0], display: 'grid', placeItems: 'center', color: c[1], fontWeight: 800, fontSize: '16px' }}>—</div>
-                    <div style={{ fontSize: '12px', fontWeight: 700, marginTop: '10px', color: '#b3bccb' }}>{t("NAME TBD")}</div>
+                    <div style={{ fontSize: '12px', fontWeight: 700, marginTop: '10px', color: '#657085' }}>{t("NAME TBD")}</div>
                     <div style={{ fontSize: '11px', color: '#5b6472', marginTop: '2px' }}>{t(r)}</div>
                   </div>
                 );

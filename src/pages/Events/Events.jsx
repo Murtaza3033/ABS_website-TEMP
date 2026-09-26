@@ -82,7 +82,7 @@ export default function Events() {
         <div style={{ maxWidth: '1160px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto' }}>
             <DataReveal as="span" className="eyebrow">{t("Why we show up")}</DataReveal>
-            <DataReveal as="h2" className="h2">{t("The best conversations happen")} <span className="cave" style={{ fontSize: '1.3em' }}>{t("in person")}</span>.</DataReveal>
+            <DataReveal as="h2" className="h2">{t("The best conversations happen")} <span className="cave cave-end" style={{ fontSize: '1.3em' }}>{t("in person")}</span>.</DataReveal>
             <DataReveal as="p" style={{ fontSize: '16px', lineHeight: 1.7, color: '#4b5565', margin: '16px 0 0' }}>{t("Software is built for people, and people are easiest to understand face to face. We go to industry events to meet businesses where they are, hear the operational headaches firsthand, and build relationships that outlast any screen.")}</DataReveal>
           </div>
           <div className="why-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: '26px', marginTop: '46px' }}>
@@ -94,7 +94,7 @@ export default function Events() {
                 <div style={{ padding: '24px 26px 26px' }}>
                   <div style={{ fontSize: '19px', fontWeight: 700, color: '#0f1729' }}>{t(c[0])}</div>
                   <p style={{ fontSize: '14px', lineHeight: 1.65, color: '#5b6472', margin: '9px 0 0' }}>{t(c[1])}</p>
-                  <SmartLink href={c[3]} style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', marginTop: '16px', fontSize: '14px', fontWeight: 700, color: '#1a56db' }}>{t(c[2])} <span className="evArrow">→</span></SmartLink>
+                  <SmartLink href={c[3]} className="tap-pad" style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', marginTop: '16px', fontSize: '14px', fontWeight: 700, color: '#1a56db' }}>{t(c[2])} <span className="evArrow">→</span></SmartLink>
                 </div>
               </DataReveal>
             ))}

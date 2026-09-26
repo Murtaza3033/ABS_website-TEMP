@@ -6,53 +6,44 @@
    platform's request/response shape — swapping platforms later means
    rewriting that one thin adapter, not this file. */
 
+import {randomUUID} from 'node:crypto';
 import {createClient} from '@sanity/client';
 import {sendContactNotification} from './email.js';
 import {verifyTurnstileToken} from './turnstile.js';
+// Field rules are shared verbatim with the browser (src/lib/contactApi.js
+// re-exports the same module), so client and server validation can't drift.
+import {
+  CONTACT_LIMITS,
+  NAME_RE,
+  EMAIL_RE,
+  validPhone,
+  validPageUrl,
+} from '../../src/lib/contactRules.js';
 
 export const REASONS = ['Book a demo', 'Product question', 'Partnership', 'Careers', 'Something else'];
 export const PRODUCTS = ['BusinessFlo', 'PeopleNest', 'Field Force', 'Not sure yet'];
 export const SOURCES = ['contact-form', 'book-demo', 'salesbot'];
 
 const MAX = {
-  name: 100,
-  company: 150,
-  email: 200,
-  phone: 30,
-  countryIso: 5,
-  message: 2000,
-  pageUrl: 500,
+  name: CONTACT_LIMITS.name.max,
+  company: CONTACT_LIMITS.company.max,
+  email: CONTACT_LIMITS.email.max,
+  phone: CONTACT_LIMITS.phone.max,
+  countryIso: CONTACT_LIMITS.countryIso.max,
+  message: CONTACT_LIMITS.message.max,
+  pageUrl: CONTACT_LIMITS.pageUrl.max,
 };
 
-// Mirrors src/pages/ContactUs/contactData.js's client-side rules — the
-// server re-checks independently rather than trusting the browser.
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const NAME_RE = /^\p{L}[\p{L}\p{M} .'-]*$/u; // Unicode letters (Arabic, accents, …)
+/* Leads are written under a dotted _id ("private.contactSubmission.<uuid>").
+   Sanity treats any document whose _id contains a "." as being in a path,
+   and path documents are never returned to unauthenticated requests — even
+   in a public dataset — so the frontend's public, token-less client (and
+   anyone else hitting the public API/CDN) can't read leads, while Studio and
+   the write-token client (both authenticated) still see them. */
+export const LEAD_ID_PREFIX = 'private.contactSubmission.';
 
 function trimStr(v) {
   return typeof v === 'string' ? v.trim() : '';
-}
-
-/* Phone validation deliberately does NOT duplicate contactData.js's full
-   30-country digit-length table (that would be a second copy of the same
-   data, guaranteed to drift out of sync over time). Since phone is optional
-   here, this only does a broad sanity check — the per-country precision
-   stays a client-side UX nicety, not a server-side security boundary. */
-function isPlausiblePhone(v) {
-  if (!v) return true;
-  const digits = v.replace(/\D/g, '');
-  return digits.length >= 4 && digits.length <= 15;
-}
-
-function isPlausibleUrl(v) {
-  if (!v) return true;
-  try {
-    // eslint-disable-next-line no-new
-    new URL(v);
-    return true;
-  } catch {
-    return false;
-  }
 }
 
 /* Returns { fields: {...} } with one message per invalid field, or null if
@@ -71,6 +62,7 @@ export function validateContactPayload(body) {
 
   const name = trimStr(b.name);
   if (!name) fields.name = 'Name is required.';
+  else if (name.length < CONTACT_LIMITS.name.min) fields.name = `Name must be at least ${CONTACT_LIMITS.name.min} characters.`;
   else if (name.length > MAX.name) fields.name = `Name must be ${MAX.name} characters or fewer.`;
   else if (!NAME_RE.test(name)) fields.name = 'Enter a valid name (letters only).';
 
@@ -88,7 +80,7 @@ export function validateContactPayload(body) {
 
   const phone = trimStr(b.phone);
   if (phone.length > MAX.phone) fields.phone = `Phone must be ${MAX.phone} characters or fewer.`;
-  else if (!isPlausiblePhone(phone)) fields.phone = 'Enter a valid phone number.';
+  else if (!validPhone(phone)) fields.phone = 'Enter a valid phone number.';
 
   const countryIso = trimStr(b.countryIso);
   if (countryIso.length > MAX.countryIso) fields.countryIso = 'Invalid country code.';
@@ -100,7 +92,7 @@ export function validateContactPayload(body) {
   if (company.length > MAX.company) fields.company = `Company must be ${MAX.company} characters or fewer.`;
 
   const pageUrl = trimStr(b.pageUrl);
-  if (pageUrl.length > MAX.pageUrl || !isPlausibleUrl(pageUrl)) fields.pageUrl = 'Invalid page URL.';
+  if (!validPageUrl(pageUrl)) fields.pageUrl = 'Invalid page URL.';
 
   return Object.keys(fields).length > 0 ? fields : null;
 }
@@ -176,6 +168,7 @@ export async function handleContactSubmission({body, source, userAgent, pageUrl,
   }
 
   const doc = {
+    _id: `${LEAD_ID_PREFIX}${randomUUID()}`,
     _type: 'contactSubmission',
     ...sanitizeContactPayload(body, {source}),
     pageUrl: trimStr(body?.pageUrl) || trimStr(pageUrl) || undefined,

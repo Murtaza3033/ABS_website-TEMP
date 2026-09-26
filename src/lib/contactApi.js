@@ -1,13 +1,21 @@
 /* Contact submission + generic field validation, shared by the Contact Us
    page and the site-wide SalesBot. */
 
-export const validEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((v || '').trim());
-export const validName = (v) => {
-  const t = (v || '').trim();
-  // Any script's letters (Arabic, accented Latin, …) + combining marks;
-  // same space/dot/apostrophe/hyphen rules as before. Mirrored server-side.
-  return t.length >= 2 && /^\p{L}[\p{L}\p{M} .'-]*$/u.test(t);
-};
+// Field rules live in ./contactRules.js — the same module the API
+// (api/_lib/contactSubmission.js) imports, so client and server can never
+// drift. Re-exported here so existing imports keep working; use
+// CONTACT_LIMITS.<field>.max for input maxLength attributes.
+export {
+  CONTACT_LIMITS,
+  NAME_RE,
+  EMAIL_RE,
+  validName,
+  validEmail,
+  validPhone,
+  validCompany,
+  validMessage,
+  contactFieldErrors,
+} from './contactRules.js';
 
 /* Posts a Contact form submission to the /api/contact backend. Returns a plain
    { ok, id } or { ok: false, error, fields } — never throws, so callers don't

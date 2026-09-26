@@ -63,6 +63,37 @@ export default function Industries() {
   const curRef = useRef(0);
   curRef.current = cur;
 
+  /* Stable showcase height: industries differ in copy/chips/client count, so
+     the auto-rotating panel used to resize (and shove the page) every few
+     seconds. A probe renders every industry's panel off-screen for one
+     synchronous layout pass (never painted), and the tallest becomes the
+     panel's min-height. Re-measured on font load, width and language change. */
+  const panelWrapRef = useRef(null);
+  const [panelMin, setPanelMin] = useState(0);
+  const [probing, setProbing] = useState(false);
+  const [measureKey, setMeasureKey] = useState(0);
+  useLayoutEffect(() => { setProbing(true); }, [measureKey, lang, industries.length]);
+  useLayoutEffect(() => {
+    if (!probing) return;
+    const hs = Array.from(panelWrapRef.current?.querySelectorAll('[data-panel-probe] > .panel') || [], (el) => el.getBoundingClientRect().height);
+    setPanelMin(Math.ceil(Math.max(0, ...hs)));
+    setProbing(false);
+  }, [probing]);
+  useEffect(() => {
+    let alive = true;
+    document.fonts?.ready?.then(() => { if (alive) setMeasureKey((k) => k + 1); });
+    let w = window.innerWidth;
+    let id = 0;
+    const onResize = () => {
+      if (window.innerWidth === w) return;
+      w = window.innerWidth;
+      clearTimeout(id);
+      id = setTimeout(() => setMeasureKey((k) => k + 1), 150);
+    };
+    window.addEventListener('resize', onResize);
+    return () => { alive = false; clearTimeout(id); window.removeEventListener('resize', onResize); };
+  }, []);
+
   useLayoutEffect(() => {
     const prev = document.body.style.background;
     document.body.style.background = 'var(--white)';
@@ -138,7 +169,7 @@ export default function Industries() {
             {HEAD.map((w, i) => (
               <Fragment key={i}>
                 <span className={hw} style={{ animationDelay: `${i * 85}ms` }}>
-                  {w === 'forward.' ? <><span className="cave" style={{ fontSize: '1.2em' }}>{t("forward")}</span>.</> : t(w)}
+                  {w === 'forward.' ? <><span className="cave cave-end" style={{ fontSize: '1.2em' }}>{t("forward")}</span>.</> : t(w)}
                 </span>
                 {i < HEAD.length - 1 ? ' ' : null}
               </Fragment>
@@ -158,9 +189,11 @@ export default function Industries() {
 
       {/* TABBED SHOWCASE */}
       <section ref={showcaseRef} className="sec" style={{ background: '#fff', padding: '36px 32px 90px' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        <div ref={panelWrapRef} style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative' }}>
           <DataReveal
             className="iTabs"
+            role="tablist"
+            aria-label={t('Industries')}
             tabIndex={0}
             onKeyDown={(e) => { if (e.key === 'ArrowRight') { e.preventDefault(); select(curRef.current + 1, true); } else if (e.key === 'ArrowLeft') { e.preventDefault(); select(curRef.current - 1, true); } }}
             style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '10px', padding: '8px', background: 'var(--tint)', border: '1px solid #eef1f6', borderRadius: '999px', width: 'fit-content', margin: '0 auto', maxWidth: '100%', overflowX: 'auto' }}
@@ -168,15 +201,22 @@ export default function Industries() {
             {industries.map((ind, i) => {
               const on = i === cur;
               return (
-                <button key={ind.short} className="iTab" onClick={() => select(i, true)}
+                <button key={ind.short} id={`iTab-${i}`} className="iTab" role="tab" aria-selected={on} aria-controls="iPanel" onClick={() => select(i, true)}
                   style={{ background: on ? '#1a56db' : 'transparent', color: on ? '#fff' : '#0f1729', boxShadow: on ? '0 12px 24px -10px rgba(26,86,219,.55)' : 'none' }}>{t(ind.short)}</button>
               );
             })}
           </DataReveal>
           <DataReveal className="iProg"><i ref={fillRef} style={{ width: '0%' }} /></DataReveal>
-          <div className="panel" style={{ marginTop: '34px' }}>
+          <div className="panel" id="iPanel" role="tabpanel" aria-labelledby={`iTab-${cur}`} style={{ marginTop: '34px', minHeight: panelMin && !probing ? `${panelMin}px` : undefined }}>
             <IndustryPanel key={cur} d={d} parallaxRef={parallaxRef} />
           </div>
+          {probing && (
+            <div data-panel-probe aria-hidden="true" inert style={{ position: 'absolute', left: 0, right: 0, top: 0, visibility: 'hidden', pointerEvents: 'none' }}>
+              {industries.map((x) => (
+                <div key={x.short} className="panel"><IndustryPanel d={x} probe /></div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

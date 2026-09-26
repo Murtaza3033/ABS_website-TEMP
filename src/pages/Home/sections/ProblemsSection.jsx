@@ -1,10 +1,11 @@
-import { useHome } from '../HomeContext';
+import { useHome, useScrollRegionProps } from '../HomeContext';
 import { useLanguage } from '../../../context/LanguageContext';
 import SmartLink from '../../../components/SmartLink';
 
 export default function ProblemsSection() {
   const { c, b, act, state } = useHome();
   const { t } = useLanguage();
+  const scrollRegion = useScrollRegionProps(t('Scrollable preview'));
   const on = state.probOn;
   // CSS vars drive the whole ON/OFF wipe + toggle (was setProb()'s setProperty calls)
   const wVars = {
@@ -41,13 +42,16 @@ export default function ProblemsSection() {
               </div>
             </div>
       
-            <div className="hm-scale-scroll-wrap" data-reveal="1" style={{opacity: '0', transform: 'translateY(24px)', transition: 'all .7s cubic-bezier(.2,.7,.3,1)', marginTop: '26px', borderRadius: '24px', '--hm-w': '1000px', '--hm-h': '430px'}}>
+            <div className="hm-scale-scroll-wrap" {...scrollRegion} data-reveal="1" style={{opacity: '0', transform: 'translateY(24px)', transition: 'all .7s cubic-bezier(.2,.7,.3,1)', marginTop: '26px', borderRadius: '24px', '--hm-w': '1000px', '--hm-h': '430px'}}>
             <div className="hm-scale-scroll" style={{position: 'relative', background: '#f7faff', border: '1px solid #eef1f6', borderRadius: '24px', height: '430px', overflow: 'hidden'}}>
               <div style={{position: 'absolute', inset: '0', background: 'radial-gradient(ellipse at center,rgba(229,72,77,.1) 0%,rgba(229,72,77,0) 70%)', opacity: 'var(--wOff,0)', transition: 'opacity .5s ease', pointerEvents: 'none'}}></div>
               
               <div style={{position: 'absolute', insetInlineStart: '3.5%', top: '50%', transform: 'translate(-50%,-50%)', textAlign: 'center', pointerEvents: 'none'}}>
                 <div style={{width: '16px', height: '16px', borderRadius: '50%', background: '#0f1729', margin: '0 auto', boxShadow: '0 0 0 6px rgba(15,23,41,.08)'}}></div>
-                <div style={{fontSize: '11px', fontWeight: '700', color: '#5b6472', marginTop: '8px', whiteSpace: 'nowrap'}}>{t("Your business")}</div>
+                {/* End-point labels are shifted to hang off their node toward the panel's
+                    inside (centred on nodes at 3.5% / 95%, the panel edge clipped
+                    them: "four business", "ourishin"). Layout box unchanged. */}
+                <div style={{fontSize: '11px', fontWeight: '700', color: '#5b6472', marginTop: '8px', whiteSpace: 'nowrap', transform: 'translateX(calc(50% - 8px))'}}>{t("Your business")}</div>
               </div>
               
               <div style={{position: 'absolute', insetInlineStart: '95%', top: '50%', transform: 'translate(-50%,-50%)', textAlign: 'center', pointerEvents: 'none'}}>
@@ -56,8 +60,8 @@ export default function ProblemsSection() {
                   <span style={{position: 'absolute', top: '-14px', insetInlineStart: '-12px', width: '20px', height: '20px', opacity: 'var(--wOn,1)', transition: 'opacity .4s ease'}}><svg viewBox="0 0 24 24" style={{width: '100%', height: '100%'}}><path d="M12 2 L13 6 M12 2 L11 6" stroke="#1a9d55" strokeWidth="1.8" strokeLinecap="round"/><path d="M4 6 L6 8 M20 6 L18 8" stroke="#f5b40a" strokeWidth="1.8" strokeLinecap="round"/></svg></span>
                   <span style={{position: 'absolute', inset: '0', opacity: 'var(--wOff,0)', transition: 'opacity .4s ease'}}><svg viewBox="0 0 36 36" style={{width: '60px', height: '60px', display: 'block'}}><circle cx="18" cy="18" r="16" fill="#fdeaea" stroke="#e5484d" strokeWidth="1.6"/><path d="M18 10.5 L18 19" stroke="#e5484d" strokeWidth="2.6" strokeLinecap="round"/><circle cx="18" cy="23.5" r="1.7" fill="#e5484d"/></svg></span>
                 </div>
-                <div style={{fontSize: '11.5px', fontWeight: '700', color: '#1a9d55', marginTop: '9px', whiteSpace: 'nowrap', opacity: 'var(--wOn,1)', transition: 'opacity .4s'}}>{t("Aligned & flourishing")}</div>
-                <div style={{fontSize: '11.5px', fontWeight: '700', color: '#e5484d', marginTop: '9px', whiteSpace: 'nowrap', position: 'absolute', insetInlineStart: '50%', transform: 'translateX(-50%)', opacity: 'var(--wOff,0)', transition: 'opacity .4s'}}>{t("Stuck & frustrated")}</div>
+                <div style={{fontSize: '11.5px', fontWeight: '700', color: '#157d44', marginTop: '9px', whiteSpace: 'nowrap', transform: 'translateX(calc(-50% + 30px))', opacity: 'var(--wOn,1)', transition: 'opacity .4s'}}>{t("Aligned & flourishing")}</div>
+                <div style={{fontSize: '11.5px', fontWeight: '700', color: '#e5484d', marginTop: '9px', whiteSpace: 'nowrap', position: 'absolute', insetInlineStart: '50%', transform: 'translateX(calc(-100% + 30px))', opacity: 'var(--wOff,0)', transition: 'opacity .4s'}}>{t("Stuck & frustrated")}</div>
               </div>
               
               <svg viewBox="0 0 1000 380" preserveAspectRatio="none" style={{position: 'absolute', inset: '0', width: '100%', height: '100%'}}>
@@ -86,7 +90,7 @@ export default function ProblemsSection() {
                   <div style={{fontSize: '14px', fontWeight: '700', color: '#0f1729', lineHeight: '1.2'}}>{t("Approvals")}</div>
                 </div>
                 <div style={{position: 'relative', height: '20px', marginTop: '9px'}}>
-                  <span style={{position: 'absolute', inset: '0', display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', fontWeight: '700', color: '#1a9d55', opacity: 'var(--wOn,1)', transition: 'opacity .4s ease'}}><span style={{width: '15px', height: '15px', borderRadius: '50%', background: '#e3f6ec', display: 'grid', placeItems: 'center', fontSize: '9px'}}>✓</span>{t("One-tap approved")}</span>
+                  <span style={{position: 'absolute', inset: '0', display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', fontWeight: '700', color: '#157d44', opacity: 'var(--wOn,1)', transition: 'opacity .4s ease'}}><span style={{width: '15px', height: '15px', borderRadius: '50%', background: '#e3f6ec', display: 'grid', placeItems: 'center', fontSize: '9px'}}>✓</span>{t("One-tap approved")}</span>
                   <span style={{position: 'absolute', inset: '0', display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', fontWeight: '700', color: '#e5484d', opacity: 'var(--wOff,0)', transition: 'opacity .4s ease'}}><span style={{width: '15px', height: '15px', borderRadius: '50%', background: '#fdeaea', display: 'grid', placeItems: 'center', fontSize: '9px'}}>!</span>{t("Stuck for days")}</span>
                 </div>
               </div>
@@ -106,7 +110,7 @@ export default function ProblemsSection() {
                   <div style={{fontSize: '14px', fontWeight: '700', color: '#0f1729', lineHeight: '1.2'}}>{t("Payroll")}</div>
                 </div>
                 <div style={{position: 'relative', height: '20px', marginTop: '9px'}}>
-                  <span style={{position: 'absolute', inset: '0', display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', fontWeight: '700', color: '#1a9d55', opacity: 'var(--wOn,1)', transition: 'opacity .4s ease'}}><span style={{width: '15px', height: '15px', borderRadius: '50%', background: '#e3f6ec', display: 'grid', placeItems: 'center', fontSize: '9px'}}>✓</span>{t("Runs in hours")}</span>
+                  <span style={{position: 'absolute', inset: '0', display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', fontWeight: '700', color: '#157d44', opacity: 'var(--wOn,1)', transition: 'opacity .4s ease'}}><span style={{width: '15px', height: '15px', borderRadius: '50%', background: '#e3f6ec', display: 'grid', placeItems: 'center', fontSize: '9px'}}>✓</span>{t("Runs in hours")}</span>
                   <span style={{position: 'absolute', inset: '0', display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', fontWeight: '700', color: '#e5484d', opacity: 'var(--wOff,0)', transition: 'opacity .4s ease'}}><span style={{width: '15px', height: '15px', borderRadius: '50%', background: '#fdeaea', display: 'grid', placeItems: 'center', fontSize: '9px'}}>!</span>{t("Weeks by hand")}</span>
                 </div>
               </div>
@@ -126,7 +130,7 @@ export default function ProblemsSection() {
                   <div style={{fontSize: '14px', fontWeight: '700', color: '#0f1729', lineHeight: '1.2'}}>{t("Reporting")}</div>
                 </div>
                 <div style={{position: 'relative', height: '20px', marginTop: '9px'}}>
-                  <span style={{position: 'absolute', inset: '0', display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', fontWeight: '700', color: '#1a9d55', opacity: 'var(--wOn,1)', transition: 'opacity .4s ease'}}><span style={{width: '15px', height: '15px', borderRadius: '50%', background: '#e3f6ec', display: 'grid', placeItems: 'center', fontSize: '9px'}}>✓</span>{t("Live visibility")}</span>
+                  <span style={{position: 'absolute', inset: '0', display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', fontWeight: '700', color: '#157d44', opacity: 'var(--wOn,1)', transition: 'opacity .4s ease'}}><span style={{width: '15px', height: '15px', borderRadius: '50%', background: '#e3f6ec', display: 'grid', placeItems: 'center', fontSize: '9px'}}>✓</span>{t("Live visibility")}</span>
                   <span style={{position: 'absolute', inset: '0', display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', fontWeight: '700', color: '#e5484d', opacity: 'var(--wOff,0)', transition: 'opacity .4s ease'}}><span style={{width: '15px', height: '15px', borderRadius: '50%', background: '#fdeaea', display: 'grid', placeItems: 'center', fontSize: '9px'}}>!</span>{t("Flying blind")}</span>
                 </div>
               </div>
@@ -146,7 +150,7 @@ export default function ProblemsSection() {
                   <div style={{fontSize: '14px', fontWeight: '700', color: '#0f1729', lineHeight: '1.2'}}>{t("Custom software")}</div>
                 </div>
                 <div style={{position: 'relative', height: '20px', marginTop: '9px'}}>
-                  <span style={{position: 'absolute', inset: '0', display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', fontWeight: '700', color: '#1a9d55', opacity: 'var(--wOn,1)', transition: 'opacity .4s ease'}}><span style={{width: '15px', height: '15px', borderRadius: '50%', background: '#e3f6ec', display: 'grid', placeItems: 'center', fontSize: '9px'}}>✓</span>{t("Built to fit")}</span>
+                  <span style={{position: 'absolute', inset: '0', display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', fontWeight: '700', color: '#157d44', opacity: 'var(--wOn,1)', transition: 'opacity .4s ease'}}><span style={{width: '15px', height: '15px', borderRadius: '50%', background: '#e3f6ec', display: 'grid', placeItems: 'center', fontSize: '9px'}}>✓</span>{t("Built to fit")}</span>
                   <span style={{position: 'absolute', inset: '0', display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', fontWeight: '700', color: '#e5484d', opacity: 'var(--wOff,0)', transition: 'opacity .4s ease'}}><span style={{width: '15px', height: '15px', borderRadius: '50%', background: '#fdeaea', display: 'grid', placeItems: 'center', fontSize: '9px'}}>!</span>{t("Fighting the tool")}</span>
                 </div>
               </div>

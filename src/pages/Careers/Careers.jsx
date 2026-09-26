@@ -61,7 +61,7 @@ export default function Careers() {
             <span>{t("On-site · Karachi")}</span>
           </DataReveal>
           <div className="crHeroCard" style={{ position: 'absolute', left: '-6%', top: '14%', background: '#fff', border: '1px solid #eaeef5', borderRadius: '14px', padding: '12px 16px', boxShadow: '0 20px 44px -22px rgba(15,23,41,.3)', animation: 'crFloat 6.5s ease-in-out infinite' }}>
-            <div style={{ fontSize: '10px', color: '#8a94a6', letterSpacing: '.5px', fontWeight: 600 }}>DHA Phase 7</div>
+            <div style={{ fontSize: '10px', color: '#657085', letterSpacing: '.5px', fontWeight: 600 }}>DHA Phase 7</div>
             <div style={{ fontSize: '13px', fontWeight: 700, color: '#0f1729', marginTop: '2px' }}>{t("Karachi Office")}</div>
           </div>
           <div className="crHeroCard" style={{ position: 'absolute', right: '-4%', bottom: '18%', background: '#fff', border: '1px solid #eaeef5', borderRadius: '14px', padding: '12px 16px', boxShadow: '0 20px 44px -22px rgba(15,23,41,.3)', animation: 'crFloat 7.2s ease-in-out .6s infinite' }}>

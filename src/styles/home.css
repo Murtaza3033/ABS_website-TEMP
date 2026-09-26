@@ -90,14 +90,14 @@
    Reflowed at mobile widths with no size change, it broke into 5-6 lines of
    1-2 words each — technically fine, visually way too tall/shouty before any
    product proof shows up. Scale it down in two steps instead. */
-@media (max-width:860px){.hero-h1{font-size:38px !important;}}
+@media (max-width:1024px){.hero-h1{font-size:38px !important;}}
 @media (max-width:480px){.hero-h1{font-size:32px !important;}}
 
 /* The 132px gap before the dashboard mockup was tuned for desktop's much
    taller hero — at mobile, with the heading now 3 lines instead of 6, that
    same fixed gap reads as a big dead pause between the paragraph and the
    product proof. Tighten it down. */
-@media (max-width:860px){.rtl-mock{margin-top:40px !important;}}
+@media (max-width:1024px){.rtl-mock{margin-top:40px !important;}}
 
 /* Mobile hero content order: heading -> product screenshot -> detail copy,
    instead of heading -> paragraph -> screenshot. A first-time mobile visitor
@@ -106,23 +106,29 @@
    paragraph is hidden and an identical copy is rendered once after the
    mockup, shown only at this breakpoint. */
 .hero-p-mobile-wrap{display:none;}
-@media (max-width:860px){
+/* was an inline minHeight:210px; --hp-min = tallest product headline (HeroSection.jsx) */
+.hero-headpara{min-height:max(210px,var(--hp-min,0px));}
+@media (max-width:1024px){
   .hero-p-orig{display:none;}
   .hero-p-mobile-wrap{display:block;}
   .hero-p-mobile{font-size:17px;line-height:1.6;color:#4b5565;margin:0 auto;max-width:560px;text-align:center;padding:0 8px;text-wrap:pretty;}
   /* Sized to fit the tallest heading+paragraph combo on desktop; with the
      paragraph hidden here, the reserved height just becomes dead space
      between the heading and the mockup below it. */
-  .hero-headpara{min-height:0 !important;}
+  .hero-headpara{min-height:var(--hp-min,0px) !important;}
 }
 
 /* ---- Mobile fixes for fixed-width two-column / floating-card sections ----
+   Breakpoint: 1024px (was 860px). Between 861 and 1024px (tablets, 1920 at
+   200% zoom, phone landscape) the desktop compositions — tuned for >=1200px —
+   let floating cards/annotations cover headings and clipped fixed-width
+   panels, so that range now gets the stacked + scaled layout too.
    These sections (ServicesSection, ProductsSection, HowWeThinkSection,
    HeroSection's product mockups) were built as fixed-width, pixel-positioned
    layouts for desktop. Below their breakpoint, stack text above visual and
    shrink any fixed-pixel visual as one scaled unit rather than letting it
    overflow or overlap. */
-@media (max-width:860px){
+@media (max-width:1024px){
   .hm-stack{grid-template-columns:1fr !important;}
   /* Without this, a grid item that contains something wider than the cell
      (a pinned scale-panel, or a flex list whose children have a min-width)
@@ -143,7 +149,7 @@
    transform doesn't affect layout, but that's fine here because the WRAP's
    size no longer depends on it; overflow:hidden on the wrap just clips any
    small mismatch between the estimated scale and the wrap's true size. */
-@media (max-width:860px){
+@media (max-width:1024px){
   .hm-scale-wrap{
     position:relative;width:100%;height:0;overflow:hidden;
     padding-top:calc(var(--hm-h,600) / var(--hm-w,900) * 100%);
@@ -163,7 +169,7 @@
    more to see. Same two-level structure as .hm-scale-wrap/.hm-scale-panel,
    but the wrap scrolls instead of clipping, since the panel is deliberately
    allowed to stay wider than it. */
-@media (max-width:860px){
+@media (max-width:1024px){
   .hm-scale-scroll-wrap{
     /* height must equal the panel's true SCALED height (hm-h * applied
        scale). The usual padding-top trick can't work here because it's a
@@ -193,7 +199,7 @@
   .hm-scale-scroll-wrap::-webkit-scrollbar-thumb{background:#9fb4d8;border-radius:99px;}
   .hm-scale-scroll-wrap::-webkit-scrollbar-thumb:hover{background:#7a94c4;}
 }
-@media (max-width:860px){
+@media (max-width:1024px){
   .hm-float-wrap{display:flex;flex-direction:column;}
   .hm-float-text,.hm-float-main{order:1;}
   .hm-float{position:static !important;inset:auto !important;width:100% !important;max-width:100% !important;order:2;margin:24px 0 0 !important;}
@@ -209,7 +215,7 @@
    right above each one restores the "why am I looking at this" cue. Same
    order:2 as .hm-float — equal-order flex items keep source order, so each
    caption renders immediately before the card it describes. */
-@media (max-width:860px){
+@media (max-width:1024px){
   .hm-float-caption{
     display:flex !important;order:2;width:fit-content;margin:24px 0 0 !important;
     align-items:center;gap:6px;font-size:11.5px;font-weight:700;color:#1a56db;
@@ -218,6 +224,13 @@
   .hm-float-caption + .hm-float{margin-top:8px !important;}
 }
 .hm-float-caption{display:none;}
+/* Client logo mosaic between 681 and 1024px: still 12 columns, but the
+   fixed 100px rows turned ~50px-wide tiles into tall pills and circles into
+   ovals. Size rows from the column width instead so tiles stay square. */
+@media (min-width:681px) and (max-width:1024px){
+  .hm-logogrid{grid-auto-rows:auto !important;}
+  .hm-logogrid>*{aspect-ratio:1/1;min-width:0;}
+}
 @media (max-width:680px){
   .hm-logogrid{grid-template-columns:repeat(6,1fr) !important;grid-auto-rows:54px !important;gap:8px !important;}
 }
@@ -231,7 +244,7 @@
    children are all position:absolute (stacked for the tab cross-fade), so
    it never auto-sizes; without this it stayed at its fixed desktop 480px
    even once the image inside shrunk, leaving a dead gap below it. */
-@media (max-width:860px){
+@media (max-width:1024px){
   .hm-indp-wrap{height:calc((100vw - 64px) * 430 / 660) !important;}
   [data-indp]>div{
     display:block !important;
@@ -251,7 +264,7 @@
    thumbnail + heading + arrow needs more room than a narrow phone gives it,
    so instead of cramming/cropping it, give cards a comfortable min-width
    and let the list scroll horizontally (visible scrollbar) to see the rest. */
-@media (max-width:860px){
+@media (max-width:1024px){
   .hm-svc-scroll{
     overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:auto;padding-bottom:14px;min-width:0;
     /* the desktop top/bottom fade mask was hiding the new scrollbar at the
@@ -336,7 +349,7 @@
 /* hero AI tabs */
 [data-screen-label="Hero"] [data-act="setAI"],
 [data-screen-label="Hero"] [data-act="setChats"],
-[data-screen-label="Hero"] [data-act="setTickets"]{color:#8a94a6 !important;border-bottom:2px solid transparent !important;}
+[data-screen-label="Hero"] [data-act="setTickets"]{color:#657085 !important;border-bottom:2px solid transparent !important;}
 [data-screen-label="Hero"][data-aitab="ai"] [data-act="setAI"],
 [data-screen-label="Hero"][data-aitab="chats"] [data-act="setChats"],
 [data-screen-label="Hero"][data-aitab="tickets"] [data-act="setTickets"]{color:#1a56db !important;border-bottom:2px solid #1a56db !important;}
@@ -395,3 +408,14 @@
 [data-screen-label="Services"][data-orbit="2"] [data-svc-bars] span:nth-child(-n+3),
 [data-screen-label="Services"][data-orbit="3"] [data-svc-bars] span:nth-child(-n+4),
 [data-screen-label="Services"][data-orbit="4"] [data-svc-bars] span:nth-child(-n+5){background:#1a56db !important;}
+
+/* Keyboard focus for the home page's card/demo "buttons" (role=button via
+   pressable() in HomeContext.jsx) and the scrollable preview regions. */
+main.home-rtl [role="button"]:focus-visible,
+main.home-rtl .hm-scale-scroll-wrap:focus-visible{outline:2px solid #1a56db;outline-offset:3px;}
+main.home-rtl [role="button"]:focus:not(:focus-visible){outline:none;}
+
+/* Services list up/down arrows sit in the box's side padding, outside the
+   cards (they used to cover each card's "→"). The phone box padding is only
+   18px, so there they overlap just the card's own padding. */
+@media (max-width:600px){.hm-svc-arrow{inset-inline-end:-34px !important;}}

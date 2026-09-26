@@ -136,6 +136,11 @@ export function HomeProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [now, setNow] = useState(() => new Date());
   const rowTimers = useRef({});
+  // Hero height probe: while `probe === 'all'` every product's hero blocks
+  // render at once for a single synchronous layout pass (never painted) so
+  // HeroSection can measure the tallest one — see HeroSection.jsx.
+  const [probe, setProbe] = useState(null);
+  const all = probe === 'all';
 
   /* live clock — 10s tick (was tickClock + setInterval 10000) */
   useEffect(() => {
@@ -144,9 +149,12 @@ export function HomeProvider({ children }) {
   }, []);
 
   /* hero product auto-rotate — 5.2s (was startAuto) */
+  // heroHold: keyboard focus is inside the hero — never swap the product (and
+  // unmount the focused demo control) under a keyboard user.
+  const heroHold = useRef(false);
   useEffect(() => {
     if (!state.playing) return undefined;
-    const id = setInterval(() => dispatch({ type: 'NEXT_PRODUCT' }), 5200);
+    const id = setInterval(() => { if (!heroHold.current) dispatch({ type: 'NEXT_PRODUCT' }); }, 5200);
     return () => clearInterval(id);
   }, [state.playing]);
 
@@ -172,9 +180,9 @@ export function HomeProvider({ children }) {
   /* ---- c(): condition -> boolean (was cond()) ---- */
   function c(cond) {
     switch (cond) {
-      case 'isBiz': return state.product === 'biz';
-      case 'isPn': return state.product === 'pn';
-      case 'isPff': return state.product === 'pff';
+      case 'isBiz': return all || state.product === 'biz';
+      case 'isPn': return all || state.product === 'pn';
+      case 'isPff': return all || state.product === 'pff';
       case 'tourOn': return state.tour && state.product === 'biz';
       case 'tourHidden': return state.product === 'biz' && !state.tour;
       case 'aiTabAI': return state.aiTab === 'ai';
@@ -277,7 +285,7 @@ export function HomeProvider({ children }) {
     return undefined;
   }
 
-  const value = { state, dispatch, c, b, act };
+  const value = { state, dispatch, c, b, act, probe, setProbe, heroHold };
   return <HomeContext.Provider value={value}>{children}</HomeContext.Provider>;
 }
 
@@ -285,4 +293,35 @@ export function useHome() {
   const ctx = useContext(HomeContext);
   if (!ctx) throw new Error('useHome must be used within <HomeProvider>');
   return ctx;
+}
+
+/* Props that make a non-button element (card, demo tab, mockup row) behave
+   like a button for keyboard users: focusable, announced as a button, and
+   activated with Enter/Space as well as click. Visible focus ring: home.css. */
+export function pressable(fn, extra) {
+  return {
+    role: 'button',
+    tabIndex: 0,
+    onClick: fn,
+    onKeyDown: (e) => {
+      if (e.target !== e.currentTarget) return;
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fn(e); }
+    },
+    ...extra,
+  };
+}
+
+/* The mockup wrappers only become horizontally scrollable at <=1024px
+   (home.css); only then do they need to be a focusable, labelled region so
+   keyboard users can scroll them. */
+const NARROW_Q = '(max-width: 1024px)';
+export function useScrollRegionProps(label) {
+  const [narrow, setNarrow] = useState(() => typeof window !== 'undefined' && window.matchMedia(NARROW_Q).matches);
+  useEffect(() => {
+    const mq = window.matchMedia(NARROW_Q);
+    const on = () => setNarrow(mq.matches);
+    mq.addEventListener('change', on);
+    return () => mq.removeEventListener('change', on);
+  }, []);
+  return narrow ? { tabIndex: 0, role: 'region', 'aria-label': label } : {};
 }

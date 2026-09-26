@@ -19,9 +19,17 @@ const DEV_ORIGINS = [
    or null if the request's origin isn't allowed (caller should then respond
    without that header, which the browser treats as a CORS denial — never
    fall back to '*' once ALLOWED_ORIGIN is set, per Phase 10B's security plan). */
+/* Production = Vercel's production deployment (VERCEL_ENV is 'production' /
+   'preview' / 'development'); off Vercel, fall back to NODE_ENV. Preview
+   deployments and `vercel dev` keep the localhost origins for testing. */
+export function isProductionEnv() {
+  if (process.env.VERCEL_ENV) return process.env.VERCEL_ENV === 'production';
+  return process.env.NODE_ENV === 'production';
+}
+
 export function resolveAllowedOrigin(requestOrigin) {
   if (!requestOrigin) return null;
-  if (DEV_ORIGINS.includes(requestOrigin)) return requestOrigin;
+  if (!isProductionEnv() && DEV_ORIGINS.includes(requestOrigin)) return requestOrigin;
 
   const configured = (process.env.ALLOWED_ORIGIN || '').replace(/\/+$/, '');
   if (configured && requestOrigin === configured) return requestOrigin;

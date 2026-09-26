@@ -37,7 +37,7 @@ export default function AboutUs() {
           <div className="strip__track">
             {STRIP.concat(STRIP).map((s, i) => (
               <div key={i} className="strip__card" style={{ background: `linear-gradient(160deg,${STRIP_TINTS[i % STRIP_TINTS.length]},#0f1729)` }}>
-                <img src={`/assets/images/about/${s[1]}.webp`} alt="" onError={(e) => e.currentTarget.remove()} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={`/assets/images/about/${s[1]}.webp`} alt="" decoding="async" loading={i < STRIP.length ? undefined : 'lazy'} onError={(e) => e.currentTarget.remove()} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
                 <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg,rgba(15,23,41,0) 42%,rgba(15,23,41,.8) 100%)' }} />
                 <span>{t(s[0])}</span>
               </div>
@@ -57,16 +57,16 @@ export default function AboutUs() {
           <DataReveal style={{ position: 'relative', aspectRatio: '4/3' }}>
             <div style={{ position: 'absolute', inset: 0, borderRadius: '24px', overflow: 'hidden', border: '1px solid #e0e9f8', boxShadow: '0 30px 70px -34px rgba(15,23,41,.45)', background: 'linear-gradient(150deg,#1a56db,#0f1729)', display: 'grid', placeItems: 'center', color: 'rgba(255,255,255,.9)' }}>
               <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" /><path d="M8 21h8" /><path d="M12 17v4" /></svg>
-              <img src="/assets/images/about/team-monitor.webp" alt={t("Align engineering team")} onError={(e) => e.currentTarget.remove()} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src="/assets/images/about/team-monitor.webp" alt={t("Align engineering team")} loading="lazy" decoding="async" onError={(e) => e.currentTarget.remove()} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
             <div className="mobile-hide-float" style={{ position: 'absolute', left: '-26px', bottom: '-24px', width: '262px', background: '#fff', border: '1px solid #eaeef5', borderRadius: '18px', padding: '16px', boxShadow: '0 30px 64px -28px rgba(15,23,41,.5)', animation: 'abFloat 6.5s ease-in-out infinite' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <span style={{ fontSize: '13px', fontWeight: 700, color: '#0f1729' }}>{t("Align Dashboard")}</span>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '10px', fontWeight: 700, color: '#1a9d55' }}><span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#1a9d55', animation: 'abDot 1.6s ease-in-out infinite' }} />{t("LIVE")}</span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '10px', fontWeight: 700, color: '#157d44' }}><span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#1a9d55', animation: 'abDot 1.6s ease-in-out infinite' }} />{t("LIVE")}</span>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginTop: '12px' }}>
-                <div style={{ background: '#f7faff', borderRadius: '11px', padding: '9px 11px' }}><div style={{ fontSize: '9px', letterSpacing: '.5px', color: '#8a94a6', textTransform: 'uppercase', fontWeight: 700 }}>{t("Total Sales")}</div><div style={{ fontSize: '16px', fontWeight: 800, color: '#0f1729', marginTop: '2px' }}>1,490,010</div></div>
-                <div style={{ background: '#f7faff', borderRadius: '11px', padding: '9px 11px' }}><div style={{ fontSize: '9px', letterSpacing: '.5px', color: '#8a94a6', textTransform: 'uppercase', fontWeight: 700 }}>{t("Total Profit")}</div><div style={{ fontSize: '16px', fontWeight: 800, color: '#1a56db', marginTop: '2px' }}>910,063</div></div>
+                <div style={{ background: '#f7faff', borderRadius: '11px', padding: '9px 11px' }}><div style={{ fontSize: '9px', letterSpacing: '.5px', color: '#657085', textTransform: 'uppercase', fontWeight: 700 }}>{t("Total Sales")}</div><div style={{ fontSize: '16px', fontWeight: 800, color: '#0f1729', marginTop: '2px' }}>1,490,010</div></div>
+                <div style={{ background: '#f7faff', borderRadius: '11px', padding: '9px 11px' }}><div style={{ fontSize: '9px', letterSpacing: '.5px', color: '#657085', textTransform: 'uppercase', fontWeight: 700 }}>{t("Total Profit")}</div><div style={{ fontSize: '16px', fontWeight: 800, color: '#1a56db', marginTop: '2px' }}>910,063</div></div>
               </div>
               <div style={{ display: 'flex', alignItems: 'flex-end', gap: '6px', height: '52px', marginTop: '12px', paddingTop: '8px', borderTop: '1px solid #eef1f6' }}>
                 {[['44%', '#cddcf8', '0s'], ['70%', '#9dbcf3', '.2s'], ['56%', '#6f9bef', '.4s'], ['88%', '#1a56db', '.6s'], ['64%', '#4b8bff', '.8s'], ['78%', '#8fb8ff', '1s']].map((b, i) => (
@@ -75,8 +75,8 @@ export default function AboutUs() {
               </div>
             </div>
             <div className="mobile-hide-float" style={{ position: 'absolute', right: '-18px', top: '24px', background: '#fff', border: '1px solid #eaeef5', borderRadius: '12px', padding: '10px 13px', boxShadow: '0 22px 48px -24px rgba(15,23,41,.45)', display: 'flex', alignItems: 'center', gap: '9px', animation: 'abFloat2 5.5s ease-in-out infinite' }}>
-              <div style={{ width: '26px', height: '26px', borderRadius: '50%', background: '#e6f5ec', color: '#1a9d55', display: 'grid', placeItems: 'center' }}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M20 6L9 17l-5-5" /></svg></div>
-              <div><div style={{ fontSize: '11.5px', fontWeight: 700, color: '#0f1729', lineHeight: 1 }}>{t("PO-2041 approved")}</div><div style={{ fontSize: '9.5px', color: '#8a94a6', marginTop: '2px' }}>{t("just now")}</div></div>
+              <div style={{ width: '26px', height: '26px', borderRadius: '50%', background: '#e6f5ec', color: '#157d44', display: 'grid', placeItems: 'center' }}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M20 6L9 17l-5-5" /></svg></div>
+              <div><div style={{ fontSize: '11.5px', fontWeight: 700, color: '#0f1729', lineHeight: 1 }}>{t("PO-2041 approved")}</div><div style={{ fontSize: '9.5px', color: '#657085', marginTop: '2px' }}>{t("just now")}</div></div>
             </div>
           </DataReveal>
         </div>
@@ -183,7 +183,7 @@ export default function AboutUs() {
           <div className="four-col" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '18px', marginTop: '48px' }}>
             {VALS.map((v) => (
               <DataReveal key={v[0]} className="card-lift" style={{ position: 'relative', background: '#fff', border: '1px solid #eaeef5', borderRadius: '20px', padding: '28px 24px', overflow: 'hidden', boxShadow: '0 16px 40px -30px rgba(15,23,41,.2)' }}>
-                <span style={{ position: 'absolute', top: '18px', right: '20px', fontSize: '13px', fontWeight: 700, color: '#dbe4f3' }}>{v[0]}</span>
+                <span aria-hidden="true" style={{ position: 'absolute', top: '18px', right: '20px', fontSize: '13px', fontWeight: 700, color: '#dbe4f3' }}>{v[0]}</span>
                 <div style={{ width: '52px', height: '52px', borderRadius: '14px', background: 'linear-gradient(135deg,#1a56db,#4b8bff)', color: '#fff', display: 'grid', placeItems: 'center', boxShadow: '0 14px 26px -10px rgba(26,86,219,.55)', animation: 'abValFloat 5s ease-in-out infinite' }}><Icon name={v[3]} size={24} /></div>
                 <div style={{ fontSize: '16.5px', fontWeight: 700, marginTop: '18px', lineHeight: 1.25 }}>{t(v[1])}</div>
                 <p style={{ fontSize: '13.5px', lineHeight: 1.6, color: '#5b6472', margin: '8px 0 0' }}>{t(v[2])}</p>
@@ -210,10 +210,10 @@ export default function AboutUs() {
                   <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(160deg,rgba(26,86,219,.1),rgba(15,23,41,.3))' }} />
                 </div>
                 <div style={{ flex: 1 }}>
-                  <span style={{ display: 'inline-block', fontSize: '10px', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', color: n.accent, background: n.tint, borderRadius: '999px', padding: '5px 11px' }}>{t(n.tag)}</span>
+                  <span style={{ display: 'inline-block', fontSize: '10px', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', color: n.ink || n.accent, background: n.tint, borderRadius: '999px', padding: '5px 11px' }}>{t(n.tag)}</span>
                   <div style={{ fontSize: '22px', fontWeight: 700, color: '#0f1729', marginTop: '10px' }}>{t(n.title)}</div>
                   <p style={{ fontSize: '14px', lineHeight: 1.6, color: '#5b6472', margin: '6px 0 0' }}>{t(n.line)}</p>
-                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', marginTop: '14px', fontSize: '13.5px', fontWeight: 700, color: n.accent }}>{t("Explore")} <span className="hub-arrow">→</span></span>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', marginTop: '14px', fontSize: '13.5px', fontWeight: 700, color: n.ink || n.accent }}>{t("Explore")} <span className="hub-arrow">→</span></span>
                 </div>
               </DataReveal>
             ))}

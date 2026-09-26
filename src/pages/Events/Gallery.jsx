@@ -74,7 +74,7 @@ export default function Gallery() {
           <DataReveal style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '26px' }}>
             <span className="eyebrow">{t("Featured Event")}</span>
             <span style={{ flex: 1, height: '1px', background: '#e4eaf3' }} />
-            <span style={{ fontSize: '12px', color: '#8a94a6', fontWeight: 600 }}>2023</span>
+            <span style={{ fontSize: '12px', color: '#657085', fontWeight: 600 }}>2023</span>
           </DataReveal>
 
           <div className="feat-grid" style={{ display: 'grid', gridTemplateColumns: '1.08fr .92fr', gap: '44px', alignItems: 'stretch' }}>
@@ -85,7 +85,7 @@ export default function Gallery() {
               <button className="evStageBtn" aria-label={t("View full size")} onClick={(e) => { e.stopPropagation(); setLbOpen(true); }}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h6v6" /><path d="M9 21H3v-6" /><path d="M21 3l-7 7" /><path d="M3 21l7-7" /></svg></button>
               <span style={{ position: 'absolute', left: '20px', top: '18px', fontSize: '10.5px', fontWeight: 700, letterSpacing: '1.5px', color: '#fff', background: 'rgba(15,23,41,.5)', borderRadius: '999px', padding: '6px 13px', textTransform: 'uppercase', zIndex: 2 }}>{t(gallery[gi][2])}</span>
               <div style={{ position: 'absolute', left: '22px', bottom: '22px', background: '#fff', borderRadius: '16px', padding: '16px 18px', boxShadow: '0 26px 52px -22px rgba(15,23,41,.6)', animation: 'floatY 6.5s ease-in-out infinite', maxWidth: '230px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#1a9d55', animation: 'evDot 1.8s ease-in-out infinite' }} /><span style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '1px', color: '#8a94a6', textTransform: 'uppercase' }}>{t("Exhibited")}</span></div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#1a9d55', animation: 'evDot 1.8s ease-in-out infinite' }} /><span style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '1px', color: '#657085', textTransform: 'uppercase' }}>{t("Exhibited")}</span></div>
                 <div style={{ fontSize: '18px', fontWeight: 700, color: '#0f1729', marginTop: '8px', lineHeight: 1.2 }}>{title}</div>
                 <div style={{ fontSize: '12.5px', color: '#5b6472', marginTop: '3px' }}>{t("Karachi Expo Centre")}</div>
               </div>

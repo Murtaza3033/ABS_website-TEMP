@@ -1,7 +1,7 @@
 /* Arabic / RTL layer — static CSS (replaces the runtime's JS-injected <style> + font <link>).
    Activated by html[dir="rtl"], which LanguageContext sets from state. Text translation is
    now React-driven (t()); this file handles font, shell mirroring and glyph-flip. */
-/* The Cairo webfont stylesheet is linked from index.html. */
+/* Cairo stylesheet is injected only for Arabic (index.html boot script / lib/arabic.js). */
 
 /* Cairo font while Arabic is active */
 html[dir="rtl"] body,
@@ -65,3 +65,15 @@ html[dir="rtl"] .ab-tip { right: auto !important; left: 96px !important; }
 @media (max-width:520px) { html[dir="rtl"] .ab-panel { left: 12px !important; } }
 html[dir="rtl"] .ab-root,
 html[dir="rtl"] .ab-root * { font-family: "Cairo", system-ui, sans-serif !important; }
+
+/* Arabic is a joined (cursive) script: any tracking breaks the letter
+   connections (eyebrows, mega-menu titles, card labels, headings with
+   negative tracking…). Reset it for everything while Arabic is active —
+   inline letterSpacing included; English rendering is untouched. */
+html[dir="rtl"] body * { letter-spacing: normal !important; }
+
+/* Scroll-to-top / scroll-to-bottom follow the chat launcher to the left edge,
+   so the whole floating column mirrors (and clears the RTL team spine,
+   which moves to the right edge). */
+html[dir="rtl"] .scroll-top,
+html[dir="rtl"] .scroll-bottom { right: auto; left: 26px; }

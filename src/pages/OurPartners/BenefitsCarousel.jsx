@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect, useLayoutEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
+import { DataReveal } from '../../components/Reveal';
 import { Icon, BENEFITS } from './partnersData';
 
 const AUTO = 4200;
@@ -78,7 +79,7 @@ export default function BenefitsCarousel() {
   }, [idx]);
 
   return (
-    <div data-reveal style={{ position: 'relative', marginTop: '48px' }}>
+    <DataReveal style={{ position: 'relative', marginTop: '48px' }}>
       <div
         ref={trackRef} tabIndex={0} aria-label={t("Partnership benefits carousel")}
         onMouseEnter={() => { pausedRef.current = true; }}
@@ -97,7 +98,7 @@ export default function BenefitsCarousel() {
               <div style={{ position: 'absolute', left: 0, bottom: 0, width: '100%', height: '5px', background: 'linear-gradient(90deg,#1a56db,#4b8bff)', opacity: 0.9 }} />
               <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '14px' }}>
                 <div className="pIco" style={{ width: '54px', height: '54px', flexShrink: 0, borderRadius: '15px', background: 'linear-gradient(135deg,#1a56db,#4b8bff)', color: '#fff', display: 'grid', placeItems: 'center', boxShadow: '0 14px 26px -10px rgba(26,86,219,.55)' }}><Icon name={b[3]} /></div>
-                <div style={{ fontSize: '12px', fontWeight: 700, letterSpacing: '1px', color: '#c3d0e6' }}>{b[0]}</div>
+                <div aria-hidden="true" style={{ fontSize: '12px', fontWeight: 700, letterSpacing: '1px', color: '#c3d0e6' }}>{b[0]}</div>
               </div>
               <div style={{ position: 'relative', fontSize: '21px', fontWeight: 700, marginTop: '20px', lineHeight: 1.2 }}>{t(b[1])}</div>
               <p style={{ position: 'relative', fontSize: '14.5px', lineHeight: 1.7, color: '#5b6472', margin: '12px 0 0' }}>{t(b[2])}</p>
@@ -110,16 +111,16 @@ export default function BenefitsCarousel() {
 
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', marginTop: '22px' }}>
         <button className="navbtn" onClick={() => go(idx - 1)} aria-label={t("Previous")} style={{ width: '44px', height: '44px', borderRadius: '50%', border: '1px solid #dbe4f3', background: '#fff', color: '#1a56db', fontSize: '18px', cursor: 'pointer', boxShadow: '0 12px 26px -14px rgba(15,23,41,.35)', transition: 'all .2s ease' }}>←</button>
-        <div style={{ display: 'flex', gap: '8px' }}>
+        <div className="benDots" style={{ display: 'flex', gap: '8px' }}>
           {BENEFITS.map((b, i) => (
-            <button key={b[0]} onClick={() => go(i)} aria-label={`${t('Go to card')} ${i + 1}`}
+            <button key={b[0]} className="dot-tap" onClick={() => go(i)} aria-label={`${t('Go to card')} ${i + 1}`}
               style={{ border: 'none', padding: 0, height: '8px', borderRadius: '999px', cursor: 'pointer', transition: 'all .35s ease', width: i === idx ? '26px' : '8px', background: i === idx ? '#1a56db' : '#d5deed' }} />
           ))}
         </div>
         <span className="benCount"><b>{pad(idx + 1)}</b> / {pad(N)}</span>
         <button className="navbtn" onClick={() => go(idx + 1)} aria-label={t("Next")} style={{ width: '44px', height: '44px', borderRadius: '50%', border: '1px solid #dbe4f3', background: '#fff', color: '#1a56db', fontSize: '18px', cursor: 'pointer', boxShadow: '0 12px 26px -14px rgba(15,23,41,.35)', transition: 'all .2s ease' }}>→</button>
       </div>
-      <div style={{ textAlign: 'center', marginTop: '14px', fontSize: '11px', fontWeight: 700, letterSpacing: '.5px', color: '#8a94a6', textTransform: 'uppercase' }}>{t("Swipe, drag, or use ← → to explore")}</div>
-    </div>
+      <div style={{ textAlign: 'center', marginTop: '14px', fontSize: '11px', fontWeight: 700, letterSpacing: '.5px', color: '#657085', textTransform: 'uppercase' }}>{t("Swipe, drag, or use ← → to explore")}</div>
+    </DataReveal>
   );
 }

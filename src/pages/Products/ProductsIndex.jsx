@@ -25,7 +25,7 @@ export default function ProductsIndex() {
         <div style={{ maxWidth: '860px', margin: '0 auto', textAlign: 'center', position: 'relative', zIndex: 1 }}>
           <DataReveal as="span" className="eyebrow">{t('Our Products')}</DataReveal>
           <h1 className="h1">
-            {t('One platform.')} <span className="cave" style={{ fontSize: '1.2em' }}>{t('Three products.')}</span>
+            {t('One platform.')} <span className="cave cave-end" style={{ fontSize: '1.2em' }}>{t('Three products.')}</span>
           </h1>
           <DataReveal as="p" className="lede" style={{ margin: '20px auto 0', maxWidth: '600px' }}>
             {t('BusinessFlo, PeopleNest and Field Force — designed, built and supported in-house, and built to work together.')}

@@ -9,12 +9,39 @@
          Per-page <title>/description/canonical/OG tags are managed by src/components/SEO.jsx
          via react-helmet-async — no static meta description here so it can't shadow Helmet's. -->
 
-    <!-- Brand fonts: Outfit + Caveat, plus Cairo for Arabic (applied under html[dir="rtl"] by styles/i18n.css) -->
+    <!-- Boot script (runs before first paint): a returning Arabic visitor gets
+         dir/lang on <html> immediately — matching what LanguageContext sets
+         later — so the first render is already RTL (no LTR->RTL flip / CLS),
+         and the Cairo font is requested only for them. English visitors never
+         download Cairo; the toggle path adds the same <link id="font-cairo">
+         (src/lib/arabic.js ensureArabicFont — keep the URL in sync). -->
+    <script>
+      (function () {
+        try {
+          if (localStorage.getItem('alignLang') !== 'ar') return;
+          var html = document.documentElement;
+          html.setAttribute('dir', 'rtl');
+          html.setAttribute('lang', 'ar');
+          var link = document.createElement('link');
+          link.id = 'font-cairo';
+          link.rel = 'stylesheet';
+          link.setAttribute('blocking', 'render');
+          link.href = 'https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap';
+          document.head.appendChild(link);
+        } catch (e) { /* storage blocked: stay English */ }
+      })();
+    </script>
+
+    <!-- Brand fonts: Outfit + Caveat in ONE render-blocking request (display=swap),
+         with their Latin files preloaded so text rarely paints in the fallback first. -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="https://fonts.gstatic.com/s/outfit/v15/QGYvz_MVcBeNP4NJtEtq.woff2" />
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="https://fonts.gstatic.com/s/caveat/v23/Wnz6HAc5bAfYB2Q7ZjYY.woff2" />
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <!-- The header's "عربي" toggle label is set in Cairo on every page: load just
+         those 4 glyphs (tiny, non-blocking) instead of the full Arabic family. -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700&text=%D8%B9%D8%B1%D8%A8%D9%8A&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
   </head>
   <body>
     <div id="root"></div>

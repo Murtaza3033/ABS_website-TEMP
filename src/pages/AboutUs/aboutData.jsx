@@ -56,9 +56,11 @@ export const VALS = [
   ['04', 'One accountable team', 'We build, deploy and support it all in-house.', 'heart'],
 ];
 
+/* accent = card colour (rail, glow); ink = the same hue darkened just enough
+   for the tag / "Explore" TEXT to meet WCAG AA on white and on its tint. */
 export const NET = [
-  { title: 'Our Team', tag: 'The builders', accent: '#1a56db', tint: 'rgba(26,86,219,.1)', line: 'The engineers, consultants and operators who build and run Align.', href: '/our-team.html', img: 'team-laptop.webp' },
-  { title: 'Our Advisors', tag: 'Guidance', accent: '#7c5cff', tint: 'rgba(124,92,255,.12)', line: 'The guidance shaping how Align grows and where it goes next.', href: '/our-advisors.html', img: 'ceo.webp' },
-  { title: 'Our Partners', tag: 'Ecosystem', accent: '#d4a017', tint: 'rgba(212,160,23,.14)', line: 'A network of trusted companies we build and grow alongside.', href: '/our-partners.html', img: 'brochure.webp' },
-  { title: 'Our Clients', tag: 'Who we serve', accent: '#1a9d55', tint: 'rgba(26,157,85,.12)', line: 'The businesses that run their operations on Align every day.', href: '/our-clients.html', img: 'booth-demo.webp' },
+  { title: 'Our Team', tag: 'The builders', accent: '#1a56db', ink: '#1a56db', tint: 'rgba(26,86,219,.1)', line: 'The engineers, consultants and operators who build and run Align.', href: '/our-team.html', img: 'team-laptop.webp' },
+  { title: 'Our Advisors', tag: 'Guidance', accent: '#7958ff', ink: '#6b47ff', tint: 'rgba(124,92,255,.12)', line: 'The guidance shaping how Align grows and where it goes next.', href: '/our-advisors.html', img: 'ceo.webp' },
+  { title: 'Our Partners', tag: 'Ecosystem', accent: '#d4a017', ink: '#8b690f', tint: 'rgba(212,160,23,.14)', line: 'A network of trusted companies we build and grow alongside.', href: '/our-partners.html', img: 'brochure.webp' },
+  { title: 'Our Clients', tag: 'Who we serve', accent: '#157d44', ink: '#157d44', tint: 'rgba(26,157,85,.12)', line: 'The businesses that run their operations on Align every day.', href: '/our-clients.html', img: 'booth-demo.webp' },
 ];

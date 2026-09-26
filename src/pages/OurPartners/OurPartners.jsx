@@ -73,7 +73,7 @@ export default function OurPartners() {
               <span className={hw} style={{ animationDelay: '90ms' }}>{t("is")}</span>{' '}
               <span className={hw} style={{ animationDelay: '180ms' }}>{t("better")}</span><br />
               <span className={hw} style={{ animationDelay: '270ms' }}>{t("built")}</span>{' '}
-              <span className={hw} style={{ animationDelay: '360ms' }}><span className="cave" style={{ fontSize: '1.18em' }}>{t("together")}</span>.</span>
+              <span className={hw} style={{ animationDelay: '360ms' }}><span className="cave cave-end" style={{ fontSize: '1.18em' }}>{t("together")}</span>.</span>
             </h1>
             <DataReveal as="p" className="lede" style={{ margin: '20px 0 0', maxWidth: '520px' }}>{t("Strong partnerships are the foundation of success. At Align Business Systems, we build collaborative relationships that empower growth, innovation, and mutual success. Together, we can create")} <span className="cave" style={{ fontSize: '1.35em' }}>{t("limitless possibilities")}</span> {t("and achieve extraordinary results.")}</DataReveal>
           </div>
@@ -112,13 +112,13 @@ export default function OurPartners() {
           </div>
           {/* featured partner stage */}
           <DataReveal ref={featRef} id="featured" onPointerMove={onFeatMove} onPointerLeave={onFeatLeave} style={{ order: 1, position: 'relative', minHeight: '470px', perspective: '1200px' }}>
-            <div ref={(el) => { ghostRefs.current[0] = el; }} style={{ position: 'absolute', top: '8px', left: '-14px', width: '74%', background: '#fff', border: '1px solid #eef2f8', borderRadius: '18px', boxShadow: '0 24px 50px -34px rgba(15,23,41,.3)', padding: '18px', opacity: 0.5, zIndex: 0 }}>
+            <div ref={(el) => { ghostRefs.current[0] = el; }} className="pGhost" aria-hidden="true" style={{ position: 'absolute', top: '8px', left: '-14px', width: '74%', background: '#fff', border: '1px solid #eef2f8', borderRadius: '18px', boxShadow: '0 24px 50px -34px rgba(15,23,41,.3)', padding: '18px', opacity: 0.5, zIndex: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}><span style={{ width: '30px', height: '30px', borderRadius: '9px', background: '#e8effc' }} /><div style={{ height: '9px', width: '44%', borderRadius: '5px', background: '#e4ebf5' }} /></div>
               <div style={{ height: '8px', width: '80%', borderRadius: '5px', background: '#eef2f8', marginTop: '16px' }} />
               <div style={{ height: '8px', width: '66%', borderRadius: '5px', background: '#eef2f8', marginTop: '9px' }} />
               <div style={{ height: '8px', width: '72%', borderRadius: '5px', background: '#eef2f8', marginTop: '9px' }} />
             </div>
-            <div ref={(el) => { ghostRefs.current[1] = el; }} style={{ position: 'absolute', top: '112px', left: '6px', width: '58%', background: '#fff', border: '1px solid #eef2f8', borderRadius: '16px', boxShadow: '0 22px 46px -34px rgba(15,23,41,.28)', padding: '16px', opacity: 0.4, zIndex: 0 }}>
+            <div ref={(el) => { ghostRefs.current[1] = el; }} className="pGhost" aria-hidden="true" style={{ position: 'absolute', top: '112px', left: '6px', width: '58%', background: '#fff', border: '1px solid #eef2f8', borderRadius: '16px', boxShadow: '0 22px 46px -34px rgba(15,23,41,.28)', padding: '16px', opacity: 0.4, zIndex: 0 }}>
               <div style={{ fontSize: '9px', letterSpacing: '.5px', color: '#aeb8c8', textTransform: 'uppercase', fontWeight: 700 }}>{t("Network activity")}</div>
               <div style={{ display: 'flex', alignItems: 'flex-end', gap: '5px', height: '40px', marginTop: '10px' }}>
                 {['50%', '74%', '60%', '88%', '68%'].map((h, i) => <div key={i} style={{ flex: 1, height: h, background: ['#dbe6ff', '#c3d6fb', '#dbe6ff', '#9dbcf3', '#dbe6ff'][i], borderRadius: '3px 3px 0 0' }} />)}
@@ -134,7 +134,7 @@ export default function OurPartners() {
               </div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <span style={{ fontSize: '10.5px', fontWeight: 700, letterSpacing: '1.5px', color: '#1a56db', background: '#eef4ff', borderRadius: '999px', padding: '6px 12px', textTransform: 'uppercase' }}>{t("Featured Partner")}</span>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11px', fontWeight: 700, color: '#1a9d55' }}><span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#1a9d55', animation: 'pDot 1.8s ease-in-out infinite' }} />{t("Active")}</span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11px', fontWeight: 700, color: '#157d44' }}><span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#1a9d55', animation: 'pDot 1.8s ease-in-out infinite' }} />{t("Active")}</span>
               </div>
               <div style={{ height: '88px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '20px 0 6px' }}>
                 <img src="/assets/images/clients/xpedite-logo.webp" loading="lazy" decoding="async" alt="Xpedite Technology Solutions" onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextElementSibling.style.display = 'grid'; }} style={{ maxHeight: '76px', maxWidth: '100%', objectFit: 'contain' }} />

@@ -9,13 +9,16 @@ import { CLIENTS, SHORT, INDOF, DURS, DELS } from './clientsData';
    Tries the real Sanity image asset first, then the static public path, then
    the text wordmark — advancing one step each time the current src 404s. */
 function ClientLogo({ name, logo, file }) {
-  const sanitySrc = getSanityImageUrl(logo, { width: 400 });
+  const sanitySrc = getSanityImageUrl(logo, { width: 240 });
+  // Tiles render ~228px wide: 240w for 1x screens, 480w for 2x (was a single
+  // 400w file, upscaled on retina and oversized on standard screens).
+  const sanitySrc2x = getSanityImageUrl(logo, { width: 480 });
   const pathSrc = file ? `/assets/images/clients/${file}.webp` : null;
   const sources = [sanitySrc, pathSrc].filter(Boolean);
   const [srcIndex, setSrcIndex] = useState(0);
   const wordmark = { fontSize: '22px', fontWeight: 800, letterSpacing: '-.5px', color: '#0f1729', textAlign: 'center' };
   if (srcIndex >= sources.length) return <span style={wordmark}>{name}</span>;
-  return <img className="clLogo" src={sources[srcIndex]} loading="lazy" decoding="async" alt={name} onError={() => setSrcIndex((i) => i + 1)} style={{ width: '100%', height: '82px', objectFit: 'contain' }} />;
+  return <img className="clLogo" src={sources[srcIndex]} srcSet={srcIndex === 0 && sanitySrc && sanitySrc2x ? `${sanitySrc} 1x, ${sanitySrc2x} 2x` : undefined} loading="lazy" decoding="async" alt={name} onError={() => setSrcIndex((i) => i + 1)} style={{ width: '100%', height: '82px', objectFit: 'contain' }} />;
 }
 
 /* Static CLIENTS reshaped to look like a Sanity `client` document list, so it
@@ -76,7 +79,7 @@ export default function ClientWall() {
         })}
       </div>
 
-      <DataReveal as="p" style={{ textAlign: 'center', fontSize: '11.5px', color: '#aeb8c8', margin: '30px 0 0' }}>{t("Filter by industry, or hover a logo to bring it to life")}</DataReveal>
+      <DataReveal as="p" style={{ textAlign: 'center', fontSize: '11.5px', color: '#657085', margin: '30px 0 0' }}>{t("Filter by industry, or hover a logo to bring it to life")}</DataReveal>
     </>
   );
 }

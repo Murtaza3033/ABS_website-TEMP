@@ -75,12 +75,20 @@ export const chatSteps = (reason) => {
   return ['name', 'company', 'reason', routed ? 'product' : null, 'contact', 'message'].filter(Boolean);
 };
 
+/* x/y = the pin's dot on the map image (%). hit = tap-target size (px, >=32).
+   anchor = which corner/edge of the tap target sits on the dot. Cities that
+   are only ~1% apart (Karachi/Lahore/Islamabad, Dubai/Saudi) get targets that
+   open away from each other (Islamabad up, Lahore right, Karachi left-down…),
+   so they never overlap, instead of centred boxes that do. Below ~500px of
+   effective map width even that can't fit, so each `group` collapses into
+   one cluster button that zooms in (PresenceMap.jsx).
+   'c' centre · 't' below · 'br' above-left · 'bl' above-right */
 export const PINS = [
-  { city: 'Karachi', tag: 'Headquarters', label: 'Suite #404, Imperial Trade Tower, DHA Phase 7 — our head office.', x: 67.3, y: 37.5, hit: 40 },
-  { city: 'Islamabad', tag: 'Regional office', label: 'Our presence in the capital, serving northern operations.', x: 68.5, y: 33, hit: 30 },
-  { city: 'Lahore', tag: 'Regional office', label: 'Supporting clients across Punjab and central Pakistan.', x: 68.8, y: 35.5, hit: 30 },
-  { city: 'Dubai, UAE', tag: 'Regional presence', label: 'Our gateway to the Gulf market and regional clients.', x: 61.4, y: 45.9, hit: 38 },
-  { city: 'Saudi Arabia', tag: 'Regional presence', label: 'Serving enterprises across the Kingdom.', x: 57.9, y: 50.5, hit: 42 },
+  { city: 'Karachi', tag: 'Headquarters', label: 'Suite #404, Imperial Trade Tower, DHA Phase 7 — our head office.', x: 67.3, y: 37.5, hit: 32, anchor: 't', group: 'pk' },
+  { city: 'Islamabad', tag: 'Regional office', label: 'Our presence in the capital, serving northern operations.', x: 68.5, y: 33, hit: 32, anchor: 'br', group: 'pk' },
+  { city: 'Lahore', tag: 'Regional office', label: 'Supporting clients across Punjab and central Pakistan.', x: 68.8, y: 35.5, hit: 32, anchor: 'bl', group: 'pk' },
+  { city: 'Dubai, UAE', tag: 'Regional presence', label: 'Our gateway to the Gulf market and regional clients.', x: 61.4, y: 45.9, hit: 32, anchor: 'br', group: 'gulf' },
+  { city: 'Saudi Arabia', tag: 'Regional presence', label: 'Serving enterprises across the Kingdom.', x: 57.9, y: 50.5, hit: 32, anchor: 't', group: 'gulf' },
   { city: 'UK, London', tag: 'International presence', label: 'Our foothold in the European market.', x: 43.5, y: 23.3, hit: 38 },
   { city: 'Australia', tag: 'Growing into', label: 'Expanding our reach into the Australian market.', x: 83, y: 81.3, hit: 38 },
 ];

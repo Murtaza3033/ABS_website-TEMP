@@ -1,6 +1,14 @@
 {
+  "redirects": [
+    { "source": "/index.html", "destination": "/", "permanent": true },
+    {
+      "source": "/:page(contact-us|about-us|our-team|our-advisors|our-partners|our-clients|industries|events|careers|products).html",
+      "destination": "/:page",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" },
-    { "source": "/(.*)", "destination": "/" }
+    { "source": "/((?!api(?:/|$)|assets/)(?!.*\\.[A-Za-z0-9]+$).*)", "destination": "/index.html" }
   ]
 }

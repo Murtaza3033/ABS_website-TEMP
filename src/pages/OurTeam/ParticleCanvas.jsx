@@ -67,5 +67,7 @@ export default function ParticleCanvas() {
     };
   }, []);
 
-  return <canvas ref={ref} style={{ position: 'fixed', inset: 0, zIndex: 1, pointerEvents: 'none' }} />;
+  // Full-viewport box from the first paint (the default 300x150 canvas box
+  // jumped — and in RTL, jumped sides — once the effect sized it).
+  return <canvas ref={ref} aria-hidden="true" style={{ position: 'fixed', inset: 0, width: '100%', height: '100%', zIndex: 1, pointerEvents: 'none' }} />;
 }

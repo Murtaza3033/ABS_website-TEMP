@@ -1,4 +1,5 @@
 import { COUNTRIES, phonePH } from './contactData';
+import { CONTACT_LIMITS } from '../../lib/contactApi';
 import { useLanguage } from '../../context/LanguageContext';
 
 /* Controlled country-code + phone input. Country change updates shared state
@@ -24,6 +25,7 @@ export default function PhoneField({ country, phone, onCountry, onPhone, onBlur,
           id={id}
           name={name}
           type="tel"
+          maxLength={CONTACT_LIMITS.phone.max}
           value={phone}
           onChange={(e) => onPhone(e.target.value)}
           onBlur={onBlur}

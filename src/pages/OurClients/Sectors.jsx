@@ -47,7 +47,7 @@ export default function Sectors() {
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '14px' }}>
                 <span style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '.5px', color: '#1a56db', background: '#eef4ff', borderRadius: '999px', padding: '4px 10px' }}>{s[2].length}</span>
-                <span style={{ fontSize: '12px', color: '#8a94a6' }}>{t("clients")}</span>
+                <span style={{ fontSize: '12px', color: '#657085' }}>{t("clients")}</span>
               </div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '16px' }}>
                 {s[2].map((m) => (

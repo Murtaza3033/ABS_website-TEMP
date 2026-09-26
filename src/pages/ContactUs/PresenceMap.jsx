@@ -3,19 +3,48 @@ import { useLanguage } from '../../context/LanguageContext';
 import Reveal from '../../components/Reveal';
 import { PINS } from './contactData';
 
-/* Presence map — zoom/pan + hover pins. State-driven (zoom/origin/active pin);
-   the wheel-zoom needs preventDefault, so it's a non-passive listener attached
-   via ref in a cleaned-up useEffect (a genuinely imperative concern). */
+/* Presence map — zoom/pan + hover pins. State-driven (zoom/origin/active pin).
+   Wheel zoom only with Ctrl/⌘ held (also what trackpad pinch sends), so a
+   plain wheel/trackpad scroll over the map keeps scrolling the page; the
+   +/− buttons zoom too. Non-passive listener (needs preventDefault) attached
+   via ref in a cleaned-up useEffect. */
+const ANCHOR = { c: 'translate(-50%,-50%)', t: 'translate(-50%,0)', br: 'translate(-100%,-100%)', bl: 'translate(0,-100%)' };
+// Effective map width (px x zoom) below which grouped pins are clustered.
+const CLUSTER_BELOW = 500;
+const GROUPS = PINS.reduce((acc, p) => {
+  if (p.group) (acc[p.group] = acc[p.group] || []).push(p);
+  return acc;
+}, {});
+const centroid = (ps) => ({ x: ps.reduce((a, p) => a + p.x, 0) / ps.length, y: ps.reduce((a, p) => a + p.y, 0) / ps.length });
 export default function PresenceMap() {
   const { t } = useLanguage();
   const vpRef = useRef(null);
   const [map, setMap] = useState({ zoom: 1, ox: 50, oy: 50 });
   const [active, setActive] = useState(null); // hovered/selected pin or null
+  const [vpW, setVpW] = useState(1180);
+
+  useEffect(() => {
+    const vp = vpRef.current;
+    if (!vp || typeof ResizeObserver === 'undefined') return undefined;
+    const ro = new ResizeObserver(([e]) => setVpW(e.contentRect.width));
+    ro.observe(vp);
+    return () => ro.disconnect();
+  }, []);
+  const clustered = vpW * map.zoom < CLUSTER_BELOW;
+  // Very narrow maps: the Pakistan and Gulf clusters themselves collide, so
+  // they merge into a single cluster.
+  const groups = vpW * map.zoom < 420 ? { all: Object.values(GROUPS).flat() } : GROUPS;
+  const zoomToGroup = (ps) => {
+    const c = centroid(ps);
+    setMap({ zoom: Math.min(3.2, Math.max(2.4, (CLUSTER_BELOW + 20) / vpW)), ox: c.x, oy: c.y });
+    setActive(null);
+  };
 
   useEffect(() => {
     const vp = vpRef.current;
     if (!vp) return undefined;
     const onWheel = (e) => {
+      if (!e.ctrlKey && !e.metaKey) return;
       e.preventDefault();
       const r = vp.getBoundingClientRect();
       setMap((m) => ({
@@ -34,7 +63,7 @@ export default function PresenceMap() {
     return zoom <= 1 ? { zoom, ox: 50, oy: 50 } : { ...m, zoom };
   });
   const resetView = () => { setMap({ zoom: 1, ox: 50, oy: 50 }); setActive(null); };
-  const focusPin = (p) => { setMap({ zoom: 2.4, ox: p.x, oy: p.y }); setActive(p); };
+  const focusPin = (p) => { setMap({ zoom: Math.min(3.2, Math.max(2.4, (CLUSTER_BELOW + 20) / vpW)), ox: p.x, oy: p.y }); setActive(p); };
 
   const btn = {
     width: '38px', height: '38px', borderRadius: '10px', border: '1px solid #e3e9f3',
@@ -52,7 +81,22 @@ export default function PresenceMap() {
             onError={(e) => { e.currentTarget.style.display = 'none'; }}
             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'fill' }}
           />
-          {PINS.map((p) => (
+          {/* Tap targets keep a constant on-screen size (hit / zoom inside the
+              scaled layer) while the distances between cities grow with zoom. */}
+          {clustered && Object.entries(groups).map(([g, ps]) => {
+            const c = centroid(ps);
+            return (
+              <button
+                type="button"
+                key={g}
+                className="presence-pin"
+                aria-label={`${ps.map((p) => t(p.city)).join(', ')} — ${t('Zoom in')}`}
+                onClick={() => zoomToGroup(ps)}
+                style={{ position: 'absolute', left: `${c.x}%`, top: `${c.y}%`, width: `${36 / map.zoom}px`, height: `${36 / map.zoom}px`, transform: 'translate(-50%,-50%)', borderRadius: '50%', zIndex: 3, cursor: 'zoom-in' }}
+              />
+            );
+          })}
+          {PINS.filter((p) => !(clustered && p.group)).map((p) => (
             <button
               type="button"
               key={p.city}
@@ -63,7 +107,7 @@ export default function PresenceMap() {
               onFocus={() => setActive(p)}
               onBlur={() => setActive((cur) => (cur === p ? null : cur))}
               onClick={() => focusPin(p)}
-              style={{ position: 'absolute', left: `${p.x}%`, top: `${p.y}%`, width: `${p.hit}px`, height: `${p.hit}px`, transform: 'translate(-50%,-50%)', borderRadius: '50%', zIndex: 3, cursor: 'pointer' }}
+              style={{ position: 'absolute', left: `${p.x}%`, top: `${p.y}%`, width: `${p.hit / map.zoom}px`, height: `${p.hit / map.zoom}px`, transform: ANCHOR[p.anchor || 'c'], borderRadius: '50%', zIndex: 3, cursor: 'pointer' }}
             />
           ))}
         </div>
@@ -79,14 +123,17 @@ export default function PresenceMap() {
           </div>
         )}
 
-        <div style={{ position: 'absolute', right: '18px', top: '18px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+      </div>
+      {/* Outside the map viewport: absolutely placed over its top-right corner
+          on wide screens, a toolbar row under the map on phones (contact-us.css)
+          so the buttons never sit on a pin. */}
+      <div className="presence-ctrls" style={{ position: 'absolute', right: '18px', top: '18px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
           <button onClick={zoomIn} aria-label={t("Zoom in")} style={btn}>+</button>
           <button onClick={zoomOut} aria-label={t("Zoom out")} style={btn}>−</button>
           <button onClick={resetView} aria-label={t("Reset view")} title={t("Reset view")} style={{ ...btn, display: 'grid', placeItems: 'center', fontSize: '17px' }}>
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9 9 0 0 0-6.4 2.6L3 8" /><path d="M3 4v4h4" /></svg>
           </button>
         </div>
-      </div>
     </Reveal>
   );
 }

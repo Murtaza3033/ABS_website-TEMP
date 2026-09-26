@@ -14,9 +14,17 @@ const DEFAULT_DESCRIPTION =
 const SITE_URL = (import.meta.env.VITE_SITE_URL || '').replace(/\/+$/, '');
 
 /* Static share-image fallback (public/ logo) for when neither the page nor
-   CMS siteSettings supplies one — absolute when a site URL is configured,
-   root-relative otherwise. */
-const STATIC_OG_IMAGE = `${SITE_URL}/assets/images/logos/logo-1783092411267.png`;
+   CMS siteSettings supplies one. */
+const STATIC_OG_IMAGE_PATH = '/assets/images/logos/logo-1783092411267.png';
+
+/* Scrapers need absolute og:image / twitter:image URLs: prefer the configured
+   VITE_SITE_URL, else the origin the page is actually served from. */
+function absoluteUrl(url) {
+  if (!url || /^https?:\/\//i.test(url)) return url;
+  const origin = SITE_URL || (typeof window !== 'undefined' ? window.location.origin : '');
+  if (url.startsWith('//')) return `https:${url}`;
+  return `${origin}${url.startsWith('/') ? '' : '/'}${url}`;
+}
 
 /* Reusable per-page <head> metadata via react-helmet-async (provider already
    wraps the app in main.jsx). Every value is optional and falls back safely:
@@ -41,7 +49,7 @@ export default function SEO({
   const desc = t(description || DEFAULT_DESCRIPTION);
   const resolvedCanonical = canonical || (SITE_URL ? `${SITE_URL}${location.pathname}` : undefined);
   const defaultOgImage = getSanityImageUrl(cmsSettings?.logo, { width: 1200 });
-  const resolvedOgImage = ogImage || defaultOgImage || STATIC_OG_IMAGE;
+  const resolvedOgImage = absoluteUrl(ogImage || defaultOgImage || STATIC_OG_IMAGE_PATH);
   const ogLocale = lang === 'ar' ? 'ar_AR' : 'en_US';
 
   return (

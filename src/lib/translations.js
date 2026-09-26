@@ -1,6 +1,6 @@
 /* Arabic translation dictionary (placeholder — swap for professional translations).
    Keyed by the exact English source string. Loaded on demand by lib/arabic.js
-   (its own chunk, so English visitors never download it). */
+   (its own file, so English visitors never download it). */
 
 export const AR = {
   'Home': 'الرئيسية', 'Company': 'الشركة', 'Products': 'المنتجات', 'Resources': 'الموارد',
@@ -1366,4 +1366,17 @@ export const AR = {
   "Our stack includes React, ASP.NET, TypeScript, SQL Server, and Crystal Reports.": "تشمل تقنياتنا React و ASP.NET و TypeScript و SQL Server و Crystal Reports.",
   /* Arabic i18n pass: hero mockup */
   "Access Card": "بطاقة الدخول",
+  /* Error boundary fallback (components/ErrorBoundary.jsx) */
+  "Something went wrong": "حدث خطأ ما",
+  "This page couldn’t be loaded. Please check your connection and reload.": "تعذّر تحميل هذه الصفحة. يُرجى التحقق من اتصالك بالإنترنت ثم إعادة التحميل.",
+  "An unexpected error occurred. Please reload the page.": "حدث خطأ غير متوقع. يُرجى إعادة تحميل الصفحة.",
+  "Reload": "إعادة التحميل",
+  /* Final QA fix round (FIXER A) */
+  "Industries": "القطاعات",
+  "Scrollable preview": "معاينة قابلة للتمرير",
+  "Product preview": "معاينة المنتج",
+  "Name must be 100 characters or fewer.": "يجب ألا يتجاوز الاسم 100 حرف.",
+  "Email must be 200 characters or fewer.": "يجب ألا يتجاوز البريد الإلكتروني 200 حرف.",
+  "Company must be 150 characters or fewer.": "يجب ألا يتجاوز اسم الشركة 150 حرفاً.",
+  "Message must be 2000 characters or fewer.": "يجب ألا تتجاوز الرسالة 2000 حرف.",
 };

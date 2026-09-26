@@ -8,7 +8,7 @@ import {
   cc, validPhone, phoneErr,
   REASON_OPTS, PRODUCT_OPTS, Q_TITLES, chatSteps,
 } from './contactData';
-import { submitContact, validEmail, validName } from '../../lib/contactApi';
+import { submitContact, validEmail, validName, CONTACT_LIMITS } from '../../lib/contactApi';
 import SEO, { resolveSeo } from '../../components/SEO';
 import { usePage } from '../../hooks/useCms';
 
@@ -56,12 +56,21 @@ function CopyButton({ text }) {
     catch { setCopied(true); }
   };
   return (
-    <button onClick={copy} aria-label={t('Copy email')} title={t('Copy')}
-      style={{ display: 'inline-grid', placeItems: 'center', width: '24px', height: '24px', borderRadius: '7px', border: '1px solid #e3e9f3', background: '#fff', color: copied ? '#1a9d55' : '#8a94a6', cursor: 'pointer' }}>
+    <button className="cCopy" onClick={copy} aria-label={t('Copy email')} title={t('Copy')}
+      style={{ display: 'inline-grid', placeItems: 'center', width: '24px', height: '24px', borderRadius: '7px', border: '1px solid #e3e9f3', background: '#fff', color: copied ? '#157d44' : '#657085', cursor: 'pointer' }}>
       {copied ? '✓' : '⎘'}
     </button>
   );
 }
+
+// Same limits the API enforces (lib/contactRules.js) — applied as input
+// maxLength so the server never has to reject an over-long field.
+const MAX = {
+  name: CONTACT_LIMITS.name.max,
+  company: CONTACT_LIMITS.company.max,
+  email: CONTACT_LIMITS.email.max,
+  message: CONTACT_LIMITS.message.max,
+};
 
 const infoLink = { display: 'inline-flex', alignItems: 'center', gap: '7px', fontSize: '13.5px', color: '#4b5565', textDecoration: 'none' };
 const ldot = { width: '5px', height: '5px', borderRadius: '50%', background: '#c9d8f5', transition: 'background .2s' };
@@ -115,7 +124,10 @@ export default function ContactUs() {
   const [classicErr, setClassicErr] = useState({});
   const turnstileRef = useRef(null);
 
-  const setField = (field, value) => dispatch({ type: 'FIELD', field, value });
+  const setField = (field, value) => {
+    dispatch({ type: 'FIELD', field, value });
+    if (field === 'company' || field === 'message') setClassicErr((prev) => (prev[field] ? { ...prev, [field]: undefined } : prev));
+  };
 
   /* Kept only as the manual fallback link shown when the API call fails —
      no longer the primary submission path (Phase 10C). */
@@ -155,9 +167,11 @@ export default function ContactUs() {
       // Server-side validation_failed: mark the offending fields it named.
       const f = result.fields || {};
       const serverErrs = {};
-      if (f.name) serverErrs.name = 'Enter a valid name (letters only).';
-      if (f.email) serverErrs.email = 'Enter a valid email address.';
+      if (f.name) serverErrs.name = state.name.trim().length > MAX.name ? 'Name must be 100 characters or fewer.' : 'Enter a valid name (letters only).';
+      if (f.email) serverErrs.email = state.email.trim().length > MAX.email ? 'Email must be 200 characters or fewer.' : 'Enter a valid email address.';
       if (f.phone) serverErrs.phone = phoneErr(state.country, t);
+      if (f.company) serverErrs.company = 'Company must be 150 characters or fewer.';
+      if (f.message) serverErrs.message = 'Message must be 2000 characters or fewer.';
       if (Object.keys(serverErrs).length) {
         setClassicErr((prev) => ({ ...prev, ...serverErrs }));
         dispatch({ type: 'TOUCH', fields: Object.keys(serverErrs) });
@@ -256,7 +270,7 @@ export default function ContactUs() {
 
                   {(key === 'name' || key === 'company') && (
                     <>
-                      <input autoFocus value={key === 'name' ? state.name : state.company}
+                      <input autoFocus value={key === 'name' ? state.name : state.company} maxLength={key === 'name' ? MAX.name : MAX.company}
                         onChange={(e) => setField(key, e.target.value)} onKeyDown={onEnter}
                         className={`cInput${nameBad ? ' cErr' : ''}`}
                         placeholder={key === 'name' ? t('Your name') : t('Company (optional)')} style={{ marginTop: '18px' }} />
@@ -279,7 +293,7 @@ export default function ContactUs() {
                   {key === 'contact' && (
                     <div style={{ marginTop: '18px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
                       <div>
-                        <input value={state.email} onChange={(e) => setField('email', e.target.value)} onKeyDown={onEnter}
+                        <input value={state.email} maxLength={MAX.email} onChange={(e) => setField('email', e.target.value)} onKeyDown={onEnter}
                           type="email" className={`cInput${emailBad ? ' cErr' : ''}`} placeholder={t('you@company.com (required)')} autoFocus />
                         {emailBad && <div className="cErrMsg">⚠ {!state.email.trim() ? t('Email is required so we can reply.') : t('Enter a valid email address.')}</div>}
                       </div>
@@ -290,20 +304,23 @@ export default function ContactUs() {
                   )}
 
                   {key === 'message' && (
-                    <textarea value={state.message} onChange={(e) => setField('message', e.target.value)}
-                      className="cInput" placeholder={t('Optional — a line or two of context')} rows={4} style={{ marginTop: '18px', resize: 'vertical' }} />
+                    <>
+                      <textarea value={state.message} maxLength={MAX.message} onChange={(e) => setField('message', e.target.value)}
+                        className={`cInput${classicErr.message ? ' cErr' : ''}`} aria-invalid={classicErr.message ? true : undefined} placeholder={t('Optional — a line or two of context')} rows={4} style={{ marginTop: '18px', resize: 'vertical' }} />
+                      {classicErr.message && <div className="cErrMsg">⚠ {t(classicErr.message)}</div>}
+                    </>
                   )}
                 </div>
               </div>
 
               <Turnstile ref={turnstileRef} action="contact_form" />
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '18px' }}>
-                <button onClick={() => dispatch({ type: 'STEP_BACK' })} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: state.step === 0 ? '#d5deed' : '#8a94a6' }}>{t("← Back")}</button>
+                <button onClick={() => dispatch({ type: 'STEP_BACK' })} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: state.step === 0 ? '#d5deed' : '#657085' }}>{t("← Back")}</button>
                 {key !== 'reason' && key !== 'product' && (
                   <button onClick={advance} disabled={state.submitting} style={{ cursor: state.submitting ? 'default' : 'pointer', opacity: state.submitting ? 0.7 : 1, background: 'var(--blue)', color: '#fff', fontSize: '14.5px', fontWeight: 600, padding: '12px 26px', border: 'none', borderRadius: '12px' }}>{state.submitting ? t('Sending…') : (state.step >= st.length - 1 ? t('Send') : t('Continue'))}</button>
                 )}
               </div>
-              <div style={{ textAlign: 'right', fontSize: '11.5px', color: '#aeb8c8', marginTop: '8px' }}>{t("Press Enter to continue")}</div>
+              <div style={{ textAlign: 'right', fontSize: '11.5px', color: '#657085', marginTop: '8px' }}>{t("Press Enter to continue")}</div>
               <SubmitErrorBanner message={state.submitError} onRetry={doSubmit} mailtoHref={buildMailtoHref()} t={t} />
             </div>
           )}
@@ -327,12 +344,13 @@ export default function ContactUs() {
                 <div className="cGrid2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginTop: '22px' }}>
                   <div>
                     <label htmlFor="cf-name" style={{ fontSize: '12px', fontWeight: 600, color: '#5b6472' }}>{t("Name")}</label>
-                    <input id="cf-name" value={state.name} onChange={(e) => setField('name', e.target.value)} className={`cInput${classicErr.name ? ' cErr' : ''}`} placeholder={t('Your name')} style={{ marginTop: '6px' }} />
+                    <input id="cf-name" maxLength={MAX.name} value={state.name} onChange={(e) => setField('name', e.target.value)} className={`cInput${classicErr.name ? ' cErr' : ''}`} placeholder={t('Your name')} style={{ marginTop: '6px' }} />
                     {classicErr.name && <div className="cErrMsg">⚠ {t(classicErr.name)}</div>}
                   </div>
                   <div>
-                    <label htmlFor="cf-company" style={{ fontSize: '12px', fontWeight: 600, color: '#5b6472' }}>{t("Company")} <span style={{ color: '#aeb8c8' }}>{t("(optional)")}</span></label>
-                    <input id="cf-company" value={state.company} onChange={(e) => setField('company', e.target.value)} className="cInput" placeholder={t('Company')} style={{ marginTop: '6px' }} />
+                    <label htmlFor="cf-company" style={{ fontSize: '12px', fontWeight: 600, color: '#5b6472' }}>{t("Company")} <span style={{ color: '#657085' }}>{t("(optional)")}</span></label>
+                    <input id="cf-company" maxLength={MAX.company} value={state.company} onChange={(e) => setField('company', e.target.value)} className={`cInput${classicErr.company ? ' cErr' : ''}`} placeholder={t('Company')} style={{ marginTop: '6px' }} />
+                    {classicErr.company && <div className="cErrMsg">⚠ {t(classicErr.company)}</div>}
                   </div>
                   <div>
                     <label htmlFor="cf-reason" style={{ fontSize: '12px', fontWeight: 600, color: '#5b6472' }}>{t("Reason for contact")}</label>
@@ -341,18 +359,18 @@ export default function ContactUs() {
                     </select>
                   </div>
                   <div>
-                    <label htmlFor="cf-product" style={{ fontSize: '12px', fontWeight: 600, color: '#5b6472' }}>{t("Product interest")} <span style={{ color: '#aeb8c8' }}>{t("(optional)")}</span></label>
+                    <label htmlFor="cf-product" style={{ fontSize: '12px', fontWeight: 600, color: '#5b6472' }}>{t("Product interest")} <span style={{ color: '#657085' }}>{t("(optional)")}</span></label>
                     <select id="cf-product" value={state.product} onChange={(e) => setField('product', e.target.value)} className="cInput" style={{ marginTop: '6px' }}>
                       {PRODUCT_OPTS.map((o) => <option key={o} value={o}>{t(o)}</option>)}
                     </select>
                   </div>
                   <div>
                     <label htmlFor="cf-email" style={{ fontSize: '12px', fontWeight: 600, color: '#5b6472' }}>{t("Email")}</label>
-                    <input id="cf-email" value={state.email} onChange={(e) => setField('email', e.target.value)} type="email" className={`cInput${classicErr.email ? ' cErr' : ''}`} placeholder="you@company.com" style={{ marginTop: '6px' }} />
+                    <input id="cf-email" maxLength={MAX.email} value={state.email} onChange={(e) => setField('email', e.target.value)} type="email" className={`cInput${classicErr.email ? ' cErr' : ''}`} placeholder="you@company.com" style={{ marginTop: '6px' }} />
                     {classicErr.email && <div className="cErrMsg">⚠ {t(classicErr.email)}</div>}
                   </div>
                   <div>
-                    <label htmlFor="cf-phone" style={{ fontSize: '12px', fontWeight: 600, color: '#5b6472' }}>{t("Phone")} <span style={{ color: '#aeb8c8' }}>{t("(optional)")}</span></label>
+                    <label htmlFor="cf-phone" style={{ fontSize: '12px', fontWeight: 600, color: '#5b6472' }}>{t("Phone")} <span style={{ color: '#657085' }}>{t("(optional)")}</span></label>
                     <div style={{ marginTop: '6px' }}>
                       <PhoneField id="cf-phone" country={state.country} phone={state.phone}
                         onCountry={(v) => dispatch({ type: 'COUNTRY', value: v })} onPhone={(v) => setField('phone', v)}
@@ -360,8 +378,9 @@ export default function ContactUs() {
                     </div>
                   </div>
                   <div style={{ gridColumn: '1/-1' }}>
-                    <label htmlFor="cf-message" style={{ fontSize: '12px', fontWeight: 600, color: '#5b6472' }}>{t("Message")} <span style={{ color: '#aeb8c8' }}>{t("(optional)")}</span></label>
-                    <textarea id="cf-message" value={state.message} onChange={(e) => setField('message', e.target.value)} className="cInput" rows={4} placeholder={t('How can we help?')} style={{ marginTop: '6px', resize: 'vertical' }} />
+                    <label htmlFor="cf-message" style={{ fontSize: '12px', fontWeight: 600, color: '#5b6472' }}>{t("Message")} <span style={{ color: '#657085' }}>{t("(optional)")}</span></label>
+                    <textarea id="cf-message" maxLength={MAX.message} value={state.message} onChange={(e) => setField('message', e.target.value)} className={`cInput${classicErr.message ? ' cErr' : ''}`} aria-invalid={classicErr.message ? true : undefined} rows={4} placeholder={t('How can we help?')} style={{ marginTop: '6px', resize: 'vertical' }} />
+                    {classicErr.message && <div className="cErrMsg">⚠ {t(classicErr.message)}</div>}
                   </div>
                 </div>
                 <Turnstile ref={turnstileRef} action="contact_form" />
@@ -416,8 +435,8 @@ export default function ContactUs() {
           {/* REASSURANCE */}
           <Reveal style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '20px', flexWrap: 'wrap', marginTop: '36px', padding: '22px 26px', background: 'var(--tint)', border: '1px solid var(--line)', borderRadius: '18px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <span style={{ width: '38px', height: '38px', borderRadius: '50%', background: '#e6f5ec', color: '#1a9d55', display: 'grid', placeItems: 'center' }}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg></span>
-              <span style={{ fontSize: '14.5px', color: '#39404d' }}>{t("We typically reply within")} <b>{t("one business day")}</b>. <span style={{ color: '#aeb8c8', fontSize: '12px' }}>{t("(response time — pending confirmation)")}</span></span>
+              <span style={{ width: '38px', height: '38px', borderRadius: '50%', background: '#e6f5ec', color: '#157d44', display: 'grid', placeItems: 'center' }}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg></span>
+              <span style={{ fontSize: '14.5px', color: '#39404d' }}>{t("We typically reply within")} <b>{t("one business day")}</b>. <span style={{ color: '#657085', fontSize: '12px' }}>{t("(response time — pending confirmation)")}</span></span>
             </div>
             <div style={{ display: 'flex', gap: '10px' }}>
               {[

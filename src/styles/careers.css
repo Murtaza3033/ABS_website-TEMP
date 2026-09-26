@@ -25,7 +25,7 @@
 .r-panel{max-height:0;overflow:hidden;transition:max-height .35s cubic-bezier(.2,.7,.3,1);}
 .r-body{padding:0 24px 26px 84px;}
 .r-desc,.r-req{color:#4b5565;transition:color .35s;}
-.r-label{font-size:11px;font-weight:700;letter-spacing:1px;color:#8a94a6;text-transform:uppercase;transition:color .35s;}
+.r-label{font-size:11px;font-weight:700;letter-spacing:1px;color:#657085;text-transform:uppercase;transition:color .35s;}
 .r-apply{display:inline-flex;align-items:center;gap:7px;margin-top:16px;background:#1a56db;color:#fff;font-size:13.5px;font-weight:600;padding:11px 20px;border-radius:999px;transition:background .35s,color .35s,opacity .2s;}
 .r-apply:hover{opacity:.88;}
 .crRole.open{background:#1a56db;border-color:#1a56db;}
@@ -45,7 +45,7 @@
 .jobstat .sep{width:4px;height:4px;border-radius:50%;background:#c9d5ea;}
 .jfiltbar{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:0 0 26px;}
 .jfilt{font-size:13px;font-weight:600;color:#48566e;background:#fff;border:1px solid #e3eaf3;border-radius:999px;padding:8px 16px;cursor:pointer;transition:all .22s ease;display:inline-flex;align-items:center;gap:7px;}
-.jfilt .n{font-size:11px;font-weight:700;color:#8a94a6;background:#eef3fb;border-radius:999px;padding:1px 7px;transition:all .22s ease;}
+.jfilt .n{font-size:11px;font-weight:700;color:#657085;background:#eef3fb;border-radius:999px;padding:1px 7px;transition:all .22s ease;}
 .jfilt:hover{border-color:#b9ccef;color:#1a56db;}
 .jfilt.on{background:#1a56db;color:#fff;border-color:#1a56db;box-shadow:0 12px 26px -12px rgba(26,86,219,.6);}
 .jfilt.on .n{background:rgba(255,255,255,.22);color:#fff;}

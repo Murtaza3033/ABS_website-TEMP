@@ -19,9 +19,28 @@ const STALE_PRODUCT_HREF_MAP = {
   'https://pharmafieldflo.co': '/products/pharmafieldflo',
 };
 
+/* CMS hrefs are editor-supplied, so only safe forms reach an <a href>:
+   http(s), mailto:, tel:, root-relative "/path", "#hash", "?query" — anything
+   else (javascript:, data:, vbscript:, protocol-relative "//host", …) is
+   dropped in favour of the static fallback. */
+export function safeHref(href) {
+  if (typeof href !== 'string') return null;
+  const h = href.trim();
+  // Browsers ignore tabs/newlines/control chars inside a scheme
+  // ("java\nscript:"), so classify on a copy with them removed.
+  const probe = h.replace(/[\u{0}-\u{20}\u{7F}-\u{9F}]/gu, '');
+  if (!probe) return null;
+  // Protocol-relative ("//host") and backslash forms can leave the site.
+  if (probe.startsWith('//') || probe.includes('\\')) return null;
+  const scheme = /^([a-z][a-z0-9+.-]*):/i.exec(probe);
+  if (!scheme) return h; // relative: "/path", "#hash", "?q", "page"
+  return ['http', 'https', 'mailto', 'tel'].includes(scheme[1].toLowerCase()) ? h : null;
+}
+
 function resolveHref(href, fallback) {
-  if (!href) return fallback;
-  return STALE_PRODUCT_HREF_MAP[href] || href;
+  const safe = safeHref(href);
+  if (!safe) return fallback;
+  return STALE_PRODUCT_HREF_MAP[safe] || safe;
 }
 
 /* A CMS label is normally bilingual ({en, ar}); a plain string (not schema

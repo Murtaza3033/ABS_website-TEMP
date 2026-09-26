@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { useLocation } from 'react-router-dom';
 import SmartLink from './SmartLink';
 import LanguageToggle from './LanguageToggle';
@@ -79,6 +80,31 @@ export default function Header() {
 
   useEffect(() => { if (mobileOpen) setNavHidden(false); }, [mobileOpen]);
 
+  // The burger (the menu's only close control) disappears above 1080px, so
+  // growing/rotating the viewport past that breakpoint closes the menu.
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 1081px)');
+    const onChange = () => { if (mq.matches) setMobileOpen(false); };
+    onChange();
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
+
+  // Lock the page behind the open mobile menu. iOS ignores overflow:hidden on
+  // the root, so pin <body> at the current offset instead, and restore the
+  // exact scroll position on close/unmount.
+  useEffect(() => {
+    if (!mobileOpen) return undefined;
+    const y = window.scrollY;
+    const b = document.body.style;
+    const prev = { position: b.position, top: b.top, left: b.left, right: b.right, width: b.width };
+    Object.assign(b, { position: 'fixed', top: `-${y}px`, left: '0', right: '0', width: '100%' });
+    return () => {
+      Object.assign(b, prev);
+      window.scrollTo(0, y);
+    };
+  }, [mobileOpen]);
+
   /* Mega menus: desktop hover stays pure CSS (.nav-group:hover). On top of
      that, `openMenu` lets the trigger button toggle a menu (Enter/Space/click,
      reflected in aria-expanded) and CSS :focus-within opens it for keyboard
@@ -87,11 +113,19 @@ export default function Header() {
      cleared once the pointer leaves or focus moves out of that group. */
   const [openMenu, setOpenMenu] = useState(null);
   const [closedMenu, setClosedMenu] = useState(null);
+  // Hover intent: leaving a group (e.g. moving diagonally from the trigger
+  // toward the panel's far column) keeps it open for a short grace period so
+  // the panel can be re-entered; crossing another trigger on the way only
+  // switches menus if the pointer rests there (250ms).
+  // Keyboard behaviour (:focus-within / openMenu) is unchanged.
+  const [hoverMenu, setHoverMenu] = useState(null);
+  const hoverTimer = useRef(null);
+  useEffect(() => () => clearTimeout(hoverTimer.current), []);
   const location = useLocation();
   const burgerRef = useRef(null);
 
   // Route change closes any open menu (desktop mega + mobile).
-  useEffect(() => { setOpenMenu(null); setMobileOpen(false); }, [location.pathname]);
+  useEffect(() => { setOpenMenu(null); setHoverMenu(null); setMobileOpen(false); }, [location.pathname]);
 
   // Esc closes the mobile menu and returns focus to the burger.
   useEffect(() => {
@@ -104,10 +138,20 @@ export default function Header() {
   }, [mobileOpen]);
 
   const groupProps = (key) => ({
-    className: `nav-group${openMenu === key ? ' open' : ''}${closedMenu === key ? ' closed' : ''}`,
+    className: `nav-group${openMenu === key ? ' open' : ''}${hoverMenu === key ? ' hover' : ''}${closedMenu === key ? ' closed' : ''}`,
+    onMouseEnter: () => {
+      clearTimeout(hoverTimer.current);
+      // Another menu is open: switch only after a short pause, so a pointer
+      // that merely crosses this trigger on its way into the open panel
+      // (safe-triangle style) doesn't close it.
+      if (hoverMenu && hoverMenu !== key) hoverTimer.current = setTimeout(() => setHoverMenu(key), 250);
+      else setHoverMenu(key);
+    },
     onMouseLeave: () => {
       if (openMenu === key) setOpenMenu(null);
       if (closedMenu === key) setClosedMenu(null);
+      clearTimeout(hoverTimer.current);
+      hoverTimer.current = setTimeout(() => setHoverMenu(null), 280);
     },
     onBlur: (e) => {
       if (e.currentTarget.contains(e.relatedTarget)) return;
@@ -118,6 +162,7 @@ export default function Header() {
       if (e.key !== 'Escape') return;
       setOpenMenu(null);
       setClosedMenu(key);
+      setHoverMenu(null);
       e.currentTarget.querySelector('button.navlink')?.focus();
     },
     // Mouse clicks never park focus inside the group (so :focus-within can't
@@ -127,6 +172,7 @@ export default function Header() {
       if (!e.target.closest('.mega-wrap a')) return;
       setOpenMenu(null);
       setClosedMenu(key);
+      setHoverMenu(null);
       if (e.currentTarget.contains(document.activeElement)) document.activeElement.blur();
     },
   });
@@ -147,7 +193,7 @@ export default function Header() {
       <header className={`site-header ${scrolled ? 'is-scrolled' : ''} ${navHidden ? 'nav-hidden' : ''}`}>
         <div className="nav-inner">
           <SmartLink href={nh('home', '/index.html')} className="nav-logo">
-            <img src={logoSrc} alt={logoAlt} />
+            <img src={logoSrc} alt={logoAlt} width="228" height="152" />
           </SmartLink>
 
           <nav className="nav-desktop">
@@ -269,8 +315,20 @@ export default function Header() {
         </div>
       </header>
 
-      <button className={`scroll-top ${showTop ? 'show' : ''}`} aria-label={t('Back to top')} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M12 19V5"></path><path d="M5 12l7-7 7 7"></path></svg></button>
-      <button className={`scroll-bottom ${showBottom ? 'show' : ''}`} aria-label={t('Scroll to bottom')} onClick={() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' })}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14"></path><path d="M19 12l-7 7-7-7"></path></svg></button>
+      {/* Floating scroll controls, each in its own landmark (axe "region").
+          They are hidden (visibility) when there is nowhere to scroll, so they
+          sit where the Tab order meets them while shown: "Scroll to bottom"
+          right after the header (shown near the top), "Back to top" portalled
+          to the end of <body> (shown near the bottom, after the footer). */}
+      <aside aria-label={t('Scroll to bottom')}>
+        <button className={`scroll-bottom ${showBottom ? 'show' : ''}`} aria-label={t('Scroll to bottom')} onClick={() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' })}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14"></path><path d="M19 12l-7 7-7-7"></path></svg></button>
+      </aside>
+      {createPortal(
+        <aside aria-label={t('Back to top')}>
+          <button className={`scroll-top ${showTop ? 'show' : ''}`} aria-label={t('Back to top')} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M12 19V5"></path><path d="M5 12l7-7 7 7"></path></svg></button>
+        </aside>,
+        document.body,
+      )}
     </>
   );
 }

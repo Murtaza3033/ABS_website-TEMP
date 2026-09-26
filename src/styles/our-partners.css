@@ -21,7 +21,19 @@
 .op-scrollcue svg{animation:cueBob 1.9s ease-in-out infinite;}
 .benprog{position:relative;margin:24px auto 0;max-width:300px;height:3px;border-radius:3px;background:rgba(26,86,219,.13);overflow:hidden;}
 .benprog i{display:block;height:100%;width:0;background:linear-gradient(90deg,#1a56db,#4b8bff);border-radius:3px;}
-.benCount{font-size:12px;font-weight:700;letter-spacing:1px;color:#8a94a6;min-width:56px;text-align:center;}
+.benCount{font-size:12px;font-weight:700;letter-spacing:1px;color:#657085;min-width:56px;text-align:center;}
 .benCount b{color:var(--blue);}
 
 @media (max-width:900px){.hero-grid{grid-template-columns:1fr !important;}.net-grid{grid-template-columns:1fr !important;}.pBen{flex:0 0 82% !important;}.net-canvas{opacity:.55;}}
+/* Phones: the featured-partner stage's absolutely-positioned card grew taller
+   than its 470px box, pushing its "Meet a partner" tooltip up over the hero's
+   scroll cue and leaving the ghost cards peeking out. Stack it in flow there:
+   card in normal flow with room above for the tooltip, ghosts hidden. */
+@media (max-width:560px){
+  #featured{min-height:0 !important;padding-top:84px;}
+  #featured .pGhost{display:none !important;}
+  #featured .pPartner{position:relative !important;width:100% !important;right:auto !important;bottom:auto !important;}
+}
+/* Phones: the dot pager (32px tap boxes) no longer fits beside the arrows and
+   the 01 / 0N counter, so the arrows + counter carry navigation there. */
+@media (max-width:480px){.benDots{display:none !important;}}

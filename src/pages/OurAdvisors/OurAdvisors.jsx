@@ -93,10 +93,10 @@ export default function OurAdvisors() {
           </div>
           <div style={{ padding: '48px 46px' }}>
             <span className="eyebrow">{t("Strategic Advisor")}</span>
-            <h2 style={{ fontSize: '32px', fontWeight: 800, margin: '12px 0 0', color: '#b3bccb', letterSpacing: '.5px' }}>{t("Name pending")}</h2>
+            <h2 style={{ fontSize: '32px', fontWeight: 800, margin: '12px 0 0', color: '#8492ab', letterSpacing: '.5px' }}>{t("Name pending")}</h2>
             <div style={{ fontSize: '15px', color: '#5b6472', marginTop: '5px' }}>{t("Role / title to be confirmed")}</div>
             <div style={{ height: '1px', background: '#e6ecf6', margin: '24px 0' }} />
-            <div style={{ fontSize: '11px', letterSpacing: '1px', color: '#8a94a6', textTransform: 'uppercase', fontWeight: 700 }}>{t("About")}</div>
+            <div style={{ fontSize: '11px', letterSpacing: '1px', color: '#657085', textTransform: 'uppercase', fontWeight: 700 }}>{t("About")}</div>
             <p style={{ fontSize: '15.5px', lineHeight: 1.7, color: '#4b5565', margin: '10px 0 0' }}>{t("Placeholder for the advisor's background — the experience across enterprise software, scaling teams and go-to-market that informs the guidance they bring to Align. Real bio to be added once confirmed.")}</p>
             <blockquote style={{ margin: '26px 0 0', padding: '20px 24px', background: '#fff', borderLeft: '3px solid var(--blue)', borderRadius: '0 14px 14px 0', fontSize: '17px', lineHeight: 1.5, color: '#31405c', fontStyle: 'italic' }}>{t("\"Advisor quote pending — a short line capturing their perspective on Align's mission.\"")}</blockquote>
           </div>

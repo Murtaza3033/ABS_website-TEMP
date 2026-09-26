@@ -5,7 +5,7 @@ import CountUp from '../../components/CountUp';
 import { DESC } from './teamData';
 
 const fcardBase = {
-  pointerEvents: 'auto', position: 'absolute', background: 'rgba(255,255,255,.06)', backdropFilter: 'blur(12px)',
+  pointerEvents: 'auto', position: 'absolute', background: 'rgba(255,255,255,.06)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)',
   border: '1px solid rgba(255,255,255,.12)', borderRadius: '16px', boxShadow: '0 30px 60px -30px rgba(0,0,0,.6)',
 };
 
@@ -71,7 +71,7 @@ export default function LeaderScene({ L, i, even, revealed, refCb }) {
 
         {/* floating cards (CSS view() parallax via .cardWrap) */}
         <div className="cardWrap" style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
-          <div className="fcard" style={{ ...fcardBase, ...c1pos, width: '210px', padding: '16px', animation: 'tmFloat1 7s ease-in-out infinite' }}>
+          <div className="fcard fc-text-side" style={{ ...fcardBase, ...c1pos, width: '210px', padding: '16px', animation: 'tmFloat1 7s ease-in-out infinite' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ width: '24px', height: '24px', borderRadius: '7px', background: 'linear-gradient(135deg,#1a56db,#4b8bff)', display: 'grid', placeItems: 'center', color: '#fff', fontWeight: 800, fontSize: '11px' }}>A</span>
               <span style={{ fontSize: '12px', fontWeight: 700, color: '#fff' }}>{t(L.c1[0])}</span>
@@ -81,7 +81,7 @@ export default function LeaderScene({ L, i, even, revealed, refCb }) {
             <div style={{ display: 'flex', alignItems: 'flex-end', gap: '4px', height: '34px', marginTop: '10px' }}><Bars arr={L.c1[3]} /></div>
           </div>
 
-          <div className="fcard" style={{ ...fcardBase, ...c2pos, width: '196px', padding: '16px', animation: 'tmFloat2 8.4s ease-in-out .6s infinite' }}>
+          <div className="fcard fc-text-side" style={{ ...fcardBase, ...c2pos, width: '196px', padding: '16px', animation: 'tmFloat2 8.4s ease-in-out .6s infinite' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <span style={{ fontSize: '11.5px', fontWeight: 700, color: '#fff' }}>{t(L.c2[0])}</span>
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '9px', fontWeight: 800, color: '#4bd07f' }}><span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#4bd07f', animation: 'tmDotPulse 1.8s ease-in-out infinite' }} />{t(L.c2[1])}</span>

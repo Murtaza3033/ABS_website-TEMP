@@ -6,6 +6,13 @@ import { HelmetProvider } from 'react-helmet-async';
 import App from './App.jsx';
 import { storedLang } from './context/LanguageContext';
 import { loadArabic } from './lib/arabic';
+import { reloadOnceForChunkError } from './lib/chunkReload';
+import ErrorBoundary from './components/ErrorBoundary';
+
+// Vite fires this when a lazy chunk (or its CSS/deps) fails to download —
+// usually a tab left open across a deploy. One guarded reload picks up the
+// new build; if it fails again the route ErrorBoundary shows a Reload button.
+window.addEventListener('vite:preloadError', () => { reloadOnceForChunkError(); });
 
 // staleTime is generous since CMS content changes rarely relative to page views.
 const queryClient = new QueryClient({
@@ -29,7 +36,11 @@ const render = () => {
       <QueryClientProvider client={queryClient}>
         <HelmetProvider>
           <BrowserRouter>
-            <App />
+            {/* Last-resort boundary for the shell itself (Header/Footer/SalesBot);
+                App.jsx has an inner one around the routed page. */}
+            <ErrorBoundary>
+              <App />
+            </ErrorBoundary>
           </BrowserRouter>
         </HelmetProvider>
       </QueryClientProvider>

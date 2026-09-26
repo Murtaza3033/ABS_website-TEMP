@@ -31,13 +31,15 @@ export default function Journey() {
         {MILES.map((m, i) => {
           const on = prog >= i / (MILES.length - 0.6);
           return (
-            <div key={m[1]} style={{ opacity: on ? 1 : 0.32, transform: on ? 'translateY(0)' : 'translateY(10px)', transition: 'opacity .4s ease,transform .4s ease', textAlign: 'center' }}>
-              <div className="abMile" style={{ width: '76px', height: '76px', margin: '0 auto', borderRadius: '50%', padding: '3px', background: m[2], boxShadow: '0 14px 28px -12px rgba(15,23,41,.4)', transition: 'transform .3s ease', transform: on ? 'scale(1.08)' : 'scale(.9)' }}>
+            <div key={m[1]} style={{ transform: on ? 'translateY(0)' : 'translateY(10px)', transition: 'transform .4s ease', textAlign: 'center' }}>
+              {/* Not-yet-reached milestones dim only their photo; the year and
+                  title stay at full contrast (they were at 32% opacity ≈ 1.4:1). */}
+              <div className="abMile" style={{ width: '76px', height: '76px', margin: '0 auto', borderRadius: '50%', padding: '3px', background: m[2], boxShadow: '0 14px 28px -12px rgba(15,23,41,.4)', transition: 'transform .3s ease,opacity .4s ease', transform: on ? 'scale(1.08)' : 'scale(.9)', opacity: on ? 1 : 0.32 }}>
                 <div style={{ width: '100%', height: '100%', borderRadius: '50%', overflow: 'hidden', background: '#fff', position: 'relative' }}>
                   <div style={{ position: 'absolute', inset: 0, backgroundImage: `url(/assets/images/about/${m[3]})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
                 </div>
               </div>
-              <div style={{ fontSize: '11px', letterSpacing: '1px', color: '#8a94a6', marginTop: '16px', textTransform: 'uppercase', fontWeight: 700 }}>{t(m[0])}</div>
+              <div style={{ fontSize: '11px', letterSpacing: '1px', color: '#657085', marginTop: '16px', textTransform: 'uppercase', fontWeight: 700 }}>{t(m[0])}</div>
               <div style={{ fontSize: '15px', fontWeight: 600, color: '#0f1729', marginTop: '6px', lineHeight: 1.3 }}>{t(m[1])}</div>
             </div>
           );

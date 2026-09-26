@@ -55,6 +55,20 @@ html[dir="rtl"] .tSpine{left:auto;right:26px;}
   .grid5{grid-template-columns:1fr 1fr !important;}.grid6{grid-template-columns:1fr 1fr 1fr !important;}
   .aw-grid{grid-template-columns:1fr 1fr !important;}
 }
+/* The fixed spine nav (left:26px, ~24px wide) sat on top of the copy
+   wherever the 1180px content column reaches the viewport edge (<1300px):
+   give the sections a gutter on the spine's side there. */
+@media (min-width:901px) and (max-width:1299px){
+  html:not([dir="rtl"]) .tsec{padding-left:76px !important;}
+  html[dir="rtl"] .tsec{padding-right:76px !important;}
+}
+/* Two of the three floating stat cards sit over the corners of the TEXT
+   column. That only clears the role/name/tags when the scene is wide and tall
+   (>=1440x800); on laptops / zoomed desktops the copy grows into them, so there
+   they are dropped and only the card on the portrait side remains. */
+@media (min-width:901px) and (max-width:1439px), (min-width:901px) and (max-height:800px){
+  .cardWrap .fcard.fc-text-side{display:none;}
+}
 @media (max-width:560px){.grid6{grid-template-columns:1fr 1fr !important;}}
 @media (prefers-reduced-motion:reduce){.tsec .anim{opacity:1 !important;transform:none !important;}}
 

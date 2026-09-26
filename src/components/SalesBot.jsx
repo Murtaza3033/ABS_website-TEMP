@@ -1,6 +1,6 @@
 import { useReducer, useRef, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import { submitContact, validEmail } from '../lib/contactApi';
+import { submitContact, validEmail, validName } from '../lib/contactApi';
 import Turnstile from './Turnstile';
 
 // Real number only — never a placeholder. Unset until VITE_WHATSAPP_NUMBER is
@@ -99,6 +99,19 @@ export default function SalesBot() {
     }, 4000);
     return () => clearTimeout(id);
   }, [state.tipDismissed]);
+
+  // Once shown, the nudge tip gets out of the way by itself: after 7s, or as
+  // soon as the visitor scrolls, so it never sits on top of page content.
+  // (Hidden for this page view only — not a permanent dismissal.)
+  useEffect(() => {
+    if (!state.tipVisible) return undefined;
+    const hide = () => dispatch({ type: 'TIP', on: false });
+    const id = setTimeout(hide, 7000);
+    const y0 = window.scrollY;
+    const onScroll = () => { if (Math.abs(window.scrollY - y0) > 80) hide(); };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => { clearTimeout(id); window.removeEventListener('scroll', onScroll); };
+  }, [state.tipVisible]);
 
   useEffect(() => () => clearTimeout(typingTimer.current), []);
 
@@ -214,9 +227,12 @@ export default function SalesBot() {
     if (!v) return;
     const { awaiting } = stateRef.current;
     if (awaiting) {
+      // Same rule the contact form and the server apply — otherwise the lead
+      // is rejected at submit time and lost.
+      if (awaiting === 'name' && !validName(v)) { addUser(v); botSay(t('Enter a valid name (letters only).')); focusInput(); return; }
       if (awaiting === 'email' && !validEmail(v)) { addUser(v); botSay(t("Hmm, that doesn't look like a valid email — mind trying again?")); focusInput(); return; }
       addUser(v);
-      if (awaiting === 'name') { dispatch({ type: 'MERGE_DATA', data: { name: v } }); dispatch({ type: 'AWAITING', value: 'company' }); botSay(<>{tf('Nice to meet you, {name}. What company are you with?', { name: v })} <span style={{ color: '#8a94a6' }}>{t("(optional)")}</span></>, [{ label: t('Skip'), onClick: () => { addUser(t('Skip')); dispatch({ type: 'AWAITING', value: 'email' }); botSay(t("No problem. What's the best email to reach you?")); focusInput(); } }]); focusInput(); return; }
+      if (awaiting === 'name') { dispatch({ type: 'MERGE_DATA', data: { name: v } }); dispatch({ type: 'AWAITING', value: 'company' }); botSay(<>{tf('Nice to meet you, {name}. What company are you with?', { name: v })} <span style={{ color: '#657085' }}>{t("(optional)")}</span></>, [{ label: t('Skip'), onClick: () => { addUser(t('Skip')); dispatch({ type: 'AWAITING', value: 'email' }); botSay(t("No problem. What's the best email to reach you?")); focusInput(); } }]); focusInput(); return; }
       if (awaiting === 'company') { dispatch({ type: 'MERGE_DATA', data: { company: v } }); dispatch({ type: 'AWAITING', value: 'email' }); botSay(t('Got it. And the best email to reach you?')); focusInput(); return; }
       if (awaiting === 'email') { dispatch({ type: 'MERGE_DATA', data: { email: v } }); dispatch({ type: 'AWAITING', value: null }); setTimeout(askSizeOrFinish, 0); return; }
     }
@@ -242,7 +258,7 @@ export default function SalesBot() {
   };
 
   return (
-    <div className="ab-root" style={{ fontFamily: 'Outfit,system-ui,sans-serif' }}>
+    <aside className="ab-root" aria-label={t('Align Assistant')} style={{ fontFamily: 'Outfit,system-ui,sans-serif' }}>
       {/* Mounted as soon as SalesBot mounts (every page) so a token is
           typically already ready by the time a capture flow completes —
           invisible (interaction-only), takes no layout space. */}
@@ -257,7 +273,7 @@ export default function SalesBot() {
 
       {state.tipVisible && !state.open && (
         <div className="ab-tip" onClick={openBot} style={{ position: 'fixed', right: '96px', bottom: '104px', zIndex: 939, background: '#fff', color: SLATE, fontSize: '13px', fontWeight: 600, padding: '10px 14px', borderRadius: '14px', boxShadow: '0 16px 40px -18px rgba(15,23,41,.4)', border: '1px solid #eef1f6', maxWidth: '200px', cursor: 'pointer' }}>
-          {t("Need help? Chat with us")} <span style={{ color: '#8a94a6', marginLeft: '6px' }} onClick={(e) => { e.stopPropagation(); dispatch({ type: 'DISMISS_TIP' }); }}>×</span>
+          {t("Need help? Chat with us")} <span style={{ color: '#657085', marginLeft: '6px' }} onClick={(e) => { e.stopPropagation(); dispatch({ type: 'DISMISS_TIP' }); }}>×</span>
         </div>
       )}
 
@@ -300,7 +316,7 @@ export default function SalesBot() {
           </div>
 
           <div style={{ padding: '10px 12px', borderTop: '1px solid #eef1f6', background: '#fff', display: 'flex', gap: '8px', alignItems: 'center' }}>
-            <input ref={inputRef} type="text" aria-label={t('Type a message…')} placeholder={t('Type a message…')} onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); send(); } }}
+            <input ref={inputRef} type="text" maxLength={state.awaiting === 'name' ? 100 : state.awaiting === 'company' ? 150 : 200} aria-label={t('Type a message…')} placeholder={t('Type a message…')} onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); send(); } }}
               style={{ flex: 1, fontFamily: 'Outfit,sans-serif', fontSize: '14px', border: '1.5px solid #e3e9f3', borderRadius: '12px', padding: '11px 13px', outline: 'none', color: SLATE }} />
             <button aria-label={t('Send message')} onClick={send} style={{ width: '42px', height: '42px', flexShrink: 0, borderRadius: '12px', border: 'none', background: BLUE, color: '#fff', cursor: 'pointer', display: 'grid', placeItems: 'center' }}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m22 2-7 20-4-9-9-4Z" /><path d="M22 2 11 13" /></svg>
@@ -308,7 +324,7 @@ export default function SalesBot() {
           </div>
         </div>
       )}
-    </div>
+    </aside>
   );
 }
 

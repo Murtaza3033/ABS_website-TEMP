@@ -99,12 +99,12 @@ export default function ProductPage() {
 
           <div className="prodShowcaseGrid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginTop: '20px' }}>
             <div style={{ background: '#fff', border: '1px solid #eaeef5', borderRadius: '16px', padding: '18px 20px', boxShadow: '0 20px 44px -30px rgba(15,23,41,.3)' }}>
-              <div style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '.5px', color: '#8a94a6', textTransform: 'uppercase' }}>{t(meta.topSub)}</div>
+              <div style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '.5px', color: '#657085', textTransform: 'uppercase' }}>{t(meta.topSub)}</div>
               <div style={{ fontSize: '17px', fontWeight: 800, color: '#0f1729', marginTop: '6px' }}>{t(meta.topTitle)}</div>
             </div>
             <div style={{ background: '#fff', border: '1px solid #eaeef5', borderRadius: '16px', padding: '18px 20px', boxShadow: '0 20px 44px -30px rgba(15,23,41,.3)' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '.5px', color: '#8a94a6', textTransform: 'uppercase' }}>{t(meta.botLabel)}</span>
+                <span style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '.5px', color: '#657085', textTransform: 'uppercase' }}>{t(meta.botLabel)}</span>
                 <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#1a9d55' }} />
               </div>
               <div style={{ fontSize: '20px', fontWeight: 800, color: '#0f1729', marginTop: '6px' }}>{meta.botValue}</div>

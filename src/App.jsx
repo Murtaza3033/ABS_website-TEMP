@@ -4,6 +4,7 @@ import { LanguageProvider } from './context/LanguageContext';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import SalesBot from './components/SalesBot';
+import ErrorBoundary from './components/ErrorBoundary';
 import Home from './pages/Home/Home.jsx';
 import NotFound from './pages/NotFound/NotFound.jsx';
 
@@ -48,28 +49,33 @@ function ScrollToTop() {
 }
 
 export default function App() {
+  const { pathname } = useLocation();
   return (
     <LanguageProvider>
       <ScrollToTop />
       <Header />
-      {/* min-height keeps the Footer from jumping up while a page chunk loads */}
-      <Suspense fallback={<main style={{ minHeight: '100vh' }} />}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/contact-us" element={<ContactUs />} />
-          <Route path="/about-us" element={<AboutUs />} />
-          <Route path="/our-team" element={<OurTeam />} />
-          <Route path="/our-advisors" element={<OurAdvisors />} />
-          <Route path="/our-partners" element={<OurPartners />} />
-          <Route path="/our-clients" element={<OurClients />} />
-          <Route path="/industries" element={<Industries />} />
-          <Route path="/events" element={<Events />} />
-          <Route path="/careers" element={<Careers />} />
-          <Route path="/products" element={<ProductsIndex />} />
-          <Route path="/products/:slug" element={<ProductPage />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Suspense>
+      {/* The boundary sits inside the shell so Header/Footer survive a page
+          crash or a failed chunk download; it resets on navigation. */}
+      <ErrorBoundary resetKey={pathname}>
+        {/* min-height keeps the Footer from jumping up while a page chunk loads */}
+        <Suspense fallback={<main style={{ minHeight: '100vh' }} />}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/contact-us" element={<ContactUs />} />
+            <Route path="/about-us" element={<AboutUs />} />
+            <Route path="/our-team" element={<OurTeam />} />
+            <Route path="/our-advisors" element={<OurAdvisors />} />
+            <Route path="/our-partners" element={<OurPartners />} />
+            <Route path="/our-clients" element={<OurClients />} />
+            <Route path="/industries" element={<Industries />} />
+            <Route path="/events" element={<Events />} />
+            <Route path="/careers" element={<Careers />} />
+            <Route path="/products" element={<ProductsIndex />} />
+            <Route path="/products/:slug" element={<ProductPage />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
+      </ErrorBoundary>
       <Footer />
       <SalesBot />
     </LanguageProvider>
