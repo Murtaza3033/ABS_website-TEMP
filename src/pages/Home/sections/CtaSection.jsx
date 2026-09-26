@@ -1,9 +1,7 @@
-import { useHome } from '../HomeContext';
 import { useLanguage } from '../../../context/LanguageContext';
 import SmartLink from '../../../components/SmartLink';
 
 export default function CtaSection() {
-  const { c, b, act } = useHome();
   const { t } = useLanguage();
   return (
     <>

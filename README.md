@@ -1,221 +1,145 @@
-# Align Business Systems — Website (React + Vite)
+# Align Business Systems website
 
-The marketing website for **Align Business Systems** — a Pakistan‑based company that builds
-the ERP, HR and field‑force platforms (BusinessFlo, PeopleNest, Field Force) that growing
-businesses run their day‑to‑day operations on.
+Marketing site for **Align Business Systems** (BusinessFlo, PeopleNest, Field Force). It is a
+single-page app in English and Arabic (RTL). Content comes from Sanity CMS, and a Vercel
+serverless function handles the contact form and sales-bot leads.
 
-This is the **React (Vite) build** of the site. It was converted, page for page, from a
-hand‑authored static HTML/CSS/JS version (kept at `../Align_Business_Systems/`) with the goal
-of **identical appearance, animation and behavior** — a faithful structural port, not a redesign.
+## Stack
 
-- **11 routes** (Home + 10 pages), a persistent site shell (nav, footer, sales‑bot), and a
-  full **English ⇄ Arabic (RTL)** toggle.
-- Live dev preview: `npm run dev` → **http://localhost:5173**
+- **React 19** + **Vite 6**, with the React Compiler (Babel plugin, see `vite.config.js`)
+- **react-router 7**: every page except Home is a `lazy()` route chunk
+- **@tanstack/react-query** + **@sanity/client** for published CMS content (read-only in the browser)
+- **react-helmet-async** for per-page SEO tags
+- **Vercel**: static hosting plus `api/contact.js` (Node serverless function)
+- **Sanity Studio** in `studio/` (a separate npm project)
 
----
+## Folder structure
 
-## Table of contents
-1. [Tech stack](#tech-stack)
-2. [Running locally](#running-locally)
-3. [Brand system](#brand-system)
-4. [Pages](#pages)
-5. [Shared shell (Header / Footer / Sales‑bot / Language)](#shared-shell)
-6. [Bilingual / RTL](#bilingual--rtl)
-7. [Sales chatbot](#sales-chatbot)
-8. [Project structure](#project-structure)
-9. [How the conversion works (architecture)](#how-the-conversion-works-architecture)
-10. [Assets & images](#assets--images)
-11. [Notable decisions & gotchas](#notable-decisions--gotchas)
-12. [Relationship to the other folders](#relationship-to-the-other-folders)
-13. [Follow‑ups / roadmap](#follow-ups--roadmap)
+```
+.
+├── api/                  Vercel serverless functions
+│   ├── contact.js        POST /api/contact (contact form + sales-bot leads)
+│   └── _lib/             helpers (CORS, Turnstile, rate limit, email, Sanity write)
+├── docs/                 guides, QA report, content sheets (see docs/README.md)
+├── public/               static files served as-is (images, robots.txt, sitemap.xml)
+├── src/
+│   ├── main.jsx          entry: providers; waits for the Arabic dictionary if Arabic is stored
+│   ├── App.jsx           routes + global CSS imports (order matters)
+│   ├── assets/           bundled images
+│   ├── components/       site shell and shared components (Header, Footer, SalesBot, SEO, ...)
+│   ├── context/          LanguageContext (t(), lang, dir)
+│   ├── hooks/useCms.js   react-query hooks for Sanity content
+│   ├── i18n/
+│   │   ├── ar.js         Arabic dictionary (English source string -> Arabic)
+│   │   └── translator.js lazy dictionary loader, Arabic font, tr()
+│   ├── lib/              Sanity client, GROQ queries, adapters, contact API client
+│   ├── pages/<Page>/     one folder per route: <Page>.jsx, sub-components, <page>Data.(js|jsx)
+│   │   └── Home/sections/hero/   per-product hero mockups
+│   └── styles/           all CSS (one sheet per page + shared.css + i18n.css)
+├── studio/               Sanity Studio + content scripts (see studio/README.md)
+├── eslint.config.js
+├── index.html
+├── vercel.json           .html redirects + SPA rewrite
+└── vite.config.js
+```
 
----
+All CSS is imported once, eagerly, in `src/App.jsx`. Page sheets share global class names, so
+the import order decides the cascade: keep it as is, and keep `shared.css` and `i18n.css` last.
+Don't import CSS from page components.
 
-## Tech stack
-| | |
-|---|---|
-| **Framework** | React 19 |
-| **Build tool** | Vite 6 (`@vitejs/plugin-react`) — esbuild (dev) + Rollup (build) |
-| **Routing** | `react-router-dom` 7 (`BrowserRouter`) |
-| **Language/RTL** | React Context + a small i18n layer (no external i18n lib) |
-| **Styling** | Plain CSS (per‑page stylesheets + one shared stylesheet), no CSS framework |
-| **Fonts** | Google Fonts — Outfit + Caveat (Latin), Cairo (loaded at runtime for Arabic) |
-| **Dependencies** | **Only** `react`, `react-dom`, `react-router-dom` at runtime |
+## Setup
 
-> **Toolchain note:** `create-vite` currently scaffolds the bleeding‑edge Vite 8 (Rolldown),
-> whose Windows native binary failed to load here. This project is intentionally pinned to the
-> **stable Vite 6 + `@vitejs/plugin-react` 4**.
+Requires **Node.js 20 or newer** (`.nvmrc` pins 24, the version used in development).
 
-## Running locally
 ```bash
-npm install          # install dependencies
-npm run dev          # start the dev server → http://localhost:5173
-npm run build        # production build → dist/
-npm run preview      # serve the production build locally
+npm install
+cp .env.example .env      # then fill in values
+npm run dev               # http://localhost:5173
 ```
-No environment variables or backend are required — it's a fully static front‑end.
 
-## Brand system
-**Fonts** — Outfit (UI/body & headings), Caveat (handwritten accents), Cairo (Arabic, runtime‑loaded).
+The site runs without the API: in `npm run dev`, `/api/contact` isn't served, so form
+submissions fail. Use `vercel dev` to run the function locally.
 
-**Colors**
+## Scripts
 
-| Token | Value | Use |
+| Command | What it does |
+|---|---|
+| `npm run dev` | Vite dev server with HMR on http://localhost:5173 |
+| `npm run build` | Production build into `dist/` |
+| `npm run preview` | Serves `dist/` locally (http://localhost:4173) |
+| `npm run lint` | ESLint (`src/`, `api/`, root config files; `studio/` has its own config) |
+
+## Environment variables
+
+Copy `.env.example` to `.env`. `VITE_*` values are compiled into the public bundle, so never put
+a secret in one. The others are read only by `api/` and must also be set in Vercel.
+
+| Variable | Used by | Purpose |
 |---|---|---|
-| Primary Blue | `rgb(26, 86, 219)` | primary actions, links, accents |
-| Dark Slate | `rgb(15, 23, 41)` | dark sections, ink text |
-| Light Tint | `rgb(247, 250, 255)` | soft section backgrounds |
-| Pure White | `#ffffff` | base background |
+| `VITE_SANITY_PROJECT_ID` | frontend | Sanity project to read published content from |
+| `VITE_SANITY_DATASET` | frontend | Dataset (default `production`) |
+| `VITE_SANITY_API_VERSION` | frontend | Sanity API date (default `2024-01-01`) |
+| `VITE_SITE_URL` | frontend, sitemap script | Canonical origin, no trailing slash. Empty = no canonical tags, sitemap skipped |
+| `VITE_TURNSTILE_SITE_KEY` | frontend | Cloudflare Turnstile public key. Empty = widget not rendered |
+| `VITE_WHATSAPP_NUMBER` | frontend | Sales-bot WhatsApp hand-off, digits only. Empty = hidden |
+| `SANITY_PROJECT_ID`, `SANITY_DATASET` | API | Where leads are stored (fall back to `SANITY_STUDIO_*`) |
+| `SANITY_WRITE_TOKEN` | API | **Secret.** Sanity token with write access |
+| `ALLOWED_ORIGIN` | API | Production origin allowed to POST `/api/contact` (CORS) |
+| `TURNSTILE_SECRET_KEY` | API | **Secret.** Turnstile verification. Empty = skipped |
+| `RESEND_API_KEY` | API | **Secret.** Resend key for notification emails. Empty = no email (lead still stored) |
+| `CONTACT_FROM_EMAIL` | API | Verified sender address |
+| `SALES_EMAIL`, `TALENT_EMAIL`, `DEFAULT_NOTIFY_EMAIL` | API | Notification recipients (sales, careers, fallback) |
+| `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | API | Per-IP rate limiting (token is secret). Empty = skipped |
 
-Tokens live as CSS custom properties (`--blue`, `--slate`, `--tint`, …) in the shared stylesheet
-and are reused across every page.
+## Sanity Studio
 
-## Pages
-All routes match the original site's URLs.
+The CMS schema and content scripts live in `studio/` (project `5knwlrie`, dataset `production`).
 
-| Route | Page | Highlights |
-|---|---|---|
-| `/` | **Home** | Live product switcher (BusinessFlo / PeopleNest / Field Force) with per‑product dashboard mockups + live clock; client mosaic; "How we think"; problems→aligned; product tabs; services orbit + carousel + modal; industry tabs; CTA |
-| `/contact-us` | **Contact Us** | Four‑state reach‑us flow (quick chat ↔ classic form ↔ done); country‑code phone with per‑country digit validation; pan/zoom presence map; contact cards |
-| `/about-us` | **About Us** | Journey milestones, stats, recognition gallery, sliding "what we build" carousel, network hub |
-| `/our-team` | **Our Team** | Dark theme; particle‑network canvas backdrop; scroll‑drawn spine + spine nav; four leadership scenes; count‑up stats; "The Align Way" culture |
-| `/our-advisors` | **Our Advisors** | Aurora hero + word‑reveal; orbiting‑hub avatar; six Areas of Guidance (3D tilt + index numbers); dark "why" band; scroll‑drawn timeline |
-| `/our-partners` | **Our Partners** | Network‑constellation canvas hero; "value flowing both ways" duotone card; featured partner; 6‑benefit drag carousel with autoplay progress |
-| `/our-clients` | **Our Clients** | Dot‑field hero + word‑reveal + count‑up; floating logo wall with **industry filter**; six‑industry convergence graphic; dark by‑the‑numbers band |
-| `/industries` | **Industries** — *nav label "Our Presence"* | Photo‑montage hero; 6‑tab auto‑rotating showcase (Ken‑Burns + parallax, per‑industry modules/stats); clickable convergence map |
-| `/events` | **Events** | Photo‑montage hero; interactive gallery + full‑screen lightbox (keyboard/click nav); "why we show up" cards; upcoming band |
-| `/careers` | **Careers** | Word‑reveal hero + live "open roles" stat; culture cards; filterable open‑roles accordion; "how hiring works" timeline |
-
-> **Naming note:** the file/route is `industries` but its nav label is **"Our Presence."** The
-> filename is kept as‑is (renaming would touch every internal link) — documented rather than renamed.
-
-## Shared shell
-Rendered once in `App.jsx`, **outside** `<Routes>`, so they persist across navigation without
-re‑mounting:
-
-- **`Header`** — logo, the three mega‑menu dropdowns (Company / Products / Resources), the
-  top‑level links (Our Presence, About Us, Clients, Contact Us), the apps icon, the language
-  toggle, and "Book a Demo"; plus a mobile burger + slide‑in menu, an `is‑scrolled` state, and
-  active‑link highlighting.
-- **`Footer`** — brand + contact block, Company / Products / Resources link columns, feature
-  row, socials, legal; scroll‑reveal on view.
-- **`SalesBot`** — the floating "Align Assistant" chat widget.
-- **`LanguageToggle`** — the EN / عربي pill.
-- **`SmartLink`** — routing helper: internal `.html`‑style hrefs → React Router `<Link>`
-  (with the nav active‑highlight), external / `mailto:` / `tel:` / `#` → plain `<a>`.
-- **`ScrollToTop`** — the back‑to‑top button.
-
-## Bilingual / RTL
-`LanguageContext` holds the current language, persists it to `localStorage`, and drives a small
-i18n layer that:
-- sets `dir="rtl"` / `lang="ar"` on `<html>` so the **whole app mirrors** (not just the nav),
-- loads the **Cairo** Arabic font on demand,
-- injects an RTL CSS layer (e.g. the sales‑bot moves to the bottom‑left in Arabic),
-- swaps known English strings → Arabic (a placeholder dictionary — see roadmap) and flips
-  directional arrow glyphs,
-- re‑applies across route changes / React re‑renders via a `MutationObserver`.
-
-The toggle state is global (Context), so it persists as you navigate between pages.
-
-## Sales chatbot
-A self‑contained assistant with a full conversation engine: greeting → main menu → product menu,
-a 10‑item FAQ, lead capture (name / company / email / company‑size), and a human‑handoff panel
-with email / call / WhatsApp / careers channels and socials. Open/close state + captured details
-persist in `localStorage`.
-
-## Project structure
-```
-Align_Business_Systems-react/
-├── index.html                 # #root + Outfit/Caveat font links
-├── vite.config.js
-├── package.json
-├── public/
-│   └── assets/images/         # logos/ icons/ clients/ team/ about/ industries/ services/ careers/ contact/ events/
-└── src/
-    ├── main.jsx               # createRoot → <BrowserRouter><App/></BrowserRouter>
-    ├── App.jsx                # LanguageProvider + Header + <Routes> + Footer + SalesBot
-    ├── context/
-    │   └── LanguageContext.jsx
-    ├── lib/
-    │   ├── i18n.js            # Arabic dictionary + dir/RTL layer + text swap
-    │   └── salesBot.js        # the chat engine (mounted by SalesBot.jsx)
-    ├── components/
-    │   ├── Header.jsx  Footer.jsx  SalesBot.jsx  LanguageToggle.jsx  SmartLink.jsx
-    ├── pages/
-    │   ├── Home.jsx           # each page = component + its extracted markup + ported runtime
-    │   ├── index.body.html    #   (the exact page markup, imported ?raw)
-    │   ├── index.runtime.js   #   (the page's interactions, ported with full teardown)
-    │   ├── ContactUs.jsx / contact-us.body.html / contact-us.runtime.js
-    │   ├── AboutUs.jsx / …    ├── OurTeam.jsx / … ├── OurAdvisors.jsx / …
-    │   ├── OurPartners.jsx / …├── OurClients.jsx / … ├── Industries.jsx / …
-    │   ├── Events.jsx / …     └── Careers.jsx / …
-    └── styles/
-        ├── shared.css         # brand tokens, base reset, nav/footer/bot styles, keyframes
-        └── home.css / contact-us.css / about-us.css / … (one per page)
+```bash
+cd studio
+npm install
+cp .env.example .env     # SANITY_STUDIO_PROJECT_ID / _DATASET, plus SANITY_WRITE_TOKEN for writes
+npm run dev              # Studio on http://localhost:3333
 ```
 
-## How the conversion works (architecture)
-This build prioritizes **exact fidelity** to the static original. Each page is a thin React
-component that:
+| Command (in `studio/`) | What it does |
+|---|---|
+| `npm run seed:dry-run` | Shows the documents the seed would write. Writes nothing |
+| `npm run seed` | Writes seed content to Sanity (needs `SANITY_WRITE_TOKEN`) |
+| `npm run upload-assets:dry-run` | Shows which local images would be uploaded. Writes nothing |
+| `npm run upload-assets` | Uploads images and patches documents (needs `SANITY_WRITE_TOKEN`) |
+| `npm run generate:sitemap` | Writes `public/sitemap.xml` + `public/robots.txt` from the root `.env` (skips if `VITE_SITE_URL` is empty) |
+| `npm run build` | Builds the Studio into `studio/dist/` |
 
-1. **renders the page's exact markup** (extracted from the static HTML and imported as a raw
-   string), and
-2. **runs the page's ported interaction runtime inside a `useEffect`**, returning a **teardown**
-   that cancels *every* `setInterval` / `setTimeout` / `requestAnimationFrame` / event listener it
-   created — so navigating away leaves nothing running (no leaks, no duplicate animation loops).
+See `studio/README.md` for details.
 
-The obsolete static‑only `fetch('/shared-assets.html')` include was removed — the shell is real
-React components now. This yields byte‑identical visuals and behavior for the intricate pieces
-(the product dashboards, the particle/constellation canvases, the contact state‑machine, the
-gallery/lightbox) without the risk of re‑implementing them from scratch.
+## Deployment (Vercel)
 
-A couple of small, general mechanisms make this robust in a single‑page app:
-- **Per‑route `<body>` background.** Page CSS `html,body{background:…}` rules are global in an SPA,
-  so each page sets its own body background on mount and restores it on unmount (this is why
-  Our Team is correctly dark while the rest are light).
-- **Full‑content extraction.** Some pages wrap `<main>` in decorative backdrops (Our Team's dark
-  wrapper + particle canvas + spine; Events' lightbox) that live *outside* `<main>`; the whole
-  page content between the shell placeholders is captured, not just `<main>`.
+1. Import the repo in Vercel. Framework preset: **Vite** (build `npm run build`, output `dist`).
+   Set the Node.js version to match `.nvmrc`.
+2. Add every variable from the table above under **Project > Settings > Environment Variables**.
+   Required for the contact form in production: `ALLOWED_ORIGIN`, `SANITY_WRITE_TOKEN`,
+   `SANITY_PROJECT_ID`, `SANITY_DATASET`. Recommended: `VITE_TURNSTILE_SITE_KEY` +
+   `TURNSTILE_SECRET_KEY` (bot protection), `RESEND_API_KEY` + `CONTACT_FROM_EMAIL` + recipient
+   addresses (email alerts), and the Upstash pair (rate limiting).
+3. `VITE_*` values are baked in at build time: redeploy after changing them.
 
-> A fully **component‑decomposed, idiomatic** rebuild (Home → `ProductSwitcher`/`ServicesOrbit`/…,
-> Our Team → `ParticleCanvas`/`LeadershipScene`/…, shared `Card`/`Carousel`/`useScrollReveal`, etc.)
-> is planned as a separate effort. See roadmap.
+`vercel.json` redirects the old `*.html` URLs and rewrites every non-file, non-API path to
+`index.html` so client-side routes work on reload.
 
-## Assets & images
-All imagery is served from `public/assets/images/` under stable folders — `logos/`, `icons/`,
-`clients/`, `team/`, `about/`, `industries/`, `services/`, `careers/`, `contact/`, `events/`.
-Serving from `public/` (rather than per‑image `import`s) keeps every path working unchanged —
-including the many paths the page runtimes build **dynamically in JavaScript**
-(e.g. `'/assets/images/services/' + name + '.png'`), which can't be import‑bundled.
+## i18n (Arabic)
 
-## Notable decisions & gotchas
-- **No `React.StrictMode`.** Its dev‑only double‑invoke would double‑initialize the imperative
-  page runtimes (dashboards, canvases). Effects still clean up fully; only the dev double‑mount
-  behavior is affected.
-- **Vite pinned to 6.x** (see toolchain note above).
-- **Headless screenshots of the canvas pages** (Our Team, Our Partners) are flaky because of their
-  continuous `requestAnimationFrame` loops — a tooling quirk, not a site issue.
-- **CRA default assets dropped.** The generic React `favicon`/`logo` placeholders are not real
-  Align branding (see roadmap).
+- UI text is written in English and wrapped in `t()` from `useLanguage()`
+  (`src/context/LanguageContext.jsx`). The English string itself is the key.
+- **To add or change a translation**, add an entry to the `AR` object in `src/i18n/ar.js`:
+  `'Exact English text': 'النص العربي',`. The key must match the English string exactly;
+  missing keys fall back to English.
+- `ar.js` is loaded on demand as its own file, so English visitors never download it. The
+  choice is stored in `localStorage.alignLang`. RTL layout fixes live in `src/styles/i18n.css`.
+- CMS content has its own `{en, ar}` fields, edited in the Studio.
+- `studio/scripts/seed.mjs` also imports `src/i18n/ar.js` to seed Arabic fields.
 
-## Relationship to the other folders
-- `../Align_Business_Systems/` — the **static HTML/CSS/JS** site this build was converted from
-  (source of truth for markup, styles and behavior; served with its own `static-server.js`).
-- `../Align_Business_Systems-react/` — **this** React build.
-- (A legacy Create‑React‑App scaffold from an earlier, abandoned attempt was archived separately
-  and is unrelated to this build.)
+## QA
 
-## Follow‑ups / roadmap
-- **Arabic translations** — the current AR dictionary is a **placeholder**; replace with
-  professional translations (brand/product names, emails, phone numbers and the tech stack are
-  intentionally left in Latin script).
-- **Real favicon / icons** to replace the dropped CRA placeholders.
-- **Idiomatic component decomposition** — break each page into small reusable components with
-  `useState`/`useReducer`/custom hooks (a full plan exists), if a more maintainable architecture is
-  wanted over the current fidelity‑first port.
-- **Wire the chatbot lead capture** to a real CRM/endpoint (currently flagged `TODO` in the UI).
-
----
-
-*Built for identical parity with the static original — same look, same motion, same behavior,
-now on React + Vite.*
+The QA report (test cases, change log, owner actions) is `docs/qa/ABS-QA-Report.xlsx`.
+See `docs/README.md` for the other documents.

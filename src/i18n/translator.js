@@ -1,14 +1,14 @@
 /* Lazy Arabic dictionary + Arabic webfont + the pure translator.
-   The dictionary (lib/translations.js) is fetched the first time Arabic is
+   The dictionary (i18n/ar.js) is fetched the first time Arabic is
    needed, so English first paint never waits on it.
 
    It is imported by URL (`?url` makes Vite emit it as its own hashed file)
-   rather than as a bundled `import('./translations')` chunk because browsers
+   rather than as a bundled `import('./ar')` chunk because browsers
    cache a FAILED dynamic import per URL for the life of the page: after one
    network blip, retrying the same import() rejects instantly without a new
    request. Owning the URL lets a retry add a cache-busting query, which is a
    new module-map entry and therefore a real re-fetch. */
-import dictUrl from './translations.js?url';
+import dictUrl from './ar.js?url';
 
 let AR = null;
 let pending = null;

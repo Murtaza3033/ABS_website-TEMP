@@ -3,7 +3,7 @@ import { useLanguage } from '../../../context/LanguageContext';
 import SmartLink from '../../../components/SmartLink';
 
 export default function ProblemsSection() {
-  const { c, b, act, state } = useHome();
+  const { b, act, state } = useHome();
   const { t } = useLanguage();
   const scrollRegion = useScrollRegionProps(t('Scrollable preview'));
   const on = state.probOn;

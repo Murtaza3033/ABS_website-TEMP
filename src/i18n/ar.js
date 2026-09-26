@@ -1,5 +1,5 @@
 /* Arabic translation dictionary (placeholder — swap for professional translations).
-   Keyed by the exact English source string. Loaded on demand by lib/arabic.js
+   Keyed by the exact English source string. Loaded on demand by i18n/translator.js
    (its own file, so English visitors never download it). */
 
 export const AR = {
@@ -114,7 +114,7 @@ export const AR = {
   "Approvals, payroll, field visits, mismatched tools — the daily friction of a growing business. Watch what happens to that journey with Align, and without it.": "الموافقات والرواتب والزيارات الميدانية والأدوات غير المتوافقة — الاحتكاك اليومي لأي عمل نامٍ. شاهد ما يحدث لتلك الرحلة مع Align وبدونه.",
   "From factory floors to pharmacies to solar rooftops — the businesses that trust us span the breadth of how the country actually works.": "من أرضيات المصانع إلى الصيدليات إلى أسطح الطاقة الشمسية — الأعمال التي تثق بنا تمتد عبر كامل طريقة عمل البلد فعلياً.",
   "Align Business Systems is a product & software company. We design, build, deploy and support the systems that run your operations — one accountable team from first call to daily use.": "Align Business Systems شركة منتجات وبرمجيات. نصمّم ونبني وننشر وندعم الأنظمة التي تُشغّل عملياتك — فريق واحد مسؤول من أول اتصال إلى الاستخدام اليومي.",
-  "start the conversation.": "لنبدأ الحوار.",
+  "start the conversation.": "الحوار.",
   "Tell us what you're working with today and we'll show you what Align can do for your operations — however you prefer to reach us.": "أخبرنا بما تعمل عليه اليوم وسنُريك ما يمكن أن يقدّمه Align لعملياتك — بالطريقة التي تفضّلها للتواصل معنا.",
   "How would you like to reach us?": "كيف تودّ الوصول إلينا؟",
   "Pick whichever feels easier — same result either way.": "اختر ما تراه أسهل — النتيجة واحدة في الحالتين.",

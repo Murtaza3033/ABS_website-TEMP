@@ -1,8 +1,6 @@
-import { useHome } from '../HomeContext';
 import { useLanguage } from '../../../context/LanguageContext';
 
 export default function HowWeThinkSection() {
-  const { c, b, act } = useHome();
   const { t } = useLanguage();
   return (
     <>

@@ -3,7 +3,7 @@ import { useLanguage } from '../../../context/LanguageContext';
 import SmartLink from '../../../components/SmartLink';
 
 export default function IndustriesSection() {
-  const { c, b, act, state } = useHome();
+  const { act, state } = useHome();
   const { t } = useLanguage();
   return (
     <>

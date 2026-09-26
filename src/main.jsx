@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { HelmetProvider } from 'react-helmet-async';
 import App from './App.jsx';
 import { storedLang } from './context/LanguageContext';
-import { loadArabic } from './lib/arabic';
+import { loadArabic } from './i18n/translator';
 import { reloadOnceForChunkError } from './lib/chunkReload';
 import ErrorBoundary from './components/ErrorBoundary';
 

@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, useRef } from 'react';
-import { tr, loadArabic, arabicReady, ensureArabicFont } from '../lib/arabic';
+import { tr, loadArabic, arabicReady, ensureArabicFont } from '../i18n/translator';
 
 /* Language state + a React-driven translator: components call t(text) and
    render the correct string directly. The only side effect is setting

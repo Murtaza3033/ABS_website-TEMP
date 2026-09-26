@@ -34,3 +34,13 @@ graphify-out/
 .claude/settings.json
 .claude/settings.json.graphify-bak
 .vercel
+
+# Office lock files and OS junk
+~$*
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Tooling caches
+.eslintcache
+coverage

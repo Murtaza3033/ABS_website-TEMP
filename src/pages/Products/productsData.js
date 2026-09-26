@@ -10,7 +10,7 @@ export const PRODMETA = [
 ];
 
 /* Same literal copy seeded into Sanity's `product` documents (sourced from
-   Header.jsx's mega-menu descriptions + translations.js's full sentences),
+   Header.jsx's mega-menu descriptions + i18n/ar.js's full sentences),
    mirrored here as the safe fallback if the CMS is unreachable or empty. */
 export const FALLBACK_PRODUCTS = [
   {

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Seed / import script — migrates the existing hard-coded website content
- * (src/pages/**\/*Data.jsx, src/lib/translations.js, Header.jsx, Footer.jsx)
+ * (src/pages/**\/*Data.jsx, src/i18n/ar.js, Header.jsx, Footer.jsx)
  * into Sanity as real CMS documents.
  *
  * Safe & idempotent: every document below has a fixed, deterministic `_id`
@@ -38,7 +38,7 @@ import {config as loadEnv} from 'dotenv'
 import {fileURLToPath} from 'node:url'
 import path from 'node:path'
 import {createClient} from '@sanity/client'
-import {AR} from '../../src/lib/translations.js'
+import {AR} from '../../src/i18n/ar.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 loadEnv({path: path.join(__dirname, '..', '.env')})
@@ -72,7 +72,7 @@ const client = createClient({
 // Bilingual + Portable Text helpers
 // ---------------------------------------------------------------------------
 
-/** English -> Arabic via the site's own translations.js dictionary, exact-key
+/** English -> Arabic via the site's own src/i18n/ar.js dictionary, exact-key
  *  match only (mirrors tr()'s lookup). Falls back to English when missing. */
 function arFor(en) {
   return Object.prototype.hasOwnProperty.call(AR, en) ? AR[en] : en
@@ -347,7 +347,7 @@ const footerDoc = {
 
 // ---------------------------------------------------------------------------
 // products — from aboutData.jsx (PRODMETA) + Header.jsx mega-menu copy +
-// translations.js (full descriptions)
+// src/i18n/ar.js (full descriptions)
 // ---------------------------------------------------------------------------
 
 const productDocs = [

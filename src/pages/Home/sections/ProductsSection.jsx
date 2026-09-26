@@ -2,7 +2,7 @@ import { useHome, pressable } from '../HomeContext';
 import { useLanguage } from '../../../context/LanguageContext';
 
 export default function ProductsSection() {
-  const { c, b, act, state } = useHome();
+  const { act, state } = useHome();
   const { t } = useLanguage();
   return (
     <>
