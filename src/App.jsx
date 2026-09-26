@@ -41,10 +41,11 @@ const ProductPage = lazy(() => import('./pages/Products/ProductPage.jsx'));
 
 // React Router doesn't reset scroll position on navigation by default —
 // without this, clicking a nav link mid-scroll on one page lands the new
-// page at that same scroll depth instead of the top.
+// page at that same scroll depth instead of the top. Keyed on location.key so
+// a link to the current page also scrolls up; hash links keep their target.
 function ScrollToTop() {
-  const { pathname } = useLocation();
-  useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
+  const { key, hash } = useLocation();
+  useEffect(() => { if (!hash) window.scrollTo(0, 0); }, [key, hash]);
   return null;
 }
 
