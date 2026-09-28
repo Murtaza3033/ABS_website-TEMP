@@ -4,6 +4,14 @@ export default defineType({
   name: 'product',
   title: 'Product',
   type: 'document',
+  fieldsets: [
+    {
+      name: 'hero',
+      title: 'Home page hero',
+      description: 'Text shown when this product is selected in the home page hero switcher.',
+      options: {collapsible: true, collapsed: false},
+    },
+  ],
   fields: [
     defineField({
       name: 'name',
@@ -17,6 +25,35 @@ export default defineType({
       type: 'slug',
       options: {source: 'name.en', maxLength: 96},
       validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'heroTitle',
+      title: 'Hero headline',
+      description: 'First part of the headline, in dark text (e.g. "Go 100% paperless.").',
+      type: 'localeString',
+      fieldset: 'hero',
+    }),
+    defineField({
+      name: 'heroHighlight',
+      title: 'Hero headline — highlighted part',
+      description: 'Second part of the headline, shown in blue (e.g. "Transform your operations.").',
+      type: 'localeString',
+      fieldset: 'hero',
+    }),
+    defineField({
+      name: 'heroText',
+      title: 'Hero paragraph',
+      type: 'localeText',
+      fieldset: 'hero',
+    }),
+    defineField({
+      name: 'heroImage',
+      title: 'Hero screenshot',
+      description:
+        'Only used for products without an interactive demo (HMSflo). Wide dashboard screenshot, about 2080×1160.',
+      type: 'image',
+      fieldset: 'hero',
+      fields: [defineField({name: 'alt', title: 'Alt text', type: 'localeString'})],
     }),
     defineField({name: 'tagline', title: 'Tagline', type: 'localeText'}),
     defineField({name: 'description', title: 'Description', type: 'localeBlock'}),
