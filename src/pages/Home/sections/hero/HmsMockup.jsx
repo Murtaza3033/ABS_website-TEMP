@@ -448,19 +448,29 @@ function ErCard() {
   );
 }
 
-const Anno = ({ text, sub, style, arrow }) => (
+/* Hand-drawn note (text only); its arrow is a separate <Curve> so the tip can
+   be pinned to the exact element it points at. */
+const Anno = ({ text, sub, style }) => (
   <div className="hm-annotate" style={{ position: 'absolute', zIndex: 60, pointerEvents: 'none', ...style }}>
     <div style={{ fontFamily: 'Caveat,cursive', fontWeight: 700, fontSize: '28px', letterSpacing: '.4px', color: '#1a56db', lineHeight: 1.05 }}>{text}</div>
     {sub && <div style={{ fontFamily: 'Outfit,sans-serif', fontSize: '12px', fontWeight: 500, color: '#1a56db', lineHeight: 1.35, marginTop: '3px' }}>{sub}</div>}
-    {arrow}
   </div>
 );
-const arrowPath = (d, head, w, h, style) => (
-  <svg className="anno-arrow" width={w} height={h} viewBox={`0 0 ${w} ${h}`} fill="none" style={{ display: 'block', ...style }}>
-    <path d={d} pathLength="240" stroke="#1a56db" strokeWidth="5" fill="none" strokeLinecap="round" strokeLinejoin="round" style={{ strokeDasharray: '240', animation: 'drawCurve 2.6s ease-in-out infinite' }} />
-    <path d={head} stroke="#1a56db" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" style={{ animation: 'drawHead 2.6s ease-in-out infinite' }} />
-  </svg>
-);
+/* Cubic arrow [start, c1, c2, end] in its own w×h box, positioned so `end`
+   lands on `tip` (frame coords). The head follows the curve's end tangent;
+   RTL mirrors both the position (inline-start) and the drawing (.anno-arrow). */
+const Curve = ({ tip, pts, w, h }) => {
+  const [s, c1, c2, e] = pts;
+  const a = Math.atan2(e[1] - c2[1], e[0] - c2[0]);
+  const hd = (o) => `${(e[0] - 15 * Math.cos(a + o)).toFixed(1)} ${(e[1] - 15 * Math.sin(a + o)).toFixed(1)}`;
+  return (
+    <svg className="anno-arrow hm-annotate" width={w} height={h} viewBox={`0 0 ${w} ${h}`} fill="none"
+      style={{ position: 'absolute', insetInlineStart: `${tip[0] - e[0]}px`, top: `${tip[1] - e[1]}px`, zIndex: 60, pointerEvents: 'none', overflow: 'visible' }}>
+      <path d={`M${s} C${c1} ${c2} ${e}`} pathLength="240" stroke="#1a56db" strokeWidth="5" fill="none" strokeLinecap="round" strokeLinejoin="round" style={{ strokeDasharray: '240', animation: 'drawCurve 2.6s ease-in-out infinite' }} />
+      <path d={`M${hd(-0.5)} L${e[0]} ${e[1]} L${hd(0.5)}`} stroke="#1a56db" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" style={{ animation: 'drawHead 2.6s ease-in-out infinite' }} />
+    </svg>
+  );
+};
 
 const SCREENS = [['pt', 'Patients', 'HMPT', IC.users], ['co', 'Consultants', 'HMCO', IC.steth], ['ap', 'Appointments', 'OPAP', IC.cal]];
 
@@ -664,12 +674,15 @@ export default function HmsMockup({ scrollRegion }) {
 
   return (
     <div className="hm-float-wrap hms-demo" onMouseEnter={() => { hover.current = true; }} onMouseLeave={() => { hover.current = false; }} style={{ position: 'relative', animation: 'slideInR .55s cubic-bezier(.2,.7,.3,1) both' }}>
-      <Anno text={t('Live OPD queue')} sub={t('Call the next token in one tap')} style={{ top: '-112px', insetInlineEnd: '300px', width: '230px', textAlign: 'end' }}
-        arrow={arrowPath('M8 8 C 40 6, 70 14, 92 34', 'M92 34 L 76 32 M92 34 L 90 18', 100, 44, { marginInlineStart: 'auto', marginInlineEnd: '-66px', marginTop: '2px' })} />
-      <Anno text={t('switch screens')} style={{ top: '52px', insetInlineStart: '-168px', width: '146px', textAlign: 'center' }}
-        arrow={arrowPath('M8 12 C 44 18, 98 30, 138 46', 'M138 46 L 122 48 M138 46 L 130 32', 146, 56, { margin: '4px 0 0 auto' })} />
-      <Anno text={t('tap to triage')} style={{ top: '372px', insetInlineStart: '-168px', width: '146px', textAlign: 'center' }}
-        arrow={arrowPath('M8 12 C 44 20, 98 34, 138 56', 'M138 56 L 122 58 M138 56 L 130 42', 146, 64, { margin: '4px 0 0 auto' })} />
+      {/* Tips are pinned to measured targets in the 1040×580 frame: queue card
+          left edge (x 802), sidebar "Consultants" item (13, 187), first ER case
+          row (card edge x −26, row centre y 426). */}
+      <Anno text={t('Live OPD queue')} sub={t('Call the next token in one tap')} style={{ top: '-112px', insetInlineEnd: '300px', width: '230px', textAlign: 'end' }} />
+      <Curve tip={[795, -66]} w={56} h={32} pts={[[4, 8], [20, 4], [38, 10], [50, 26]]} />
+      <Anno text={t('switch screens')} style={{ top: '83px', insetInlineStart: '-176px', width: '150px', textAlign: 'center' }} />
+      <Curve tip={[8, 187]} w={120} h={56} pts={[[4, 6], [40, 2], [84, 20], [114, 46]]} />
+      <Anno text={t('tap to triage')} style={{ top: '326px', insetInlineStart: '-178px', width: '140px', textAlign: 'center' }} />
+      <Curve tip={[-32, 426]} w={110} h={52} pts={[[4, 6], [34, 2], [76, 18], [104, 44]]} />
 
       <div className="hm-scale-scroll-wrap hm-float-main" {...scrollRegion} style={{ '--hm-w': '1040px', '--hm-h': '580px' }}>
         <div className="hm-scale-scroll" style={{ position: 'relative', isolation: 'isolate', display: 'flex', height: '580px', background: '#f4f6fa', border: '1px solid #e7ecf5', borderRadius: '16px', boxShadow: '0 50px 100px -40px rgba(15,23,41,.35)', overflow: 'hidden', color: '#1a1d23', fontSize: '12px', lineHeight: 1.4, textAlign: 'start' }}>
