@@ -179,7 +179,7 @@ export default function Industries() {
           <DataReveal className="ind-trustline">
             <span><b><CountUp end={6} duration={1300} /></b> {t("industries")}</span>
             <span className="tdot" />
-            <span><b><CountUp end={20} duration={1300} /></b>{t("+ businesses")}</span>
+            <span><b><CountUp end={50} duration={1300} /></b>{t("+ businesses")}</span>
             <span className="tdot" />
             <span><b>1</b> {t("platform")}</span>
           </DataReveal>

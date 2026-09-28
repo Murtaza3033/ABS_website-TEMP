@@ -5,7 +5,7 @@ import SmartLink from '../../components/SmartLink';
 import CountUp from '../../components/CountUp';
 import ClientWall from './ClientWall';
 import Sectors from './Sectors';
-import { NUMBERS } from './clientsData';
+import TrackRecord from './TrackRecord';
 import SEO, { resolveSeo } from '../../components/SEO';
 import { usePage } from '../../hooks/useCms';
 
@@ -54,7 +54,7 @@ export default function OurClients() {
           </h1>
           <DataReveal as="p" className="lede" style={{ margin: '20px auto 0', maxWidth: '600px' }}>{t("Every name here chose to trust us with the systems their business runs on. Their growth is the story we're proudest of — and the reason we keep building.")}</DataReveal>
           <DataReveal className="oc-trustline">
-            <span>{t("Trusted by")} <b><CountUp end={35} duration={1400} /></b>{t("+ businesses")}</span>
+            <span>{t("Trusted by")} <b><CountUp end={50} duration={1400} /></b>{t("+ businesses")}</span>
             <span className="tdot" />
             <span>{t("across")} <b>6</b> {t("industries")}</span>
             <span className="tdot" />
@@ -86,19 +86,12 @@ export default function OurClients() {
       <section className="sec" style={{ background: '#0f1729', position: 'relative', overflow: 'hidden', padding: '90px 32px' }}>
         <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 50% 0%,rgba(26,86,219,.26),transparent 58%)' }} />
         <div style={{ position: 'absolute', inset: 0, opacity: 0.05, backgroundImage: 'linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px)', backgroundSize: '44px 44px' }} />
-        <div style={{ maxWidth: '1000px', margin: '0 auto', position: 'relative' }}>
+        <div style={{ maxWidth: '1060px', margin: '0 auto', position: 'relative' }}>
           <div style={{ textAlign: 'center', maxWidth: '620px', margin: '0 auto' }}>
             <DataReveal as="span" className="eyebrow light">{t("The track record")}</DataReveal>
             <DataReveal as="h2" className="h2" style={{ color: '#fff' }}>{t("Trust, by the numbers.")}</DataReveal>
           </div>
-          <div className="num-grid">
-            {NUMBERS.map((n) => (
-              <DataReveal key={n[2]} style={{ background: '#131c2e', border: '1px solid rgba(255,255,255,.08)', borderRadius: '20px', padding: '34px 28px', textAlign: 'center' }}>
-                <div style={{ fontSize: '52px', fontWeight: 800, letterSpacing: '-1.5px', color: '#fff', lineHeight: 1 }}><CountUp end={n[0]} suffix={n[1]} /></div>
-                <div style={{ fontSize: '14.5px', color: '#96a2ba', marginTop: '12px' }}>{t(n[2])}</div>
-              </DataReveal>
-            ))}
-          </div>
+          <TrackRecord />
         </div>
       </section>
 
