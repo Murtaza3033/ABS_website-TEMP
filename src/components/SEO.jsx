@@ -7,7 +7,7 @@ import { getSanityImageUrl } from '../lib/sanity';
 
 const SITE_NAME = 'Align Business Systems';
 const DEFAULT_DESCRIPTION =
-  'Align Business Systems — the ERP, HR and field-force platforms growing businesses run their operations on.';
+  'Align Business Systems — the ERP, HR, field-force and hospital management platforms growing businesses run their operations on.';
 
 /* Only set if VITE_SITE_URL is configured (see .env) — canonical/og:url are
    skipped entirely otherwise rather than guessing a production domain. */

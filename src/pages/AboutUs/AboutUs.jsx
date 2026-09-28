@@ -18,7 +18,7 @@ export default function AboutUs() {
       <SEO
         {...seo}
         title={seo.title || t('About Us')}
-        description={seo.description || t('Align Business Systems designs and builds the ERP, HR, and field-force platforms that businesses across Pakistan use to run their day-to-day operations.')}
+        description={seo.description || t('Align Business Systems designs and builds the ERP, HR, field-force and hospital management platforms that businesses across Pakistan use to run their day-to-day operations.')}
       />
       {/* 1. HERO */}
       <section className="sec" style={{ padding: '96px 32px 40px', background: 'linear-gradient(180deg,var(--tint) 0%,#fff 100%)', overflow: 'hidden' }}>
@@ -27,7 +27,7 @@ export default function AboutUs() {
         <div style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center', position: 'relative' }}>
           <DataReveal as="span" className="eyebrow">{t("About Align")}</DataReveal>
           <DataReveal as="h1" className="h1">{t("We Build the Systems")}<br />{t("Businesses Run On")}</DataReveal>
-          <DataReveal as="p" className="lede" style={{ margin: '22px auto 0', maxWidth: '640px' }}>{t("Align Business Systems designs and builds the ERP, HR, and field-force platforms that businesses across Pakistan use to run their day-to-day operations.")}</DataReveal>
+          <DataReveal as="p" className="lede" style={{ margin: '22px auto 0', maxWidth: '640px' }}>{t("Align Business Systems designs and builds the ERP, HR, field-force and hospital management platforms that businesses across Pakistan use to run their day-to-day operations.")}</DataReveal>
           <DataReveal style={{ display: 'flex', gap: '14px', justifyContent: 'center', marginTop: '32px', flexWrap: 'wrap' }}>
             <SmartLink href="/our-team.html" className="btn-primary">{t("Meet Our Team")}</SmartLink>
             <SmartLink href="/contact-us.html" className="btn-outline">{t("Book a Demo")}</SmartLink>
@@ -52,7 +52,7 @@ export default function AboutUs() {
           <div>
             <DataReveal as="span" className="eyebrow">{t("Who We Are")}</DataReveal>
             <DataReveal as="h2" className="h2">{t("A Product Company, First.")}</DataReveal>
-            <DataReveal as="p" className="lede" style={{ margin: '20px 0 0', fontSize: '17px' }}>{t("We're an engineering-led team building Businessflo, PeopleNest, and Field Force — and taking on custom builds for businesses that need something no off-the-shelf tool can offer.")}</DataReveal>
+            <DataReveal as="p" className="lede" style={{ margin: '20px 0 0', fontSize: '17px' }}>{t("We're an engineering-led team building Businessflo, PeopleNest, Field Force and HMSflo — and taking on custom builds for businesses that need something no off-the-shelf tool can offer.")}</DataReveal>
           </div>
           <DataReveal style={{ position: 'relative', aspectRatio: '4/3' }}>
             <div style={{ position: 'absolute', inset: 0, borderRadius: '24px', overflow: 'hidden', border: '1px solid #e0e9f8', boxShadow: '0 30px 70px -34px rgba(15,23,41,.45)', background: 'linear-gradient(150deg,#1a56db,#0f1729)', display: 'grid', placeItems: 'center', color: 'rgba(255,255,255,.9)' }}>
@@ -141,8 +141,8 @@ export default function AboutUs() {
         <div className="wrap" style={{ maxWidth: '1000px' }}>
           <div style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto' }}>
             <DataReveal as="span" className="eyebrow">{t("What We Build")}</DataReveal>
-            <DataReveal as="h2" className="h2">{t("Three products. One platform.")}</DataReveal>
-            <DataReveal as="p" className="lede" style={{ fontSize: '16px', margin: '16px auto 0', maxWidth: '600px' }}>{t("One connected platform, three products. Slide through each live dashboard — or pick one below.")}</DataReveal>
+            <DataReveal as="h2" className="h2">{t("Four products. One platform.")}</DataReveal>
+            <DataReveal as="p" className="lede" style={{ fontSize: '16px', margin: '16px auto 0', maxWidth: '600px' }}>{t("One connected platform, four products. Slide through each live dashboard — or pick one below.")}</DataReveal>
           </div>
           <ProductCarousel />
         </div>

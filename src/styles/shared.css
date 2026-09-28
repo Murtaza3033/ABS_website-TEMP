@@ -28,6 +28,9 @@ html,body{margin:0;padding:0;background:var(--white);overflow-x:hidden;}
 /* padding-top reserves the space the now-fixed .site-header no longer takes
    up in normal flow (matches .nav-inner's 78px height). */
 body{font-family:var(--font-sans);color:var(--ink);-webkit-font-smoothing:antialiased;padding-top:78px;}
+/* Desktop renders at the density of 90% browser zoom (owner's preferred
+   scale). Phones/tablets keep 100% so text stays readable. */
+@media (min-width:1100px){html{zoom:.9;}}
 a{color:var(--blue);text-decoration:none;}
 a:hover{color:var(--blue-hover);}
 img{max-width:100%;display:block;}

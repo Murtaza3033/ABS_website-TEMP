@@ -21,7 +21,7 @@ import {
 } from '../../src/lib/contactRules.js';
 
 export const REASONS = ['Book a demo', 'Product question', 'Partnership', 'Careers', 'Something else'];
-export const PRODUCTS = ['Businessflo', 'PeopleNest', 'Field Force', 'Not sure yet'];
+export const PRODUCTS = ['Businessflo', 'PeopleNest', 'Field Force', 'HMSflo', 'Not sure yet'];
 export const SOURCES = ['contact-form', 'book-demo', 'salesbot'];
 
 const MAX = {

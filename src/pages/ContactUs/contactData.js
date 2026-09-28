@@ -71,7 +71,7 @@ export const validPhone = (v, iso) => {
 };
 
 export const REASON_OPTS = ['Book a demo', 'Product question', 'Partnership', 'Careers', 'Something else'];
-export const PRODUCT_OPTS = ['Businessflo', 'PeopleNest', 'Field Force', 'Not sure yet'];
+export const PRODUCT_OPTS = ['Businessflo', 'PeopleNest', 'Field Force', 'HMSflo', 'Not sure yet'];
 export const Q_TITLES = {
   name: "What's your name?",
   company: 'What company are you with?',

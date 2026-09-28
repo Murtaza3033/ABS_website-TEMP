@@ -2,12 +2,20 @@
    page's ProductCarousel, which reuses PRODMETA). */
 import { loc, blocksToText } from '../../lib/loc';
 
-/* Per-product accent color + dashboard-mock demo data (no CMS equivalent). */
+/* Per-product accent color + dashboard-mock demo data (no CMS equivalent).
+   `url` is the product's live app (shown in the mock browser bar and as the
+   "Visit" button); products without one set `bar` for the browser-bar label
+   instead. `src` overrides the default /assets/images/about/<img>.webp. */
 export const PRODMETA = [
-  { name: 'Businessflo', accent: '#1a56db', tint: 'rgba(26,86,219,.14)', url: 'app.businessflo.com', img: 'dash-businessflo', topTitle: 'PO-2041 approved', topSub: 'Warehouse notified', botLabel: 'Payment received', botValue: 'Rs 84,500', botDelta: '↑ Cleared just now' },
-  { name: 'PeopleNest', accent: '#7958ff', tint: 'rgba(124,92,255,.14)', url: 'app.peoplenest.com', img: 'dash-peoplenest', topTitle: 'Leave approved', topSub: 'Casual · 2 days', botLabel: 'New hires this month', botValue: '12', botDelta: '↑ Onboarded' },
-  { name: 'Field Force', accent: '#157d44', tint: 'rgba(26,157,85,.14)', url: 'app.pharmafieldflo.com', img: 'dash-pharmafieldflo', topTitle: 'Visit logged', topSub: 'Dr. review · 4:20 PM', botLabel: 'Coverage today', botValue: '87%', botDelta: '↑ 6% vs target' },
+  { slug: 'businessflo', name: 'Businessflo', accent: '#1a56db', tint: 'rgba(26,86,219,.14)', url: 'app.businessflo.com', img: 'dash-businessflo', topTitle: 'PO-2041 approved', topSub: 'Warehouse notified', botLabel: 'Payment received', botValue: 'Rs 84,500', botDelta: '↑ Cleared just now' },
+  { slug: 'peoplenest', name: 'PeopleNest', accent: '#7958ff', tint: 'rgba(124,92,255,.14)', url: 'app.peoplenest.com', img: 'dash-peoplenest', topTitle: 'Leave approved', topSub: 'Casual · 2 days', botLabel: 'New hires this month', botValue: '12', botDelta: '↑ Onboarded' },
+  { slug: 'pharmafieldflo', name: 'Field Force', accent: '#157d44', tint: 'rgba(26,157,85,.14)', url: 'app.pharmafieldflo.com', img: 'dash-pharmafieldflo', topTitle: 'Visit logged', topSub: 'Dr. review · 4:20 PM', botLabel: 'Coverage today', botValue: '87%', botDelta: '↑ 6% vs target' },
+  // HMSflo has no public app URL or logo yet — placeholder dashboard image.
+  { slug: 'hmsflo', name: 'HMSflo', accent: '#0e9384', tint: 'rgba(14,147,132,.14)', url: null, bar: 'HMSflo', img: 'hmsflo-dashboard', src: '/assets/images/hero/hmsflo-dashboard.webp', topTitle: 'Patient admitted', topSub: 'Ward B · Bed 12', botLabel: 'Bed occupancy', botValue: '86%', botDelta: '↑ 4% this week' },
 ];
+
+/* Image path for a PRODMETA entry's dashboard screenshot. */
+export const metaImg = (m) => m.src || `/assets/images/about/${m.img}.webp`;
 
 /* Same literal copy seeded into Sanity's `product` documents (sourced from
    Header.jsx's mega-menu descriptions + i18n/ar.js's full sentences),
@@ -39,6 +47,24 @@ export const FALLBACK_PRODUCTS = [
     description:
       'Field Force plans field visits, tracks calls, manages doctors and pharmacies, and turns territory activity into live field performance analytics — visible the moment it happens.',
     order: 3,
+  },
+  {
+    _id: 'fallback-hmsflo',
+    name: 'HMSflo',
+    slug: 'hmsflo',
+    tagline: 'Run your hospital from one connected system.',
+    description:
+      'HMSflo brings OPD, admissions, beds, pharmacy, lab and billing into one hospital management system — every patient tracked, every bed visible, every invoice accurate.',
+    order: 4,
+    // Placeholder feature list until the CMS product doc provides its own.
+    features: [
+      { _key: 'opd', title: 'OPD & appointments', description: 'Register patients, book appointments and manage outpatient queues from arrival to consultation.' },
+      { _key: 'ipd', title: 'Admissions & bed management', description: 'Admit, transfer and discharge patients with a live view of every ward and bed.' },
+      { _key: 'pharmacy', title: 'Pharmacy', description: 'Dispense against prescriptions and keep stock, batches and expiry dates under control.' },
+      { _key: 'lab', title: 'Laboratory', description: 'Order tests, record results and deliver reports straight to the patient record.' },
+      { _key: 'billing', title: 'Billing & insurance', description: 'Accurate invoices, panel and insurance claims, and payments in one ledger.' },
+      { _key: 'reports', title: 'Reports & analytics', description: 'Live dashboards for occupancy, revenue and clinical activity across the hospital.' },
+    ],
   },
 ];
 
@@ -76,11 +102,12 @@ export function resolveDescription(doc, lang, t) {
   return hasAr ? blocksToText(value, lang) : tr(blocksToText(value, 'en'));
 }
 
-/* Attaches the matching PRODMETA entry (by position — Sanity was seeded in
-   the same order as PRODMETA/FALLBACK_PRODUCTS) for the dashboard-showcase
-   visual + accent color, which the CMS product schema doesn't model. */
+/* Attaches the matching PRODMETA entry for the dashboard-showcase visual +
+   accent color, which the CMS product schema doesn't model. Matched by slug;
+   unknown slugs fall back to position (Sanity was seeded in PRODMETA order). */
 export function withMeta(doc, i) {
-  const meta = PRODMETA[i] || PRODMETA[0];
+  const slug = slugOf(doc);
+  const meta = PRODMETA.find((m) => m.slug === slug) || PRODMETA[i] || PRODMETA[0];
   return { ...doc, meta };
 }
 

@@ -11,9 +11,9 @@ html[dir="rtl"] .prodCard:hover .prodArrow{transform:translateX(-4px);}
 .prodFeatCard{transition:transform .3s cubic-bezier(.2,.7,.3,1),box-shadow .3s ease;}
 .prodFeatCard:hover{transform:translateY(-4px);box-shadow:0 26px 52px -28px rgba(15,23,41,.3);}
 
+@media (max-width:1100px){.prodGrid{grid-template-columns:1fr 1fr !important;}}
 @media (max-width:900px){
-  .prodGrid{grid-template-columns:1fr !important;}
   .prodShowcaseGrid{grid-template-columns:1fr !important;}
   .prodFeatGrid{grid-template-columns:1fr 1fr !important;}
 }
-@media (max-width:560px){.prodFeatGrid{grid-template-columns:1fr !important;}}
+@media (max-width:560px){.prodGrid,.prodFeatGrid{grid-template-columns:1fr !important;}}

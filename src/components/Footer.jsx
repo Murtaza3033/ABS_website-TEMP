@@ -17,7 +17,7 @@ export default function Footer() {
   const fr = (key, fallbackHref) => footerLinkHref(footerIndex, key, fallbackHref);
   const logoSrc = getSanityImageUrl(cmsSettings?.logo, { width: 240 }) || logo;
   const logoAlt = loc(cmsSettings?.logo?.alt, lang) || 'Align Business Systems';
-  const lede = loc(cmsSettings?.siteDescription, lang) || t("We build the ERP, HR and field-force platforms growing businesses run their operations on — designed, built and supported in-house.");
+  const lede = loc(cmsSettings?.siteDescription, lang) || t("We build the ERP, HR, field-force and hospital management platforms growing businesses run their operations on — designed, built and supported in-house.");
   const address = loc(cmsSettings?.address, lang) || t('Karachi, Pakistan');
   const email = cmsSettings?.email || 'info@alignbsystems.com';
   const phone = cmsSettings?.phone || '+92 21 111 254 265';
@@ -81,6 +81,7 @@ export default function Footer() {
               <SmartLink href={fr('businessflo', '/products/businessflo')}>{fl('businessflo', 'Businessflo')} <span className="arw">&rarr;</span></SmartLink>
               <SmartLink href={fr('peoplenest', '/products/peoplenest')}>{fl('peoplenest', 'PeopleNest')} <span className="arw">&rarr;</span></SmartLink>
               <SmartLink href={fr('field-force', '/products/pharmafieldflo')}>{fl('field-force', 'Field Force')} <span className="arw">&rarr;</span></SmartLink>
+              <SmartLink href={fr('hmsflo', '/products/hmsflo')}>{fl('hmsflo', 'HMSflo')} <span className="arw">&rarr;</span></SmartLink>
             </div>
           </div>
 

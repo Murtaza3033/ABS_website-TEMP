@@ -319,6 +319,7 @@
 [data-screen-label="Products"][data-active-pg="fin"] [data-pg="fin"]{display:block !important;}
 [data-screen-label="Products"][data-active-pg="pen"] [data-pg="pen"]{display:block !important;}
 [data-screen-label="Products"][data-active-pg="fie"] [data-pg="fie"]{display:block !important;}
+[data-screen-label="Products"][data-active-pg="hos"] [data-pg="hos"]{display:block !important;}
 
 [data-screen-label="Industries"] [data-indp]{opacity:0 !important;transform:translateY(20px) !important;pointer-events:none !important;transition:opacity .5s ease,transform .5s ease;}
 [data-screen-label="Industries"][data-active-ind="0"] [data-indp="0"],
@@ -377,13 +378,15 @@
 [data-screen-label="Hero"][data-pnmenu="tm"] [data-act="pnTm"],
 [data-screen-label="Hero"][data-pnmenu="pay"] [data-act="pnPay"]{color:#1a56db !important;}
 
-/* products tabs (data-active-pg fin/pen/fie <-> setProd0/1/2) */
+/* products tabs (data-active-pg fin/pen/fie/hos <-> setProd0/1/2/3) */
 [data-screen-label="Products"] [data-act="setProd0"],
 [data-screen-label="Products"] [data-act="setProd1"],
-[data-screen-label="Products"] [data-act="setProd2"]{background:rgba(255,255,255,.55) !important;border-color:#e7ecf5 !important;box-shadow:none !important;}
+[data-screen-label="Products"] [data-act="setProd2"],
+[data-screen-label="Products"] [data-act="setProd3"]{background:rgba(255,255,255,.55) !important;border-color:#e7ecf5 !important;box-shadow:none !important;}
 [data-screen-label="Products"][data-active-pg="fin"] [data-act="setProd0"],
 [data-screen-label="Products"][data-active-pg="pen"] [data-act="setProd1"],
-[data-screen-label="Products"][data-active-pg="fie"] [data-act="setProd2"]{background:#ffffff !important;border-color:#1a56db !important;box-shadow:0 20px 44px -22px rgba(26,86,219,.4) !important;}
+[data-screen-label="Products"][data-active-pg="fie"] [data-act="setProd2"],
+[data-screen-label="Products"][data-active-pg="hos"] [data-act="setProd3"]{background:#ffffff !important;border-color:#1a56db !important;box-shadow:0 20px 44px -22px rgba(26,86,219,.4) !important;}
 
 /* industries tabs (data-active-ind 0..6 <-> setInd0..6) */
 [data-screen-label="Industries"] [data-act^="setInd"]{background:#ffffff !important;color:#5b6472 !important;border-color:#e4eaf3 !important;}

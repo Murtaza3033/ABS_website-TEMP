@@ -35,7 +35,7 @@ export const MILES = [
 ];
 
 export const STATS = [
-  ['3', 'Products on one platform', '#4b8bff', 'rgba(75,139,255,.16)', 'layers'],
+  ['4', 'Products on one platform', '#4b8bff', 'rgba(75,139,255,.16)', 'layers'],
   ['In-house', 'Design, build & support', '#d4a017', 'rgba(212,160,23,.16)', 'spark'],
   ['ITCN Asia', 'National exhibitor', '#a48bff', 'rgba(164,139,255,.18)', 'building'],
   ['Karachi', 'Built in Pakistan', '#2fd07f', 'rgba(47,208,127,.16)', 'flag'],

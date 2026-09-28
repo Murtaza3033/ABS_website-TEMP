@@ -3,10 +3,10 @@ import { useLanguage } from '../../context/LanguageContext';
 import { DataReveal } from '../../components/Reveal';
 import SmartLink from '../../components/SmartLink';
 import { useProduct } from '../../hooks/useCms';
-import { loc, locT } from '../../lib/loc';
+import { locT } from '../../lib/loc';
 import { getSanityImageUrl } from '../../lib/sanity';
 import SEO, { resolveSeo } from '../../components/SEO';
-import { FALLBACK_PRODUCTS, resolveDescription, withMeta, findFallbackIndex, isValidProduct, validFeatures } from './productsData';
+import { FALLBACK_PRODUCTS, resolveDescription, withMeta, findFallbackIndex, isValidProduct, validFeatures, metaImg } from './productsData';
 
 export default function ProductPage() {
   const { slug } = useParams();
@@ -40,10 +40,12 @@ export default function ProductPage() {
   if (!doc) return null; // still resolving an unknown slug — avoid a "not found" flash
 
   const meta = withMeta(doc, fallbackIndex).meta;
-  const name = loc(doc.name, lang) || fallbackDoc.name;
+  const name = locT(doc.name, lang, t) || t(fallbackDoc.name);
   const tagline = locT(doc.tagline, lang, t) || t(fallbackDoc.tagline);
   const description = resolveDescription(doc, lang, t) || t(fallbackDoc.description);
-  const features = validFeatures(doc.features);
+  // A CMS doc without features keeps the static placeholder list (if any).
+  const cmsFeatures = validFeatures(doc.features);
+  const features = cmsFeatures.length > 0 || !isKnownSlug ? cmsFeatures : validFeatures(fallbackDoc.features);
   const seo = resolveSeo(doc.seo, lang);
 
   return (
@@ -52,7 +54,7 @@ export default function ProductPage() {
         {...seo}
         title={seo.title || name}
         description={seo.description || tagline || description}
-        ogImage={seo.ogImage || getSanityImageUrl(doc.logo, { width: 1200 })}
+        ogImage={seo.ogImage || getSanityImageUrl(doc.logo, { width: 1200 }) || meta.src}
       />
       {/* HERO */}
       <section className="sec" style={{ position: 'relative', background: 'linear-gradient(180deg,var(--tint) 0%,#fff 100%)', padding: '80px 32px 56px', overflow: 'hidden' }}>
@@ -85,11 +87,11 @@ export default function ProductPage() {
               <span style={{ width: '11px', height: '11px', borderRadius: '50%', background: '#ff5f57' }} />
               <span style={{ width: '11px', height: '11px', borderRadius: '50%', background: '#febc2e' }} />
               <span style={{ width: '11px', height: '11px', borderRadius: '50%', background: '#28c840' }} />
-              <div style={{ flex: 1, marginLeft: '10px', background: 'rgba(255,255,255,.1)', borderRadius: '8px', padding: '6px 12px', fontSize: '11px', color: '#9fb3d4' }}>{meta.url}</div>
+              <div style={{ flex: 1, marginLeft: '10px', background: 'rgba(255,255,255,.1)', borderRadius: '8px', padding: '6px 12px', fontSize: '11px', color: '#9fb3d4' }}>{meta.url || meta.bar}</div>
             </div>
             <div style={{ position: 'relative', width: '100%', paddingBottom: '56%', background: '#eef2f8', borderRadius: '12px', overflow: 'hidden' }}>
               <img
-                src={`/assets/images/about/${meta.img}.webp`}
+                src={metaImg(meta)}
                 alt={`${name} ${t('dashboard')}`}
                 onError={(e) => { e.currentTarget.style.display = 'none'; }}
                 style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top left' }}

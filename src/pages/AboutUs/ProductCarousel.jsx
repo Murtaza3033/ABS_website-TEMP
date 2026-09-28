@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import Reveal from '../../components/Reveal';
-import { PRODMETA } from '../Products/productsData';
+import { PRODMETA, metaImg } from '../Products/productsData';
 
 /* "What We Build" product preview carousel — index state + 5s autoplay that
    pauses for 9s after any interaction (was pb/pbPaused/pbResume in the runtime). */
@@ -48,14 +48,14 @@ export default function ProductCarousel() {
             <span style={{ width: '11px', height: '11px', borderRadius: '50%', background: '#ff5f57' }} />
             <span style={{ width: '11px', height: '11px', borderRadius: '50%', background: '#febc2e' }} />
             <span style={{ width: '11px', height: '11px', borderRadius: '50%', background: '#28c840' }} />
-            <div style={{ flex: 1, marginLeft: '10px', background: 'rgba(255,255,255,.1)', borderRadius: '8px', padding: '6px 12px', fontSize: '11px', color: '#9fb3d4' }}>{m.url}</div>
+            <div style={{ flex: 1, marginLeft: '10px', background: 'rgba(255,255,255,.1)', borderRadius: '8px', padding: '6px 12px', fontSize: '11px', color: '#9fb3d4' }}>{m.url || m.bar}</div>
           </div>
           <div style={{ overflow: 'hidden', borderRadius: '12px' }}>
             <div style={{ display: 'flex', transition: 'transform .6s cubic-bezier(.4,0,.2,1)', transform: `translateX(-${pb * 100}%)` }}>
               {PRODMETA.map((x) => (
                 <div key={x.name} style={{ flex: '0 0 100%' }}>
                   <div style={{ position: 'relative', width: '100%', paddingBottom: '62%', background: '#eef2f8', overflow: 'hidden' }}>
-                    <img src={`/assets/images/about/${x.img}.webp`} loading="lazy" decoding="async" alt={`${x.name} ${t('dashboard')}`} onError={(e) => { e.currentTarget.style.opacity = 0; }} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top left' }} />
+                    <img src={metaImg(x)} loading="lazy" decoding="async" alt={`${x.name} ${t('dashboard')}`} onError={(e) => { e.currentTarget.style.opacity = 0; }} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top left' }} />
                   </div>
                 </div>
               ))}

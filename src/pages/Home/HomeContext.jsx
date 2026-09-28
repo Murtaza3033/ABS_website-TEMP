@@ -55,7 +55,7 @@ const initialState = {
   counts: { a: 24, p: 6, r: 2 },
   tour: true,
   // §2-7
-  prodTab: 0,              // 0..2  (products filter)
+  prodTab: 0,              // 0..3  (products filter)
   indTab: 0,               // 0..6  (industries panel)
   probOn: true,            // problems Align on/off
   orbitStep: 0,            // 0..4  (services orbit)

@@ -3,7 +3,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { DataReveal } from '../../components/Reveal';
 import SmartLink from '../../components/SmartLink';
 import { useProducts } from '../../hooks/useCms';
-import { loc, locT } from '../../lib/loc';
+import { locT } from '../../lib/loc';
 import { getSanityImageUrl } from '../../lib/sanity';
 import SEO from '../../components/SEO';
 import { FALLBACK_PRODUCTS, withMeta, slugOf, mergeProducts, LOCAL_LOGOS, logoIconStyle } from './productsData';
@@ -17,7 +17,7 @@ export default function ProductsIndex() {
     <main>
       <SEO
         title={t('Our Products')}
-        description={t('Businessflo, PeopleNest and Field Force — designed, built and supported in-house, and built to work together.')}
+        description={t('Businessflo, PeopleNest, Field Force and HMSflo — designed, built and supported in-house, and built to work together.')}
       />
       {/* HERO */}
       <section className="sec" style={{ position: 'relative', background: 'linear-gradient(180deg,var(--tint) 0%,#fff 100%)', padding: '80px 32px 56px', overflow: 'hidden' }}>
@@ -25,10 +25,10 @@ export default function ProductsIndex() {
         <div style={{ maxWidth: '860px', margin: '0 auto', textAlign: 'center', position: 'relative', zIndex: 1 }}>
           <DataReveal as="span" className="eyebrow">{t('Our Products')}</DataReveal>
           <h1 className="h1">
-            {t('One platform.')} <span className="cave cave-end" style={{ fontSize: '1.2em' }}>{t('Three products.')}</span>
+            {t('One platform.')} <span className="cave cave-end" style={{ fontSize: '1.2em' }}>{t('Four products.')}</span>
           </h1>
           <DataReveal as="p" className="lede" style={{ margin: '20px auto 0', maxWidth: '600px' }}>
-            {t('Businessflo, PeopleNest and Field Force — designed, built and supported in-house, and built to work together.')}
+            {t('Businessflo, PeopleNest, Field Force and HMSflo — designed, built and supported in-house, and built to work together.')}
           </DataReveal>
         </div>
       </section>
@@ -36,9 +36,9 @@ export default function ProductsIndex() {
       {/* GRID */}
       <section className="sec" style={{ background: '#fff', paddingTop: '20px' }}>
         <div style={{ maxWidth: '1160px', margin: '0 auto' }}>
-          <div className="prodGrid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '24px' }}>
+          <div className="prodGrid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '24px' }}>
             {products.map((p) => {
-              const name = loc(p.name, lang);
+              const name = locT(p.name, lang, t);
               const tagline = locT(p.tagline, lang, t);
               const slug = slugOf(p);
               const logoUrl = getSanityImageUrl(p.logo, { width: 96 });
@@ -54,7 +54,7 @@ export default function ProductsIndex() {
                   <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: p.meta.tint, color: p.meta.accent, display: 'grid', placeItems: 'center', fontWeight: 800, fontSize: '18px', overflow: 'hidden' }}>
                     {logoUrl ? <img src={logoUrl} alt={name} style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '7px' }} />
                       : localLogo ? <span style={{ position: 'relative', width: '32px', height: '32px', overflow: 'hidden' }}><img src={localLogo.src} alt={name} style={logoIconStyle(localLogo, 32)} /></span>
-                      : name.charAt(0)}
+                      : locT(p.name, 'en').charAt(0)}
                   </div>
                   <div style={{ fontSize: '20px', fontWeight: 800, color: '#0f1729', marginTop: '18px', letterSpacing: '-.4px' }}>{name}</div>
                   <p style={{ fontSize: '14.5px', lineHeight: 1.6, color: '#5b6472', margin: '10px 0 0', minHeight: '48px' }}>{tagline}</p>

@@ -33,7 +33,7 @@ export default function Careers() {
       <SEO
         {...seo}
         title={seo.title || t('Careers')}
-        description={seo.description || t("We're a small, fast-moving team building the ERP, HR and field-force platforms real businesses run their operations on — not internal tools nobody sees.")}
+        description={seo.description || t("We're a small, fast-moving team building the ERP, HR, field-force and hospital management platforms real businesses run their operations on — not internal tools nobody sees.")}
       />
       {/* HERO */}
       <section className="sec" style={{ position: 'relative', background: 'linear-gradient(180deg,var(--tint) 0%,#fff 100%)', padding: '80px 32px 56px', overflow: 'hidden' }}>
@@ -49,7 +49,7 @@ export default function Careers() {
             <span className="crWord crAccentWord" style={accentStyle}>{t("Run On")}</span>
             <span className="crWord" style={{ ...crWordStyle, animation: cw(5) }}>.</span>
           </h1>
-          <DataReveal as="p" className="lede" style={{ margin: '22px auto 0', maxWidth: '600px' }}>{t("We're a small, fast-moving team building the ERP, HR and field-force platforms real businesses run their operations on — not internal tools nobody sees. Come own a piece of it.")}</DataReveal>
+          <DataReveal as="p" className="lede" style={{ margin: '22px auto 0', maxWidth: '600px' }}>{t("We're a small, fast-moving team building the ERP, HR, field-force and hospital management platforms real businesses run their operations on — not internal tools nobody sees. Come own a piece of it.")}</DataReveal>
           <DataReveal style={{ marginTop: '32px' }}>
             <a href="#open-roles" onClick={(e) => { e.preventDefault(); rolesRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} style={{ background: '#1a56db', color: '#fff', fontSize: '15px', fontWeight: 600, padding: '14px 30px', borderRadius: '999px', boxShadow: '0 12px 28px -10px rgba(26,86,219,.5)' }}>{t("See Open Roles")}</a>
           </DataReveal>
