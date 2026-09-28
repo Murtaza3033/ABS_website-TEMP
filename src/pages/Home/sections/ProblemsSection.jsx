@@ -54,7 +54,7 @@ export default function ProblemsSection() {
                 <div style={{fontSize: '11px', fontWeight: '700', color: '#5b6472', marginTop: '8px', whiteSpace: 'nowrap', transform: 'translateX(calc(50% - 8px))'}}>{t("Your business")}</div>
               </div>
               
-              <div style={{position: 'absolute', insetInlineStart: '95%', top: '50%', transform: 'translate(-50%,-50%)', textAlign: 'center', pointerEvents: 'none'}}>
+              <div style={{position: 'absolute', insetInlineStart: '95%', top: '50%', transform: 'translate(-50%,calc(-100% - 36px))', zIndex: 3, textAlign: 'center', pointerEvents: 'none'}}>
                 <div style={{position: 'relative', width: '60px', height: '60px', margin: '0 auto'}}>
                   <span style={{position: 'absolute', inset: '0', opacity: 'var(--wOn,1)', transition: 'opacity .4s ease'}}><svg viewBox="0 0 36 36" style={{width: '60px', height: '60px', display: 'block'}}><circle cx="18" cy="18" r="16" fill="#e3f6ec" stroke="#1a9d55" strokeWidth="1.6"/><path d="M11.5 18.5 L16 22.5 L25 13.5" fill="none" stroke="#1a9d55" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"/></svg></span>
                   <span style={{position: 'absolute', top: '-14px', insetInlineStart: '-12px', width: '20px', height: '20px', opacity: 'var(--wOn,1)', transition: 'opacity .4s ease'}}><svg viewBox="0 0 24 24" style={{width: '100%', height: '100%'}}><path d="M12 2 L13 6 M12 2 L11 6" stroke="#1a9d55" strokeWidth="1.8" strokeLinecap="round"/><path d="M4 6 L6 8 M20 6 L18 8" stroke="#f5b40a" strokeWidth="1.8" strokeLinecap="round"/></svg></span>
