@@ -13,6 +13,11 @@
 /* storyboard strip */
 .strip{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);}
 .strip__track{display:flex;gap:18px;width:max-content;animation:abMarq 42s linear infinite;}
+/* Owner's choice: the photo strip keeps scrolling (slower) even when the OS
+   asks for reduced motion; hover/focus pauses it (WCAG 2.2.2). The class
+   selector outranks the global `*{animation:none!important}` kill-switch. */
+@media (prefers-reduced-motion:reduce){.strip__track{animation:abMarq 60s linear infinite !important;}}
+.strip:hover .strip__track,.strip:focus-within .strip__track{animation-play-state:paused !important;}
 .strip__card{flex:0 0 214px;aspect-ratio:3/4;border-radius:20px;overflow:hidden;position:relative;box-shadow:0 24px 50px -28px rgba(15,23,41,.4);border:1px solid #e6ecf6;display:flex;align-items:flex-end;padding:14px;}
 .strip__card span{position:relative;font-size:11px;font-weight:700;letter-spacing:1px;color:#fff;text-transform:uppercase;}
 
