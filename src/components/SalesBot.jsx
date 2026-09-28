@@ -54,8 +54,8 @@ function reducer(s, a) {
 }
 
 const FAQ = [
-  ['What does Align Business Systems do?', 'We build enterprise software — BusinessFlo (ERP), PeopleNest (HR & workforce), and Field Force (field operations) — plus custom web, mobile, and SaaS development. We help businesses run their operations on one connected system.'],
-  ['What products do you offer?', 'Three main products: BusinessFlo for ERP (finance, inventory, procurement, reporting), PeopleNest for HR and workforce management, and Field Force for field-team operations. Want details on any?'],
+  ['What does Align Business Systems do?', 'We build enterprise software — Businessflo (ERP), PeopleNest (HR & workforce), and Field Force (field operations) — plus custom web, mobile, and SaaS development. We help businesses run their operations on one connected system.'],
+  ['What products do you offer?', 'Three main products: Businessflo for ERP (finance, inventory, procurement, reporting), PeopleNest for HR and workforce management, and Field Force for field-team operations. Want details on any?'],
   ['How do I book a demo?', 'Just tap "Book a demo" and share a few details — our team will set it up. You can also email sales@alignbsystems.com.'],
   ['How much does it cost?', 'Pricing depends on your business size and needs. The best way is a quick chat with our team — shall I connect you?'],
   ['Which industries do you work with?', 'We serve businesses across food & FMCG, pharma & healthcare, lighting & electrical, construction & real estate, energy & solar, and technology & mobility.'],
@@ -158,7 +158,7 @@ export default function SalesBot() {
     ]);
   };
   const productMenu = () => botSay(t('Which one would you like to hear about?'), [
-    { label: 'BusinessFlo', onClick: () => prod('BusinessFlo', 'Our ERP — finance, inventory, procurement and reporting in one connected flow.') },
+    { label: 'Businessflo', onClick: () => prod('Businessflo', 'Our ERP — finance, inventory, procurement and reporting in one connected flow.') },
     { label: 'PeopleNest', onClick: () => prod('PeopleNest', 'HR & workforce — attendance, leave, payroll and people analytics in one place.') },
     { label: 'Field Force', onClick: () => prod('Field Force', 'Field operations — visits, routes and live KPIs for teams on the ground.') },
   ]);

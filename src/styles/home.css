@@ -341,10 +341,17 @@
 /* hero product switcher */
 [data-screen-label="Hero"] [data-act="goBiz"],
 [data-screen-label="Hero"] [data-act="goPn"],
-[data-screen-label="Hero"] [data-act="goPff"]{background:transparent !important;color:#5b6472 !important;}
+[data-screen-label="Hero"] [data-act="goPff"],
+[data-screen-label="Hero"] [data-act="goHms"]{background:transparent !important;color:#5b6472 !important;}
 [data-screen-label="Hero"][data-product="biz"] [data-act="goBiz"],
 [data-screen-label="Hero"][data-product="pn"] [data-act="goPn"],
-[data-screen-label="Hero"][data-product="pff"] [data-act="goPff"]{background:#1a56db !important;color:#ffffff !important;}
+[data-screen-label="Hero"][data-product="pff"] [data-act="goPff"],
+[data-screen-label="Hero"][data-product="hms"] [data-act="goHms"]{background:#1a56db !important;color:#ffffff !important;}
+/* Four tabs don't fit one row on phones — stack them as a 2×2 pill grid. */
+@media (max-width:560px){
+  .hero-switch{display:grid !important;grid-template-columns:1fr 1fr;gap:2px;border-radius:20px !important;}
+  .hero-switch button{padding:8px 12px !important;}
+}
 
 /* hero AI tabs */
 [data-screen-label="Hero"] [data-act="setAI"],

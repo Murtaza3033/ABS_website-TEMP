@@ -1,8 +1,8 @@
 import { useHome, pressable } from '../../HomeContext';
 import { useLanguage } from '../../../../context/LanguageContext';
 
-/* BusinessFlo hero mockup (approvals list, AI/Chats/Tickets panel, approval
-   donut). Rendered by HeroSection while BusinessFlo is the active product. */
+/* Businessflo hero mockup (approvals list, AI/Chats/Tickets panel, approval
+   donut). Rendered by HeroSection while Businessflo is the active product. */
 export default function BizMockup({ scrollRegion }) {
   'use no memo'; // Compiler skipped this markup before the split; memoizing its ~300 inline styles adds ~20 KB per mockup.
   const { c, b, act, state } = useHome();

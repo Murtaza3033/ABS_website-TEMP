@@ -78,7 +78,7 @@ export default function Footer() {
           <div>
             <div className="ft-col-h">{fh('products', 'Products')}</div><div className="ft-col-rule"></div>
             <div className="ft-links">
-              <SmartLink href={fr('businessflo', '/products/businessflo')}>{fl('businessflo', 'BusinessFlo')} <span className="arw">&rarr;</span></SmartLink>
+              <SmartLink href={fr('businessflo', '/products/businessflo')}>{fl('businessflo', 'Businessflo')} <span className="arw">&rarr;</span></SmartLink>
               <SmartLink href={fr('peoplenest', '/products/peoplenest')}>{fl('peoplenest', 'PeopleNest')} <span className="arw">&rarr;</span></SmartLink>
               <SmartLink href={fr('field-force', '/products/pharmafieldflo')}>{fl('field-force', 'Field Force')} <span className="arw">&rarr;</span></SmartLink>
             </div>

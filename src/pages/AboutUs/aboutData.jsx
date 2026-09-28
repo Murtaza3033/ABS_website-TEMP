@@ -28,7 +28,7 @@ export const STRIP_TINTS = ['#1a56db', '#0f1729', '#d4a017', '#1a9d55', '#123f9e
 
 export const MILES = [
   ['Year TBD', 'Align founded', '#1a56db', 'team-laptop.webp'],
-  ['Year TBD', 'BusinessFlo launch', '#1a56db', 'presentation.webp'],
+  ['Year TBD', 'Businessflo launch', '#1a56db', 'presentation.webp'],
   ['2023', 'ITCN Asia exhibitor', '#d4a017', 'itcn-wall.webp'],
   ['Year TBD', 'PeopleNest & Field Force', '#1a56db', 'meeting.webp'],
   ['Today', 'One connected platform', '#1a9d55', 'team-monitor.webp'],

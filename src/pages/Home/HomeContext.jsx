@@ -43,7 +43,7 @@ const ROW_LABEL = { approved: 'Approved', hold: 'On Hold', rejected: 'Rejected' 
 
 /* ---- initial state (mirrors `st` + the §2-7 locals in the runtime) ---- */
 const initialState = {
-  product: 'biz',          // biz | pn | pff
+  product: 'biz',          // biz | pn | pff | hms
   playing: true,           // hero auto-rotate
   aiTab: 'ai',             // ai | chats | tickets
   chatOpen: false,
@@ -68,8 +68,8 @@ function reducer(s, a) {
     case 'PRODUCT':
       return { ...s, product: a.p, pnMenu: null, playing: a.manual ? false : s.playing };
     case 'NEXT_PRODUCT': {
-      const o = ['biz', 'pn', 'pff'];
-      return { ...s, product: o[(o.indexOf(s.product) + 1) % 3], pnMenu: null };
+      const o = ['biz', 'pn', 'pff', 'hms'];
+      return { ...s, product: o[(o.indexOf(s.product) + 1) % o.length], pnMenu: null };
     }
     case 'TOGGLE_PAUSE':
       return { ...s, playing: !s.playing };
@@ -183,6 +183,7 @@ export function HomeProvider({ children }) {
       case 'isBiz': return all || state.product === 'biz';
       case 'isPn': return all || state.product === 'pn';
       case 'isPff': return all || state.product === 'pff';
+      case 'isHms': return all || state.product === 'hms';
       case 'tourOn': return state.tour && state.product === 'biz';
       case 'tourHidden': return state.product === 'biz' && !state.tour;
       case 'aiTabAI': return state.aiTab === 'ai';
@@ -245,6 +246,7 @@ export function HomeProvider({ children }) {
     if (name === 'goBiz') return dispatch({ type: 'PRODUCT', p: 'biz', manual: true });
     if (name === 'goPn') return dispatch({ type: 'PRODUCT', p: 'pn', manual: true });
     if (name === 'goPff') return dispatch({ type: 'PRODUCT', p: 'pff', manual: true });
+    if (name === 'goHms') return dispatch({ type: 'PRODUCT', p: 'hms', manual: true });
     if (name === 'togglePause') return dispatch({ type: 'TOGGLE_PAUSE' });
     if (name === 'setAI') return dispatch({ type: 'AI_TAB', tab: 'ai' });
     if (name === 'setChats') return dispatch({ type: 'AI_TAB', tab: 'chats' });

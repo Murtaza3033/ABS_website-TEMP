@@ -17,7 +17,7 @@ export default function ProductsIndex() {
     <main>
       <SEO
         title={t('Our Products')}
-        description={t('BusinessFlo, PeopleNest and Field Force — designed, built and supported in-house, and built to work together.')}
+        description={t('Businessflo, PeopleNest and Field Force — designed, built and supported in-house, and built to work together.')}
       />
       {/* HERO */}
       <section className="sec" style={{ position: 'relative', background: 'linear-gradient(180deg,var(--tint) 0%,#fff 100%)', padding: '80px 32px 56px', overflow: 'hidden' }}>
@@ -28,7 +28,7 @@ export default function ProductsIndex() {
             {t('One platform.')} <span className="cave cave-end" style={{ fontSize: '1.2em' }}>{t('Three products.')}</span>
           </h1>
           <DataReveal as="p" className="lede" style={{ margin: '20px auto 0', maxWidth: '600px' }}>
-            {t('BusinessFlo, PeopleNest and Field Force — designed, built and supported in-house, and built to work together.')}
+            {t('Businessflo, PeopleNest and Field Force — designed, built and supported in-house, and built to work together.')}
           </DataReveal>
         </div>
       </section>

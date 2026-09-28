@@ -4,6 +4,10 @@ import { useLanguage } from '../../../context/LanguageContext';
 import BizMockup from './hero/BizMockup';
 import PeopleNestMockup from './hero/PeopleNestMockup';
 import FieldForceMockup from './hero/FieldForceMockup';
+import HmsMockup from './hero/HmsMockup';
+
+// Placeholder copy — replace with the final HMSflo text (and its ar.js entry).
+const HMS_COPY = 'HMSflo brings OPD, admissions, beds, pharmacy, lab and billing into one hospital management system — every patient tracked, every bed visible, every invoice accurate.';
 
 /* "Show tips" / "Hide tips" pill (toggles the hand-drawn tour annotations). */
 const TIP_PILL = {position: 'absolute', top: '120px', insetInlineEnd: '40px', zIndex: '60', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '7px', background: '#ffffff', border: '1px solid #c9d8f5', color: '#1a56db', fontFamily: 'Outfit,sans-serif', fontSize: '13px', fontWeight: '600', borderRadius: '99px', padding: '9px 16px', boxShadow: '0 8px 20px -10px rgba(15,23,41,.2)'};
@@ -17,11 +21,11 @@ export default function HeroSection() {
   const { t, lang } = useLanguage();
   const scrollRegion = useScrollRegionProps(t('Product preview'));
 
-  /* Stable hero height. The three products' headline, mockup collage and
+  /* Stable hero height. Each product’s headline, mockup collage and
      mobile paragraph differ in height (by up to ~230px on phones, where the
      floating cards stack in-flow), so every auto-rotation used to move the
      whole page below the hero. We reserve the tallest variant instead: a
-     probe renders all three products at once inside one synchronous layout
+     probe renders every product at once inside one synchronous layout
      pass (useLayoutEffect → setState → re-render before paint, so it is never
      visible and the active product's block stays mounted — no animation
      replay), measures each block, and reserves the tallest variant: the
@@ -36,15 +40,16 @@ export default function HeroSection() {
     if (probe !== 'all') return;
     const sec = secRef.current;
     if (sec) {
-      // All three products are stacked in each slot (headline, mockup,
+      // Every product is stacked in each slot (headline, mockup,
       // mobile paragraph; children in product order). Measure each product
-      // alone by briefly display:none-ing the other two (synchronous layout
+      // alone by briefly display:none-ing the others (synchronous layout
       // reads — nothing is painted), then restore.
       const slots = ['.hero-headpara', '.rtl-mock', '.hero-p-mobile-wrap'].map((q) => Array.from(sec.querySelector(q)?.children || []));
       // total = tallest (section - headline) + the reserved (tallest) headline
       let hp = 0; let rest = 0;
-      for (let i = 0; i < 3; i++) {
-        const hidden = slots.flatMap((kids) => kids.filter((_, k) => k !== i && kids.length === 3));
+      const n = slots[0].length;
+      for (let i = 0; i < n; i++) {
+        const hidden = slots.flatMap((kids) => kids.filter((_, k) => k !== i && kids.length === n));
         hidden.forEach((el) => { el.dataset.probeDisplay = el.style.display; el.style.display = 'none'; });
         const h = sec.querySelector('.hero-headpara')?.getBoundingClientRect().height || 0;
         hp = Math.max(hp, h);
@@ -99,10 +104,11 @@ export default function HeroSection() {
           <div style={{position: 'absolute', top: '-220px', insetInlineStart: '50%', marginInlineStart: '-320px', width: '640px', height: '640px', borderRadius: '50%', background: 'radial-gradient(circle,rgba(26,86,219,.08) 0%,rgba(26,86,219,0) 65%)'}}></div>
           <div style={{maxWidth: '900px', margin: '0 auto', padding: '70px 32px 0', textAlign: 'center'}}>
             <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px', marginTop: '4px', position: 'relative', zIndex: '40'}}>
-              <div style={{display: 'inline-flex', background: '#ffffff', border: '1px solid #e4eaf5', borderRadius: '999px', padding: '4px', boxShadow: '0 2px 10px rgba(15,23,41,.05)'}}>
-                <button data-act="goBiz" onClick={() => act('goBiz')} style={{fontFamily: 'Outfit,sans-serif', fontSize: '12.5px', fontWeight: '600', padding: '8px 18px', borderRadius: '999px', border: 'none', cursor: 'pointer', background: '#1a56db', color: '#ffffff', whiteSpace: 'nowrap', transition: 'background .25s cubic-bezier(.2,.7,.3,1),color .2s ease'}}>{t("BusinessFlo")}</button>
+              <div className="hero-switch" style={{display: 'inline-flex', background: '#ffffff', border: '1px solid #e4eaf5', borderRadius: '999px', padding: '4px', boxShadow: '0 2px 10px rgba(15,23,41,.05)'}}>
+                <button data-act="goBiz" onClick={() => act('goBiz')} style={{fontFamily: 'Outfit,sans-serif', fontSize: '12.5px', fontWeight: '600', padding: '8px 18px', borderRadius: '999px', border: 'none', cursor: 'pointer', background: '#1a56db', color: '#ffffff', whiteSpace: 'nowrap', transition: 'background .25s cubic-bezier(.2,.7,.3,1),color .2s ease'}}>{t("Businessflo")}</button>
                 <button data-act="goPn" onClick={() => act('goPn')} style={{fontFamily: 'Outfit,sans-serif', fontSize: '12.5px', fontWeight: '600', padding: '8px 18px', borderRadius: '999px', border: 'none', cursor: 'pointer', background: 'transparent', color: '#5b6472', whiteSpace: 'nowrap', transition: 'background .25s cubic-bezier(.2,.7,.3,1),color .2s ease'}}>{t("PeopleNest")}</button>
-                <button data-act="goPff" onClick={() => act('goPff')} style={{fontFamily: 'Outfit,sans-serif', fontSize: '12.5px', fontWeight: '600', padding: '8px 18px', borderRadius: '999px', border: 'none', cursor: 'pointer', background: 'transparent', color: '#5b6472', whiteSpace: 'nowrap', transition: 'background .25s cubic-bezier(.2,.7,.3,1),color .2s ease'}}>{t("Force")}</button>
+                <button data-act="goPff" onClick={() => act('goPff')} style={{fontFamily: 'Outfit,sans-serif', fontSize: '12.5px', fontWeight: '600', padding: '8px 18px', borderRadius: '999px', border: 'none', cursor: 'pointer', background: 'transparent', color: '#5b6472', whiteSpace: 'nowrap', transition: 'background .25s cubic-bezier(.2,.7,.3,1),color .2s ease'}}>{t("Field Force")}</button>
+                <button data-act="goHms" onClick={() => act('goHms')} style={{fontFamily: 'Outfit,sans-serif', fontSize: '12.5px', fontWeight: '600', padding: '8px 18px', borderRadius: '999px', border: 'none', cursor: 'pointer', background: 'transparent', color: '#5b6472', whiteSpace: 'nowrap', transition: 'background .25s cubic-bezier(.2,.7,.3,1),color .2s ease'}}>HMSflo</button>
               </div>
               <button onClick={() => act('togglePause')} title={t('Pause / play auto-switch')} aria-label={t('Pause / play auto-switch')} style={{flexShrink: 0, width: '34px', height: '34px', borderRadius: '50%', border: '1px solid #e4eaf5', background: '#ffffff', color: '#1a56db', cursor: 'pointer', display: 'grid', placeItems: 'center', boxShadow: '0 2px 10px rgba(15,23,41,.05)', fontSize: '10px', fontWeight: '700', transition: 'background .2s'}} data-hv="hv-0"><span>{b('pauseIcon')}</span></button>
             </div>
@@ -110,7 +116,7 @@ export default function HeroSection() {
               {c('isBiz') && (<>
                 <div style={{animation: 'slideInR .5s cubic-bezier(.2,.7,.3,1) both'}}>
                   <h1 className="hero-h1" style={{fontFamily: '\'Outfit\',sans-serif', fontSize: '50px', lineHeight: '1.1', fontWeight: '700', letterSpacing: '-1.2px', margin: '20px 0 0', color: '#0f1729', textWrap: 'pretty'}}>{t("Go 100% paperless.")} <span style={{color: '#1a56db'}}>{t("Transform your operations.")}</span></h1>
-                  <p className="hero-p-orig" style={{fontSize: '18px', lineHeight: '1.6', color: '#4b5565', margin: '18px auto 0', maxWidth: '600px', textWrap: 'pretty'}}>{t("BusinessFlo moves approvals, workflows, finance, inventory and daily reporting off paper and into one connected ERP — every request routed, every action audited, every number live.")}</p>
+                  <p className="hero-p-orig" style={{fontSize: '18px', lineHeight: '1.6', color: '#4b5565', margin: '18px auto 0', maxWidth: '600px', textWrap: 'pretty'}}>{t("Businessflo moves approvals, workflows, finance, inventory and daily reporting off paper and into one connected ERP — every request routed, every action audited, every number live.")}</p>
                 </div>
               </>)}
               {c('isPn') && (<>
@@ -125,6 +131,12 @@ export default function HeroSection() {
                   <p className="hero-p-orig" style={{fontSize: '18px', lineHeight: '1.6', color: '#4b5565', margin: '18px auto 0', maxWidth: '600px', textWrap: 'pretty'}}>{t("Field Force plans field visits, tracks calls, manages doctors and pharmacies, and turns territory activity into live field performance analytics — visible the moment it happens.")}</p>
                 </div>
               </>)}
+              {c('isHms') && (<>
+                <div style={{animation: 'slideInR .5s cubic-bezier(.2,.7,.3,1) both'}}>
+                  <h1 className="hero-h1" style={{fontFamily: '\'Outfit\',sans-serif', fontSize: '50px', lineHeight: '1.1', fontWeight: '700', letterSpacing: '-1.2px', margin: '20px 0 0', color: '#0f1729', textWrap: 'pretty'}}>{t("Run your hospital")} <span style={{color: '#1a56db'}}>{t("from one connected system.")}</span></h1>
+                  <p className="hero-p-orig" style={{fontSize: '18px', lineHeight: '1.6', color: '#4b5565', margin: '18px auto 0', maxWidth: '600px', textWrap: 'pretty'}}>{t(HMS_COPY)}</p>
+                </div>
+              </>)}
             </div>
             
           </div>
@@ -134,11 +146,13 @@ export default function HeroSection() {
             {c('isBiz') && <BizMockup scrollRegion={scrollRegion} />}
             {c('isPn') && <PeopleNestMockup scrollRegion={scrollRegion} />}
             {c('isPff') && <FieldForceMockup scrollRegion={scrollRegion} />}
+            {c('isHms') && <HmsMockup scrollRegion={scrollRegion} />}
           </div>
           <div className="hero-p-mobile-wrap">
-            {c('isBiz') && (<p className="hero-p-mobile">{t("BusinessFlo moves approvals, workflows, finance, inventory and daily reporting off paper and into one connected ERP — every request routed, every action audited, every number live.")}</p>)}
+            {c('isBiz') && (<p className="hero-p-mobile">{t("Businessflo moves approvals, workflows, finance, inventory and daily reporting off paper and into one connected ERP — every request routed, every action audited, every number live.")}</p>)}
             {c('isPn') && (<p className="hero-p-mobile">{t("PeopleNest manages employees, attendance, leave, payroll, performance, documents and every HR workflow from one modern platform — with a self-service view for every employee.")}</p>)}
             {c('isPff') && (<p className="hero-p-mobile">{t("Field Force plans field visits, tracks calls, manages doctors and pharmacies, and turns territory activity into live field performance analytics — visible the moment it happens.")}</p>)}
+            {c('isHms') && (<p className="hero-p-mobile">{t(HMS_COPY)}</p>)}
           </div>
         </section>
     </>

@@ -27,7 +27,7 @@ export default defineType({
       title: 'Product interest',
       type: 'string',
       options: {
-        list: ['BusinessFlo', 'PeopleNest', 'Field Force', 'Not sure yet'],
+        list: ['Businessflo', 'PeopleNest', 'Field Force', 'Not sure yet'],
       },
     }),
     defineField({

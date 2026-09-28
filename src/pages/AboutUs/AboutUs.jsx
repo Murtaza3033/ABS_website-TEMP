@@ -52,7 +52,7 @@ export default function AboutUs() {
           <div>
             <DataReveal as="span" className="eyebrow">{t("Who We Are")}</DataReveal>
             <DataReveal as="h2" className="h2">{t("A Product Company, First.")}</DataReveal>
-            <DataReveal as="p" className="lede" style={{ margin: '20px 0 0', fontSize: '17px' }}>{t("We're an engineering-led team building BusinessFlo, PeopleNest, and Field Force — and taking on custom builds for businesses that need something no off-the-shelf tool can offer.")}</DataReveal>
+            <DataReveal as="p" className="lede" style={{ margin: '20px 0 0', fontSize: '17px' }}>{t("We're an engineering-led team building Businessflo, PeopleNest, and Field Force — and taking on custom builds for businesses that need something no off-the-shelf tool can offer.")}</DataReveal>
           </div>
           <DataReveal style={{ position: 'relative', aspectRatio: '4/3' }}>
             <div style={{ position: 'absolute', inset: 0, borderRadius: '24px', overflow: 'hidden', border: '1px solid #e0e9f8', boxShadow: '0 30px 70px -34px rgba(15,23,41,.45)', background: 'linear-gradient(150deg,#1a56db,#0f1729)', display: 'grid', placeItems: 'center', color: 'rgba(255,255,255,.9)' }}>
@@ -112,7 +112,7 @@ export default function AboutUs() {
           <div style={{ maxWidth: '760px', margin: '0 auto', textAlign: 'center' }}>
             <DataReveal as="span" className="eyebrow light">{t("On the National Stage")}</DataReveal>
             <DataReveal as="h2" className="h2" style={{ color: '#fff' }}>{t("Recognized, and out in the field.")}</DataReveal>
-            <DataReveal as="p" className="lede" style={{ color: '#b7c2d6', margin: '16px auto 0', maxWidth: '640px' }}>{t("From exhibiting at ITCN Asia to earning a Tech destiNATION Pakistan recognition award — Align shows up where Pakistan's software industry gathers, and demos BusinessFlo live to the businesses that need it.")}</DataReveal>
+            <DataReveal as="p" className="lede" style={{ color: '#b7c2d6', margin: '16px auto 0', maxWidth: '640px' }}>{t("From exhibiting at ITCN Asia to earning a Tech destiNATION Pakistan recognition award — Align shows up where Pakistan's software industry gathers, and demos Businessflo live to the businesses that need it.")}</DataReveal>
           </div>
           <DataReveal className="rec-gallery" style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr 1fr', gridTemplateRows: '180px 180px', gap: '16px', marginTop: '44px' }}>
             <div style={{ gridRow: 'span 2', borderRadius: '20px', overflow: 'hidden', position: 'relative', background: '#131c2e' }}><img src="/assets/images/about/award.webp" loading="lazy" decoding="async" alt={t("Tech destiNATION Pakistan recognition award")} onError={(e) => e.currentTarget.remove()} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /><div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, padding: '16px', background: 'linear-gradient(0deg,rgba(15,23,41,.85),transparent)' }}><div style={{ fontSize: '16px', fontWeight: 700, color: '#fff' }}>{t("Recognition Award")}</div><div style={{ fontSize: '12px', color: '#b7c2d6', marginTop: '2px' }}>Tech destiNATION Pakistan</div></div></div>

@@ -202,7 +202,7 @@ const navigationDoc = {
         {
           _type: 'navSubItem',
           _key: 'businessflo',
-          label: bi('BusinessFlo'),
+          label: bi('Businessflo'),
           href: 'https://businessflo.co',
         },
         {
@@ -302,7 +302,7 @@ const footerDoc = {
         {
           _type: 'footerLink',
           _key: 'businessflo',
-          label: bi('BusinessFlo'),
+          label: bi('Businessflo'),
           href: 'https://businessflo.co',
         },
         {
@@ -354,11 +354,11 @@ const productDocs = [
   {
     _id: 'product-businessflo',
     _type: 'product',
-    name: bi('BusinessFlo'),
+    name: bi('Businessflo'),
     slug: slugField('businessflo'),
     tagline: bi('Automate approvals, workflows and operations.'),
     description: biBlock(
-      'BusinessFlo moves approvals, workflows, finance, inventory and daily reporting off paper and into one connected ERP — every request routed, every action audited, every number live.',
+      'Businessflo moves approvals, workflows, finance, inventory and daily reporting off paper and into one connected ERP — every request routed, every action audited, every number live.',
     ),
     logoPath: '/assets/images/logos/businessflo-logo-6e685b87.png',
     order: 1,
