@@ -8,7 +8,7 @@ import {
   cc, validPhone, phoneErr,
   REASON_OPTS, PRODUCT_OPTS, Q_TITLES, chatSteps,
 } from './contactData';
-import { submitContact, validEmail, validName, CONTACT_LIMITS } from '../../lib/contactApi';
+import { submitContact, validEmail, validName, cleanName, CONTACT_LIMITS } from '../../lib/contactApi';
 import SEO, { resolveSeo } from '../../components/SEO';
 import { usePage } from '../../hooks/useCms';
 
@@ -271,7 +271,7 @@ export default function ContactUs() {
                   {(key === 'name' || key === 'company') && (
                     <>
                       <input autoFocus value={key === 'name' ? state.name : state.company} maxLength={key === 'name' ? MAX.name : MAX.company}
-                        onChange={(e) => setField(key, e.target.value)} onKeyDown={onEnter}
+                        onChange={(e) => setField(key, key === 'name' ? cleanName(e.target.value) : e.target.value)} onKeyDown={onEnter}
                         className={`cInput${nameBad ? ' cErr' : ''}`}
                         placeholder={key === 'name' ? t('Your name') : t('Company (optional)')} style={{ marginTop: '18px' }} />
                       {nameBad && <div className="cErrMsg">{t("⚠ Enter a valid name (letters only).")}</div>}
@@ -344,7 +344,7 @@ export default function ContactUs() {
                 <div className="cGrid2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginTop: '22px' }}>
                   <div>
                     <label htmlFor="cf-name" style={{ fontSize: '12px', fontWeight: 600, color: '#5b6472' }}>{t("Name")}</label>
-                    <input id="cf-name" maxLength={MAX.name} value={state.name} onChange={(e) => setField('name', e.target.value)} className={`cInput${classicErr.name ? ' cErr' : ''}`} placeholder={t('Your name')} style={{ marginTop: '6px' }} />
+                    <input id="cf-name" maxLength={MAX.name} value={state.name} onChange={(e) => setField('name', cleanName(e.target.value))} className={`cInput${classicErr.name ? ' cErr' : ''}`} placeholder={t('Your name')} style={{ marginTop: '6px' }} />
                     {classicErr.name && <div className="cErrMsg">⚠ {t(classicErr.name)}</div>}
                   </div>
                   <div>

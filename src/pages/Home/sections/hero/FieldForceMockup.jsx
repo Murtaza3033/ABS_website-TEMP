@@ -1,9 +1,9 @@
-'use no memo'; // Compiler skipped this markup before the split; memoizing its ~300 inline styles adds ~20 KB per mockup.
 import { useLanguage } from '../../../../context/LanguageContext';
 
 /* Field Force hero mockup. Rendered by HeroSection while Field Force is the
    active product. */
 export default function FieldForceMockup({ scrollRegion }) {
+  'use no memo'; // Compiler skipped this markup before the split; memoizing its ~300 inline styles adds ~20 KB per mockup.
   const { t } = useLanguage();
   return (
     <>

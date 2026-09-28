@@ -1,10 +1,10 @@
-'use no memo'; // Compiler skipped this markup before the split; memoizing its ~300 inline styles adds ~20 KB per mockup.
 import { useHome } from '../../HomeContext';
 import { useLanguage } from '../../../../context/LanguageContext';
 
 /* PeopleNest hero mockup. Rendered by HeroSection while PeopleNest is the
    active product. */
 export default function PeopleNestMockup({ scrollRegion }) {
+  'use no memo'; // Compiler skipped this markup before the split; memoizing its ~300 inline styles adds ~20 KB per mockup.
   const { c, act } = useHome();
   const { t } = useLanguage();
   return (

@@ -1,4 +1,4 @@
-import { COUNTRIES, phonePH } from './contactData';
+import { COUNTRIES, phonePH, cleanPhone } from './contactData';
 import { CONTACT_LIMITS } from '../../lib/contactApi';
 import { useLanguage } from '../../context/LanguageContext';
 
@@ -12,7 +12,7 @@ export default function PhoneField({ country, phone, onCountry, onPhone, onBlur,
       <div className="phone-row" style={{ display: 'flex', gap: '8px' }}>
         <select
           value={country}
-          onChange={(e) => onCountry(e.target.value)}
+          onChange={(e) => { onCountry(e.target.value); if (phone) onPhone(cleanPhone(phone, e.target.value)); }}
           className="cInput phone-country-select"
           aria-label={t('Country dial code')}
           style={{ width: '172px', flexShrink: 0, padding: '13px 10px' }}
@@ -25,9 +25,11 @@ export default function PhoneField({ country, phone, onCountry, onPhone, onBlur,
           id={id}
           name={name}
           type="tel"
+          inputMode="numeric"
+          autoComplete="tel-national"
           maxLength={CONTACT_LIMITS.phone.max}
           value={phone}
-          onChange={(e) => onPhone(e.target.value)}
+          onChange={(e) => onPhone(cleanPhone(e.target.value, country))}
           onBlur={onBlur}
           className={`cInput${error ? ' cErr' : ''}`}
           placeholder={phonePH(country, t)}

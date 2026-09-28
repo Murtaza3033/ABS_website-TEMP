@@ -9,6 +9,7 @@ export {
   CONTACT_LIMITS,
   NAME_RE,
   EMAIL_RE,
+  cleanName,
   validName,
   validEmail,
   validPhone,

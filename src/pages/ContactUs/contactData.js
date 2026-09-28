@@ -51,6 +51,18 @@ export const phonePH = (iso, t = id) => {
 export const phoneErr = (iso, t = id) => t('Enter a valid {country} number ({len}).')
   .replace('{country}', t(cc(iso).name)).replace('{len}', lenText(iso, t));
 
+/* Live input filter: digits only, capped at the country's max length. Drops a
+   pasted dial code (+92 …) and the national trunk 0 (0321… → 321…); Italy
+   keeps its leading 0 because it is part of Italian numbers. */
+export const cleanPhone = (v, iso) => {
+  const c = cc(iso);
+  let d = String(v).replace(/\D/g, '');
+  const dial = c.dial.replace(/\D/g, '');
+  if (d.length > c.len[1] && d.startsWith(dial)) d = d.slice(dial.length);
+  if (c.iso !== 'IT') d = d.replace(/^0+/, '');
+  return d.slice(0, c.len[1]);
+};
+
 export const validPhone = (v, iso) => {
   if (!v || !v.trim()) return true; // phone is optional
   const c = cc(iso);

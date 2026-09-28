@@ -18,8 +18,13 @@ export const CONTACT_LIMITS = {
 // harakat, Devanagari vowel signs, decomposed accents), space, period, straight
 // or curly apostrophe (iOS/macOS smart punctuation types ’), hyphen, and
 // ZWNJ/ZWJ (U+200C/U+200D, required in Persian/Urdu/Indic names).
+// eslint-disable-next-line no-misleading-character-class -- ZWNJ/ZWJ are allowed individually on purpose
 export const NAME_RE = /^\p{L}[\p{L}\p{M} .'\u{2019}\u{200C}\u{200D}-]*$/u;
 export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// Live input filter: drops any character NAME_RE would reject (digits, symbols).
+// eslint-disable-next-line no-misleading-character-class -- mirrors NAME_RE
+export const cleanName = (v) => String(v).replace(/[^\p{L}\p{M} .'\u{2019}\u{200C}\u{200D}-]/gu, '');
 
 const str = (v) => (typeof v === 'string' ? v.trim() : '');
 
