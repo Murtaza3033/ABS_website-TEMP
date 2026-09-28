@@ -11,9 +11,16 @@ function apiDevServer() {
     apply: 'serve',
     configureServer(server) {
       // Server-only vars (no VITE_ prefix) never reach the browser bundle.
+      // Keys we loaded are tracked so a .env edit (which restarts Vite in the
+      // same process) refreshes them, while real shell env vars still win.
+      const loaded = (globalThis.__apiDevEnvKeys ??= new Set())
       const env = loadEnv(server.config.mode, process.cwd(), '')
       for (const [key, value] of Object.entries(env)) {
-        if (!key.startsWith('VITE_') && process.env[key] === undefined) process.env[key] = value
+        if (key.startsWith('VITE_')) continue
+        if (process.env[key] === undefined || loaded.has(key)) {
+          process.env[key] = value
+          loaded.add(key)
+        }
       }
 
       server.middlewares.use('/api', async (req, res) => {
