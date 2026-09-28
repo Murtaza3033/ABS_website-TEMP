@@ -1,10 +1,9 @@
-import { useRef, useState, useLayoutEffect, useEffect } from 'react';
+import { useRef, useState, useLayoutEffect, useEffect, lazy, Suspense } from 'react';
 import { useHome, useScrollRegionProps } from '../HomeContext';
 import { useLanguage } from '../../../context/LanguageContext';
 import BizMockup from './hero/BizMockup';
 import PeopleNestMockup from './hero/PeopleNestMockup';
 import FieldForceMockup from './hero/FieldForceMockup';
-import HmsMockup from './hero/HmsMockup';
 import { useProducts } from '../../../hooks/useCms';
 import { locT } from '../../../lib/loc';
 
@@ -17,6 +16,15 @@ const HERO = {
   hms: { slug: 'hmsflo', cond: 'isHms', title: 'Run your hospital', highlight: 'from one connected system.', text: 'HMSflo brings OPD, admissions, beds, pharmacy, lab and billing into one hospital management system — every patient tracked, every bed visible, every invoice accurate.' },
 };
 const HERO_KEYS = Object.keys(HERO);
+
+/* The HMSflo demo is the largest mockup (~47 KB), so it is its own chunk:
+   fetched right after first paint (see the effect below, which also
+   re-measures the reserved hero height once it has arrived) instead of
+   delaying the entry bundle. Businessflo is shown first, so it is always
+   loaded long before HMSflo comes round. */
+const loadHms = () => import('./hero/HmsMockup');
+const HmsMockup = lazy(loadHms);
+const HMS_FALLBACK = <div style={{height: '580px'}} />;
 
 /* "Show tips" / "Hide tips" pill (toggles the hand-drawn tour annotations). */
 const TIP_PILL = {position: 'absolute', top: '120px', insetInlineEnd: '40px', zIndex: '60', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '7px', background: '#ffffff', border: '1px solid #c9d8f5', color: '#1a56db', fontFamily: 'Outfit,sans-serif', fontSize: '13px', fontWeight: '600', borderRadius: '99px', padding: '9px 16px', boxShadow: '0 8px 20px -10px rgba(15,23,41,.2)'};
@@ -97,6 +105,8 @@ export default function HeroSection() {
     let imgT = 0;
     const onImg = (e) => { if (e.target.tagName !== 'IMG') return; clearTimeout(imgT); imgT = setTimeout(() => setMeasureKey((k) => k + 1), 120); };
     sec?.addEventListener('load', onImg, true);
+    // Lazy HMSflo demo: preload now, re-measure once it can render for real.
+    loadHms().then(() => { if (alive) setMeasureKey((k) => k + 1); }, () => {});
     return () => { alive = false; clearTimeout(id); clearTimeout(imgT); window.removeEventListener('resize', onResize); sec?.removeEventListener('load', onImg, true); };
   }, []);
   const hold = probe !== 'all' && mins;
@@ -151,7 +161,7 @@ export default function HeroSection() {
             {c('isBiz') && <BizMockup scrollRegion={scrollRegion} />}
             {c('isPn') && <PeopleNestMockup scrollRegion={scrollRegion} />}
             {c('isPff') && <FieldForceMockup scrollRegion={scrollRegion} />}
-            {c('isHms') && <HmsMockup scrollRegion={scrollRegion} image={cmsDoc('hms')?.heroImage} />}
+            {c('isHms') && <Suspense fallback={HMS_FALLBACK}><HmsMockup scrollRegion={scrollRegion} /></Suspense>}
           </div>
           <div className="hero-p-mobile-wrap">
             {HERO_KEYS.filter((k) => c(HERO[k].cond)).map((k) => (<p key={k} className="hero-p-mobile">{copy(k).text}</p>))}

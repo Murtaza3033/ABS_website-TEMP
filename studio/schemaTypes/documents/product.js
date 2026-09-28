@@ -46,15 +46,6 @@ export default defineType({
       type: 'localeText',
       fieldset: 'hero',
     }),
-    defineField({
-      name: 'heroImage',
-      title: 'Hero screenshot',
-      description:
-        'Only used for products without an interactive demo (HMSflo). Wide dashboard screenshot, about 2080×1160.',
-      type: 'image',
-      fieldset: 'hero',
-      fields: [defineField({name: 'alt', title: 'Alt text', type: 'localeString'})],
-    }),
     defineField({name: 'tagline', title: 'Tagline', type: 'localeText'}),
     defineField({name: 'description', title: 'Description', type: 'localeBlock'}),
     defineField({

@@ -429,3 +429,13 @@ main.home-rtl [role="button"]:focus:not(:focus-visible){outline:none;}
    cards (they used to cover each card's "→"). The phone box padding is only
    18px, so there they overlap just the card's own padding. */
 @media (max-width:600px){.hm-svc-arrow{inset-inline-end:-34px !important;}}
+
+/* HMSflo hero demo (Home/sections/hero/HmsMockup.jsx): screen mount, dialog
+   pop, scrim fade and the "just added" row flash, plus a teal focus ring for
+   its form controls (matches the HMSflo design's #5fc4b8 focus colour). */
+@keyframes hmsIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+@keyframes hmsPop{from{opacity:0;transform:translateY(12px) scale(.985);}to{opacity:1;transform:none;}}
+@keyframes hmsFade{from{opacity:0;}to{opacity:1;}}
+@keyframes hmsFlash{0%,45%{background-color:#ccfbf1;}100%{background-color:#ffffff;}}
+.hms-demo input:focus,.hms-demo select:focus{outline:none;border-color:#5fc4b8 !important;}
+.hms-demo button:focus-visible,.hms-demo input:focus-visible,.hms-demo select:focus-visible{outline:2px solid #5fc4b8;outline-offset:1px;}
