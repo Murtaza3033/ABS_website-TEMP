@@ -1,12 +1,14 @@
 import { useHome, pressable } from '../../HomeContext';
 import { useLanguage } from '../../../../context/LanguageContext';
+import { useHeroNote } from './heroNotes';
 
 /* Businessflo hero mockup (approvals list, AI/Chats/Tickets panel, approval
    donut). Rendered by HeroSection while Businessflo is the active product. */
-export default function BizMockup({ scrollRegion }) {
+export default function BizMockup({ scrollRegion, notes }) {
   'use no memo'; // Compiler skipped this markup before the split; memoizing its ~300 inline styles adds ~20 KB per mockup.
   const { c, b, act, state } = useHome();
   const { t } = useLanguage();
+  const note = useHeroNote(notes); // CMS notes: 0 = AI Hub (1 = Approve on the go, in HeroSection)
   // donut ring proportions from live counts (was setDonut())
   const { a, p, r } = state.counts;
   const tot = a + p + r;
@@ -98,8 +100,8 @@ export default function BizMockup({ scrollRegion }) {
               </div>
               </div>
               <div className="hm-annotate" style={{position: 'absolute', top: '-186px', insetInlineStart: '-14px', width: '300px', textAlign: 'center', zIndex: '7', pointerEvents: 'none', display: state.tour ? undefined : 'none'}}>
-                <div style={{fontFamily: 'Caveat,cursive', fontWeight: '700', fontSize: '38px', letterSpacing: '.5px', color: '#1a56db', lineHeight: '1', transform: 'rotate(-3deg)'}}>{t("AI Hub")}</div>
-                <div style={{fontFamily: 'Outfit,sans-serif', fontSize: '12px', fontWeight: '500', color: '#1a56db', lineHeight: '1.4', marginTop: '4px'}}>{t("AI chat, support tickets & quick help —")}<br />{t("built into every interactive field")}</div>
+                <div style={{fontFamily: 'Caveat,cursive', fontWeight: '700', fontSize: '38px', letterSpacing: '.5px', color: '#1a56db', lineHeight: '1', transform: 'rotate(-3deg)'}}>{note(0, 'text', ['AI Hub'])}</div>
+                <div style={{fontFamily: 'Outfit,sans-serif', fontSize: '12px', fontWeight: '500', color: '#1a56db', lineHeight: '1.4', marginTop: '4px'}}>{note(0, 'sub', ['AI chat, support tickets & quick help —', 'built into every interactive field'])}</div>
                 <svg width="84" height="74" viewBox="0 0 84 74" fill="none" style={{marginTop: '2px', marginInlineStart: '104px'}}><path d="M44 8 C 10 6, 8 44, 38 38 C 60 34, 48 60, 44 70" stroke="#1a56db" strokeWidth="5" fill="none" strokeLinecap="round" strokeLinejoin="round" style={{strokeDasharray: '240', animation: 'drawCurve 2.6s ease-in-out infinite'}}></path><path d="M44 70 L 33 56 M44 70 L 56 58" stroke="#1a56db" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" style={{animation: 'drawHead 2.6s ease-in-out infinite'}}></path></svg>
               </div>
               <span className="hm-float-caption">{t("✨ Built-in AI assistant")}</span>

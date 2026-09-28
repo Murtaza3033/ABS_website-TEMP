@@ -11,6 +11,8 @@ export default function CountUp({ end, suffix = '', duration = 1200, style, clas
     const el = ref.current;
     if (!el) return undefined;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setVal(end); return undefined; }
+    // Already counted up and `end` changed since (e.g. CMS value arrived) — jump to it.
+    if (done.current) { setVal(end); return undefined; }
     let raf = 0;
     let io = null;
     const start = () => {

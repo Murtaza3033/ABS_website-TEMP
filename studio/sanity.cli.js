@@ -5,6 +5,7 @@ export default defineCliConfig({
     projectId: '5knwlrie',
     dataset: 'production'
   },
+  studioHost: 'align-cms',
   deployment: {
     /**
      * Enable auto-updates for studios.

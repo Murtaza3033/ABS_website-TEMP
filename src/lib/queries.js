@@ -10,6 +10,8 @@ export const NAVIGATION_QUERY = groq`*[_id == "navigation"][0]`;
 
 export const FOOTER_QUERY = groq`*[_id == "footer"][0]`;
 
+export const CLIENTS_PAGE_QUERY = groq`*[_id == "clientsPage"][0]`;
+
 export const PAGE_BY_SLUG_QUERY = groq`*[_type == "page" && slug.current == $slug][0]`;
 
 export const ALL_PRODUCTS_QUERY = groq`*[_type == "product"] | order(order asc)`;

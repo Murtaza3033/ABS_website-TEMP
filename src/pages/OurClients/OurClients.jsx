@@ -7,7 +7,9 @@ import ClientWall from './ClientWall';
 import Sectors from './Sectors';
 import TrackRecord from './TrackRecord';
 import SEO, { resolveSeo } from '../../components/SEO';
-import { usePage } from '../../hooks/useCms';
+import { usePage, useClientsPage } from '../../hooks/useCms';
+import { locT } from '../../lib/loc';
+import { TRUSTLINE } from './clientsData';
 
 const HEAD = ['The', 'businesses', "we're", 'proud', 'to', 'work', 'with.'];
 
@@ -15,6 +17,12 @@ export default function OurClients() {
   const { t, lang } = useLanguage();
   const { data: cmsPage } = usePage('our-clients');
   const seo = resolveSeo(cmsPage?.seo, lang);
+  /* Trust line, track record and industry cards are editable in Sanity
+     ("Our Clients page" singleton); the built-in copy is the fallback. */
+  const { data: cms } = useClientsPage();
+  const tl = cms?.trustline;
+  const tx = (k) => locT(tl?.[k], lang, t) || t(TRUSTLINE[k]);
+  const num = (k) => (Number.isFinite(tl?.[k]) ? tl[k] : TRUSTLINE[k]);
   const [play, setPlay] = useState(false);
 
   useLayoutEffect(() => {
@@ -54,11 +62,11 @@ export default function OurClients() {
           </h1>
           <DataReveal as="p" className="lede" style={{ margin: '20px auto 0', maxWidth: '600px' }}>{t("Every name here chose to trust us with the systems their business runs on. Their growth is the story we're proudest of — and the reason we keep building.")}</DataReveal>
           <DataReveal className="oc-trustline">
-            <span>{t("Trusted by")} <b><CountUp end={50} duration={1400} /></b>{t("+ businesses")}</span>
+            <span>{tx('businessesBefore')} <b><CountUp end={num('businessesCount')} duration={1400} /></b>{tx('businessesAfter')}</span>
             <span className="tdot" />
-            <span>{t("across")} <b>6</b> {t("industries")}</span>
+            <span>{tx('industriesBefore')} <b>{num('industriesCount')}</b> {tx('industriesAfter')}</span>
             <span className="tdot" />
-            <span><b>100%</b> {t("in-house")}</span>
+            <span><b>{tl?.inhouseValue || TRUSTLINE.inhouseValue}</b> {tx('inhouseAfter')}</span>
           </DataReveal>
         </div>
       </section>
@@ -78,7 +86,7 @@ export default function OurClients() {
             <DataReveal as="h2" className="h2">{t("One system.")} <span className="cave" style={{ fontSize: '1.3em' }}>{t("Six")}</span> {t("industries.")}</DataReveal>
             <DataReveal as="p" style={{ fontSize: '16px', lineHeight: 1.65, color: '#4b5565', margin: '16px 0 0' }}>{t("From factory floors to pharmacies to solar rooftops — the businesses that trust us span the breadth of how the country actually works. Every one of them connects back to a single place.")}</DataReveal>
           </div>
-          <Sectors />
+          <Sectors cms={cms?.sectors} />
         </div>
       </section>
 
@@ -88,10 +96,10 @@ export default function OurClients() {
         <div style={{ position: 'absolute', inset: 0, opacity: 0.05, backgroundImage: 'linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px)', backgroundSize: '44px 44px' }} />
         <div style={{ maxWidth: '1060px', margin: '0 auto', position: 'relative' }}>
           <div style={{ textAlign: 'center', maxWidth: '620px', margin: '0 auto' }}>
-            <DataReveal as="span" className="eyebrow light">{t("The track record")}</DataReveal>
-            <DataReveal as="h2" className="h2" style={{ color: '#fff' }}>{t("Trust, by the numbers.")}</DataReveal>
+            <DataReveal as="span" className="eyebrow light">{locT(cms?.trackEyebrow, lang, t) || t("The track record")}</DataReveal>
+            <DataReveal as="h2" className="h2" style={{ color: '#fff' }}>{locT(cms?.trackHeading, lang, t) || t("Trust, by the numbers.")}</DataReveal>
           </div>
-          <TrackRecord />
+          <TrackRecord cms={cms?.stats} />
         </div>
       </section>
 

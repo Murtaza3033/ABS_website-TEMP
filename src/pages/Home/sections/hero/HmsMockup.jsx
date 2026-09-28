@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useHome } from '../../HomeContext';
 import { useLanguage } from '../../../../context/LanguageContext';
+import { useHeroNote } from './heroNotes';
 
 /* HMSflo hero demo — a working slice of the HMSflo OPD module, styled after
    the owner's HMSflo design (teal accent, 242px-style white sidebar, 60px top
@@ -475,10 +476,11 @@ const Curve = ({ tip, pts, w, h }) => {
 const SCREENS = [['pt', 'Patients', 'HMPT', IC.users], ['co', 'Consultants', 'HMCO', IC.steth], ['ap', 'Appointments', 'OPAP', IC.cal]];
 
 /* HMSflo hero mockup. Rendered by HeroSection while HMSflo is the active product. */
-export default function HmsMockup({ scrollRegion }) {
+export default function HmsMockup({ scrollRegion, notes }) {
   'use no memo'; // Compiler skipped these inline-style-heavy mockups; memoizing them adds ~20 KB each.
   const { state: home } = useHome();
   const { t } = useLanguage();
+  const note = useHeroNote(notes); // CMS notes: 0 = Live OPD queue, 1 = switch screens, 2 = tap to triage
   const [scr, setScr] = useState('pt');
   const [pts, setPts] = useState(P0);
   const [cons, setCons] = useState(C0);
@@ -677,11 +679,11 @@ export default function HmsMockup({ scrollRegion }) {
       {/* Tips are pinned to measured targets in the 1040×580 frame: queue card
           left edge (x 802), sidebar "Consultants" item (13, 187), first ER case
           row (card edge x −26, row centre y 426). */}
-      <Anno text={t('Live OPD queue')} sub={t('Call the next token in one tap')} style={{ top: '-112px', insetInlineEnd: '300px', width: '230px', textAlign: 'end' }} />
+      <Anno text={note(0, 'text', ['Live OPD queue'])} sub={note(0, 'sub', ['Call the next token in one tap'])} style={{ top: '-112px', insetInlineEnd: '300px', width: '230px', textAlign: 'end' }} />
       <Curve tip={[795, -66]} w={56} h={32} pts={[[4, 8], [20, 4], [38, 10], [50, 26]]} />
-      <Anno text={t('switch screens')} style={{ top: '83px', insetInlineStart: '-176px', width: '150px', textAlign: 'center' }} />
+      <Anno text={note(1, 'text', ['switch screens'])} style={{ top: '83px', insetInlineStart: '-176px', width: '150px', textAlign: 'center' }} />
       <Curve tip={[8, 187]} w={120} h={56} pts={[[4, 6], [40, 2], [84, 20], [114, 46]]} />
-      <Anno text={t('tap to triage')} style={{ top: '326px', insetInlineStart: '-178px', width: '140px', textAlign: 'center' }} />
+      <Anno text={note(2, 'text', ['tap to triage'])} style={{ top: '326px', insetInlineStart: '-178px', width: '140px', textAlign: 'center' }} />
       <Curve tip={[-32, 426]} w={110} h={52} pts={[[4, 6], [34, 2], [76, 18], [104, 44]]} />
 
       <div className="hm-scale-scroll-wrap hm-float-main" {...scrollRegion} style={{ '--hm-w': '1040px', '--hm-h': '580px' }}>

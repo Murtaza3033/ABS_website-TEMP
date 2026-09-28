@@ -6,6 +6,7 @@ import PeopleNestMockup from './hero/PeopleNestMockup';
 import FieldForceMockup from './hero/FieldForceMockup';
 import { useProducts } from '../../../hooks/useCms';
 import { locT } from '../../../lib/loc';
+import { useHeroNote } from './hero/heroNotes';
 
 /* Hero copy per product. Editable in Sanity (product → "Home page hero");
    these strings are the fallback while the CMS loads or when a field is empty. */
@@ -39,6 +40,10 @@ export default function HeroSection() {
   const scrollRegion = useScrollRegionProps(t('Product preview'));
   const { data: cmsProducts } = useProducts();
   const cmsDoc = (k) => (Array.isArray(cmsProducts) ? cmsProducts.find((p) => p?.slug?.current === HERO[k].slug) : null);
+  /* Hand-drawn notes per product (product.heroNotes): each mockup gets its
+     own list; Businessflo note 1 ("Approve on the go") is drawn here. */
+  const notes = (k) => cmsDoc(k)?.heroNotes;
+  const bizNote = useHeroNote(notes('biz'));
   const copy = (k) => {
     const doc = cmsDoc(k);
     const f = HERO[k];
@@ -119,8 +124,8 @@ export default function HeroSection() {
               
               <div style={{position: 'absolute', top: '918px', insetInlineStart: '50%', marginInlineStart: '-70px', width: '300px', textAlign: 'center', pointerEvents: 'none'}}>
                 <svg className="anno-arrow anno-approve" width="110" height="96" viewBox="0 0 110 96" fill="none" style={{display: 'block', margin: '0 auto 2px'}}><path d="M90 90 C 84 44, 52 20, 14 12" stroke="#1a56db" strokeWidth="5" fill="none" strokeLinecap="round" strokeLinejoin="round" style={{strokeDasharray: '240', animation: 'drawCurve 2.6s ease-in-out infinite'}}></path><path d="M14 12 L 34 14 M14 12 L 20 32" stroke="#1a56db" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" style={{animation: 'drawHead 2.6s ease-in-out infinite'}}></path></svg>
-                <div style={{fontFamily: 'Caveat,cursive', fontWeight: '700', fontSize: '30px', letterSpacing: '.3px', color: '#1a56db', lineHeight: '1'}}>{t("Approve on the go")}</div>
-                <div style={{fontFamily: 'Outfit,sans-serif', fontSize: '12px', fontWeight: '500', color: '#1a56db', lineHeight: '1.4', marginTop: '3px'}}>{t("Approve, hold or reject documents in one tap")}</div>
+                <div style={{fontFamily: 'Caveat,cursive', fontWeight: '700', fontSize: '30px', letterSpacing: '.3px', color: '#1a56db', lineHeight: '1'}}>{bizNote(1, 'text', ['Approve on the go'])}</div>
+                <div style={{fontFamily: 'Outfit,sans-serif', fontSize: '12px', fontWeight: '500', color: '#1a56db', lineHeight: '1.4', marginTop: '3px'}}>{bizNote(1, 'sub', ['Approve, hold or reject documents in one tap'])}</div>
               </div>
               
             </div>
@@ -158,10 +163,10 @@ export default function HeroSection() {
       
           
           <div className="rtl-mock" style={{maxWidth: '1120px', margin: '132px auto 0', padding: '0 40px 92px', position: 'relative'}}>
-            {c('isBiz') && <BizMockup scrollRegion={scrollRegion} />}
-            {c('isPn') && <PeopleNestMockup scrollRegion={scrollRegion} />}
+            {c('isBiz') && <BizMockup scrollRegion={scrollRegion} notes={notes('biz')} />}
+            {c('isPn') && <PeopleNestMockup scrollRegion={scrollRegion} notes={notes('pn')} />}
             {c('isPff') && <FieldForceMockup scrollRegion={scrollRegion} />}
-            {c('isHms') && <Suspense fallback={HMS_FALLBACK}><HmsMockup scrollRegion={scrollRegion} /></Suspense>}
+            {c('isHms') && <Suspense fallback={HMS_FALLBACK}><HmsMockup scrollRegion={scrollRegion} notes={notes('hms')} /></Suspense>}
           </div>
           <div className="hero-p-mobile-wrap">
             {HERO_KEYS.filter((k) => c(HERO[k].cond)).map((k) => (<p key={k} className="hero-p-mobile">{copy(k).text}</p>))}

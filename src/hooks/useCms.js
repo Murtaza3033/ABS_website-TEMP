@@ -4,6 +4,7 @@ import {
   SITE_SETTINGS_QUERY,
   NAVIGATION_QUERY,
   FOOTER_QUERY,
+  CLIENTS_PAGE_QUERY,
   PAGE_BY_SLUG_QUERY,
   ALL_PRODUCTS_QUERY,
   PRODUCT_BY_SLUG_QUERY,
@@ -41,6 +42,10 @@ export function useNavigation(options) {
 
 export function useFooterContent(options) {
   return useSanityQuery(['footer'], FOOTER_QUERY, {}, options);
+}
+
+export function useClientsPage(options) {
+  return useSanityQuery(['clientsPage'], CLIENTS_PAGE_QUERY, {}, options);
 }
 
 export function usePage(slug, options) {

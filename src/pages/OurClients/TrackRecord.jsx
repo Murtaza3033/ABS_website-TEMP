@@ -1,6 +1,7 @@
 import { useLanguage } from '../../context/LanguageContext';
 import { DataReveal } from '../../components/Reveal';
 import CountUp from '../../components/CountUp';
+import { locT } from '../../lib/loc';
 import { CLIENTS, SECTORS, NUMBERS, Icon } from './clientsData';
 
 /* "Trust, by the numbers." — three stat cards, each with a small decorative
@@ -11,7 +12,6 @@ import { CLIENTS, SECTORS, NUMBERS, Icon } from './clientsData';
 
 const LOGOS = CLIENTS.filter((c) => c[1]);
 const STACK = LOGOS.slice(0, 4);
-const MORE = `+${NUMBERS[0][0] - STACK.length}`; // 4 chips + "+46" = the 50+ headline
 const RING_R = 42; // orbit radius (px) for the six industry icons
 const PROG_C = 2 * Math.PI * 40; // progress-ring circumference
 
@@ -23,7 +23,8 @@ function track(e) {
   el.style.setProperty('--my', `${((e.clientY - r.top) / r.height) * 100}%`);
 }
 
-function LogoStack() {
+function LogoStack({ total }) {
+  const more = `+${Math.max(0, total - STACK.length)}`; // 4 chips + "+46" = the 50+ headline
   const mid = STACK.length / 2; // 5 chips incl. the "+N" one → offsets -2 … 2
   return (
     <div className="trStack">
@@ -32,7 +33,7 @@ function LogoStack() {
           <img src={`/assets/images/clients/${file}.webp`} alt="" loading="lazy" decoding="async" />
         </span>
       ))}
-      <span className="trChip trMore" style={{ '--k': STACK.length, '--o': mid, zIndex: 1 }}>{MORE}</span>
+      <span className="trChip trMore" style={{ '--k': STACK.length, '--o': mid, zIndex: 1 }}>{more}</span>
     </div>
   );
 }
@@ -77,19 +78,28 @@ function ProgressRing() {
 
 const VISUALS = [LogoStack, IndustryRing, ProgressRing];
 
-export default function TrackRecord() {
-  const { t } = useLanguage();
+/* Stats come from Sanity ("Our Clients page" → Stats) when set, else NUMBERS.
+   Each card's visual stays tied to its position. */
+export default function TrackRecord({ cms }) {
+  const { t, lang } = useLanguage();
+  const stats = Array.isArray(cms) && cms.length
+    ? cms.slice(0, VISUALS.length).map((s, i) => [
+      Number.isFinite(s?.value) ? s.value : (NUMBERS[i]?.[0] ?? 0),
+      s?.suffix ?? '',
+      locT(s?.label, lang, t) || t(NUMBERS[i]?.[2] ?? ''),
+    ])
+    : NUMBERS.map(([v, suf, l]) => [v, suf, t(l)]);
   return (
     <>
       <div className="num-grid">
-        {NUMBERS.map((n, i) => {
+        {stats.map((n, i) => {
           const Visual = VISUALS[i];
           return (
-            <DataReveal key={n[2]} className="trCard" style={{ transitionDelay: `${i * 90}ms` }} onPointerMove={track}>
+            <DataReveal key={i} className="trCard" style={{ transitionDelay: `${i * 90}ms` }} onPointerMove={track}>
               <span className="trSpot" aria-hidden="true" />
-              <div className="trVis" aria-hidden="true"><Visual /></div>
+              <div className="trVis" aria-hidden="true"><Visual total={n[0]} /></div>
               <div className="trNum"><CountUp end={n[0]} suffix={n[1]} duration={1500} /></div>
-              <div className="trLbl">{t(n[2])}</div>
+              <div className="trLbl">{n[2]}</div>
             </DataReveal>
           );
         })}

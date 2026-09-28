@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { DataReveal } from '../../components/Reveal';
+import { locT } from '../../lib/loc';
 import { Icon, SECTORS, SECTOR_AREAS } from './clientsData';
 
 /* the six convergence connectors (shared d for the static + animated pair) */
@@ -15,9 +16,23 @@ const LINES = [
 
 /* Industry convergence — hovering a sector lights its connector + scales the
    hub node (was the mouseenter/leave DOM style writes). Driven by hover state. */
-export default function Sectors() {
-  const { t } = useLanguage();
+export default function Sectors({ cms }) {
+  const { t, lang } = useLanguage();
   const [hov, setHov] = useState(null);
+  /* Card titles + sub-areas from Sanity ("Our Clients page" → Industries) when
+     set, else SECTORS/SECTOR_AREAS. The card icon stays tied to its position. */
+  const cards = Array.isArray(cms) && cms.length
+    ? cms.slice(0, LINES.length).map((s, i) => ({
+      title: locT(s?.title, lang, t) || t(SECTORS[i]?.[0] ?? ''),
+      icon: SECTORS[i]?.[1],
+      areas: Array.isArray(s?.areas) && s.areas.length
+        ? s.areas.slice(0, 4).map((a, k) => [
+          locT(a?.caption, lang, t) || t(SECTOR_AREAS[i]?.[k]?.[0] ?? ''),
+          a?.icon || SECTOR_AREAS[i]?.[k]?.[1],
+        ])
+        : (SECTOR_AREAS[i] || []).map(([cap, ico]) => [t(cap), ico]),
+    }))
+    : SECTORS.map((s, i) => ({ title: t(s[0]), icon: s[1], areas: SECTOR_AREAS[i].map(([cap, ico]) => [t(cap), ico]) }));
 
   return (
     <DataReveal style={{ position: 'relative', marginTop: '34px' }}>
@@ -32,9 +47,9 @@ export default function Sectors() {
         <circle cx="600" cy="-12" r="7" fill="#1a56db" />
       </svg>
       <div className="sector-grid">
-        {SECTORS.map((s, i) => (
+        {cards.map((s, i) => (
           <DataReveal
-            key={s[0]} className="clGrp"
+            key={i} className="clGrp"
             onMouseEnter={() => setHov(i)} onMouseLeave={() => setHov(null)}
             style={{ background: '#fff', border: '1px solid #eaeef5', borderRadius: '20px', padding: '26px', boxShadow: '0 16px 42px -30px rgba(15,23,41,.24)' }}
           >
@@ -42,14 +57,14 @@ export default function Sectors() {
             <div className="clBar" style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '4px', background: 'linear-gradient(90deg,#1a56db,#4b8bff)', zIndex: 2 }} />
             <div className="secBody" style={{ position: 'relative', zIndex: 1 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <span className="clIco" style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#e8effc', color: '#1a56db', display: 'grid', placeItems: 'center', flexShrink: 0 }}><Icon name={s[1]} /></span>
-                <span style={{ flex: 1, fontSize: '16.5px', fontWeight: 700, lineHeight: 1.2, color: '#0f1729' }}>{t(s[0])}</span>
+                <span className="clIco" style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#e8effc', color: '#1a56db', display: 'grid', placeItems: 'center', flexShrink: 0 }}><Icon name={s.icon} /></span>
+                <span style={{ flex: 1, fontSize: '16.5px', fontWeight: 700, lineHeight: 1.2, color: '#0f1729' }}>{s.title}</span>
               </div>
               <ul className="secAreas">
-                {SECTOR_AREAS[i].map(([cap, ico], k) => (
-                  <li key={cap} className="secTile" style={{ '--k': k }}>
+                {s.areas.map(([cap, ico], k) => (
+                  <li key={k} className="secTile" style={{ '--k': k }}>
                     <span className="secTileIco"><Icon name={ico} size={20} /></span>
-                    <span className="secTileCap">{t(cap)}</span>
+                    <span className="secTileCap">{cap}</span>
                   </li>
                 ))}
               </ul>

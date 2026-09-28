@@ -1,22 +1,24 @@
 import { useHome } from '../../HomeContext';
 import { useLanguage } from '../../../../context/LanguageContext';
+import { useHeroNote } from './heroNotes';
 
 /* PeopleNest hero mockup. Rendered by HeroSection while PeopleNest is the
    active product. */
-export default function PeopleNestMockup({ scrollRegion }) {
+export default function PeopleNestMockup({ scrollRegion, notes }) {
   'use no memo'; // Compiler skipped this markup before the split; memoizing its ~300 inline styles adds ~20 KB per mockup.
   const { c, act } = useHome();
   const { t } = useLanguage();
+  const note = useHeroNote(notes); // CMS notes: 0 = Try our menu, 1 = click to change the view
   return (
     <>
             <div className="hm-float-wrap" style={{position: 'relative', animation: 'slideInR .55s cubic-bezier(.2,.7,.3,1) both'}}>
               <div className="hm-annotate" style={{position: 'absolute', top: '-118px', insetInlineStart: '52px', zIndex: '60', pointerEvents: 'none', textAlign: 'start'}}>
-                <div style={{fontFamily: 'Caveat,cursive', fontWeight: '700', fontSize: '34px', letterSpacing: '.5px', color: '#1a56db', lineHeight: '1'}}>{t("Try our menu")}</div>
+                <div style={{fontFamily: 'Caveat,cursive', fontWeight: '700', fontSize: '34px', letterSpacing: '.5px', color: '#1a56db', lineHeight: '1'}}>{note(0, 'text', ['Try our menu'])}</div>
                 <svg className="anno-arrow" width="96" height="106" viewBox="0 0 96 106" fill="none" style={{display: 'block', margin: '2px 0 0 30px'}}><path d="M34 8 C 6 20, 6 56, 38 50 C 64 45, 52 80, 62 98" stroke="#1a56db" strokeWidth="5" fill="none" strokeLinecap="round" strokeLinejoin="round" style={{strokeDasharray: '260', animation: 'drawCurve 2.6s ease-in-out infinite'}}></path><path d="M62 98 L 48 88 M62 98 L 72 82" stroke="#1a56db" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" style={{animation: 'drawHead 2.6s ease-in-out infinite'}}></path></svg>
               </div>
               <div className="hm-annotate" style={{position: 'absolute', top: '110px', insetInlineStart: '-172px', width: '150px', zIndex: '60', pointerEvents: 'none', textAlign: 'center'}}>
                 <svg className="anno-arrow" width="148" height="56" viewBox="0 0 148 56" fill="none" style={{display: 'block', margin: '0 0 2px auto'}}><path d="M8 48 C 44 42, 98 30, 142 10" stroke="#1a56db" strokeWidth="5" fill="none" strokeLinecap="round" strokeLinejoin="round" style={{strokeDasharray: '220', animation: 'drawCurve 2.6s ease-in-out infinite'}}></path><path d="M142 10 L 126 12 M142 10 L 134 26" stroke="#1a56db" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" style={{animation: 'drawHead 2.6s ease-in-out infinite'}}></path></svg>
-                <div style={{fontFamily: 'Caveat,cursive', fontWeight: '700', fontSize: '27px', letterSpacing: '.4px', color: '#1a56db', lineHeight: '1.05'}}>{t("click to change")}<br />{t("the view")}</div>
+                <div style={{fontFamily: 'Caveat,cursive', fontWeight: '700', fontSize: '27px', letterSpacing: '.4px', color: '#1a56db', lineHeight: '1.05'}}>{note(1, 'text', ['click to change', 'the view'])}</div>
               </div>
               <div className="hm-scale-scroll-wrap hm-float-main" {...scrollRegion} style={{'--hm-w': '1040px', '--hm-h': '620px'}}>
               <div className="hm-scale-scroll" style={{position: 'relative', background: '#ffffff', border: '1px solid #e7ecf5', borderRadius: '16px', boxShadow: '0 50px 100px -40px rgba(15,23,41,.35)', overflow: 'hidden'}}>

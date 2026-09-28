@@ -34,3 +34,20 @@ export function blockLines(value, lang) {
 export function blocksToText(value, lang) {
   return blockLines(value, lang).join(' ').trim();
 }
+
+/* A multi-line (textarea) bilingual field as an array of lines, for short
+   copy with manual line breaks. Same language rules as locT() — Arabic from
+   the CMS, else each English line through the dictionary `t` — and when the
+   field is empty, `fallback` (a string or an array of English lines) is
+   translated line by line, so the built-in copy renders exactly as before. */
+export function locLines(field, lang, t, fallback = []) {
+  const pick = (s) => String(s).split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+  const tr = (l) => (lang === 'ar' && t ? t(l) : l);
+  if (field && typeof field === 'object') {
+    if (lang === 'ar' && field.ar?.trim()) return pick(field.ar);
+    if (field.en?.trim()) return pick(field.en).map(tr);
+  } else if (typeof field === 'string' && field.trim()) {
+    return pick(field).map(tr);
+  }
+  return (Array.isArray(fallback) ? fallback : [fallback]).filter(Boolean).map(tr);
+}

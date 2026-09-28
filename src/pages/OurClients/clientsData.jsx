@@ -74,3 +74,12 @@ export const INDOF = {};
 SECTORS.forEach((s, si) => { s[2].forEach((m) => { INDOF[m] = si; }); });
 
 export const NUMBERS = [[50, '+', 'Businesses served'], [6, '+', 'Industries served'], [100, '%', 'Built & supported in-house']];
+
+/* Hero trust line — built-in copy; editable in Sanity ("Our Clients page"
+   → Trust line, same keys). Reads "Trusted by 50+ businesses • across 6
+   industries • 100% in-house". */
+export const TRUSTLINE = {
+  businessesBefore: 'Trusted by', businessesCount: 50, businessesAfter: '+ businesses',
+  industriesBefore: 'across', industriesCount: 6, industriesAfter: 'industries',
+  inhouseValue: '100%', inhouseAfter: 'in-house',
+};
