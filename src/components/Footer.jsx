@@ -3,27 +3,29 @@ import SmartLink from './SmartLink';
 import { useLanguage } from '../context/LanguageContext';
 import { useSiteSettings, useFooterContent } from '../hooks/useCms';
 import { loc } from '../lib/loc';
-import { getSanityImageUrl } from '../lib/sanity';
+import { cmsPic } from '../lib/cmsImage';
+import { useContactInfo } from '../hooks/useContactInfo';
+import SocialIcon from './SocialIcon';
 import { buildFooterIndex, footerColumnHeading, footerLinkLabel, footerLinkHref } from '../lib/navAdapters';
 import logo from '../assets/images/logos/logo-1783092411267.png';
 
 export default function Footer() {
   const { t, lang } = useLanguage();
-  const { data: cmsSettings } = useSiteSettings();
+  const settingsQuery = useSiteSettings();
+  const cmsSettings = settingsQuery.data;
   const { data: cmsFooter } = useFooterContent();
   const footerIndex = buildFooterIndex(cmsFooter);
   const fh = (key, fallbackText) => footerColumnHeading(footerIndex, key, lang, t, fallbackText);
   const fl = (key, fallbackText) => footerLinkLabel(footerIndex, key, lang, t, fallbackText);
   const fr = (key, fallbackHref) => footerLinkHref(footerIndex, key, fallbackHref);
-  const logoSrc = getSanityImageUrl(cmsSettings?.logo, { width: 240 }) || logo;
+  // No src until Site Settings answers (lib/cmsImage.js): avoids loading the
+  // built-in logo and then the Sanity copy; width/height keep the box.
+  const logoSrc = cmsPic(settingsQuery)(cmsSettings?.logo, { width: 240 }, logo);
   const logoAlt = loc(cmsSettings?.logo?.alt, lang) || 'Align Business Systems';
   const lede = loc(cmsSettings?.siteDescription, lang) || t("We build the ERP, HR, field-force and hospital management platforms growing businesses run their operations on — designed, built and supported in-house.");
-  const address = loc(cmsSettings?.address, lang) || t('Karachi, Pakistan');
-  const email = cmsSettings?.email || 'info@alignbsystems.com';
-  const phone = cmsSettings?.phone || '+92 21 111 254 265';
-  const socialByPlatform = {};
-  (cmsSettings?.socialLinks || []).forEach((s) => { if (s?.platform && s?.url) socialByPlatform[s.platform] = s.url; });
-  const socialUrl = (platform, fallback) => socialByPlatform[platform] || fallback;
+  // Address, email, phone, office hours and social links: Site Settings
+  // (shared with the Contact page and the chat assistant).
+  const { address, email, phone, officeHours, socials } = useContactInfo();
   const copyrightText = loc(cmsFooter?.copyrightText, lang) || t('© 2026 Align Business Systems. All rights reserved.');
   const ref = useRef(null);
   const [revealed, setRevealed] = useState(false);
@@ -54,12 +56,18 @@ export default function Footer() {
               <div><span className="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span>{address}</div>
               <SmartLink href={`mailto:${email}`}><span className="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-10 5L2 7"></path></svg></span>{email}</SmartLink>
               <div><span className="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.7 2.6a2 2 0 0 1-.5 2.1L8.1 9.8a16 16 0 0 0 6 6l1.4-1.2a2 2 0 0 1 2.1-.5c.8.4 1.7.6 2.6.7a2 2 0 0 1 1.7 2z"></path></svg></span><bdi dir="ltr">{phone}</bdi></div>
-              <div><span className="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg></span>{t("Mon – Fri  |  9:00 AM – 6:00 PM PKT")}</div>
+              <div><span className="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg></span>{officeHours}</div>
             </div>
-            <div className="ft-social-h">{t('Follow us')}</div>
-            <div className="ft-social">
-              <SmartLink href={socialUrl('linkedin', 'https://www.linkedin.com/company/align-business-systems')} target="_blank" rel="noopener" aria-label="LinkedIn"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2.06 3.77-2.06 4 0 4.75 2.65 4.75 6.1V21H20v-5.4c0-1.3 0-2.95-1.8-2.95s-2.08 1.4-2.08 2.85V21H9z"></path></svg></SmartLink>
-            </div>
+            {socials.length > 0 && (
+              <>
+                <div className="ft-social-h">{t('Follow us')}</div>
+                <div className="ft-social">
+                  {socials.map((l) => (
+                    <SmartLink key={l.platform + l.url} href={l.url} target="_blank" rel="noopener" aria-label={l.label}><SocialIcon platform={l.platform} /></SmartLink>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
     
           

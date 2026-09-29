@@ -5,12 +5,17 @@ import SmartLink from '../../components/SmartLink';
 import { useProducts } from '../../hooks/useCms';
 import { locT } from '../../lib/loc';
 import { getSanityImageUrl } from '../../lib/sanity';
+import { cmsWaiting } from '../../lib/cmsImage';
 import SEO from '../../components/SEO';
 import { FALLBACK_PRODUCTS, withMeta, slugOf, mergeProducts, LOCAL_LOGOS, logoIconStyle } from './productsData';
 
 export default function ProductsIndex() {
   const { t, lang } = useLanguage();
-  const { data: cmsProducts } = useProducts({ fallbackData: FALLBACK_PRODUCTS });
+  const productsQuery = useProducts({ fallbackData: FALLBACK_PRODUCTS });
+  const cmsProducts = productsQuery.data;
+  // Logos: nothing until the CMS answers (lib/cmsImage.js) — the built-in
+  // sprite/initial only when the CMS failed or has no logo.
+  const waiting = cmsWaiting(productsQuery);
   const products = mergeProducts(cmsProducts).map((doc, i) => withMeta(doc, i));
 
   return (
@@ -42,7 +47,7 @@ export default function ProductsIndex() {
               const tagline = locT(p.tagline, lang, t);
               const slug = slugOf(p);
               const logoUrl = getSanityImageUrl(p.logo, { width: 96 });
-              const localLogo = logoUrl ? null : LOCAL_LOGOS[slug];
+              const localLogo = logoUrl || waiting ? null : LOCAL_LOGOS[slug];
               return (
                 <DataReveal
                   key={slugOf(p)}
@@ -54,7 +59,7 @@ export default function ProductsIndex() {
                   <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: p.meta.tint, color: p.meta.accent, display: 'grid', placeItems: 'center', fontWeight: 800, fontSize: '18px', overflow: 'hidden' }}>
                     {logoUrl ? <img src={logoUrl} alt={name} style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '7px' }} />
                       : localLogo ? <span style={{ position: 'relative', width: '32px', height: '32px', overflow: 'hidden' }}><img src={localLogo.src} alt={name} style={logoIconStyle(localLogo, 32)} /></span>
-                      : locT(p.name, 'en').charAt(0)}
+                      : waiting ? null : locT(p.name, 'en').charAt(0)}
                   </div>
                   <div style={{ fontSize: '20px', fontWeight: 800, color: '#0f1729', marginTop: '18px', letterSpacing: '-.4px' }}>{name}</div>
                   <p style={{ fontSize: '14.5px', lineHeight: 1.6, color: '#5b6472', margin: '10px 0 0', minHeight: '48px' }}>{tagline}</p>

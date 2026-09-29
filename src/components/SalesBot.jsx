@@ -2,6 +2,8 @@ import { useReducer, useRef, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { submitContact, validEmail, validName } from '../lib/contactApi';
 import Turnstile from './Turnstile';
+import { useContactInfo } from '../hooks/useContactInfo';
+import { FALLBACK_DEPT } from '../lib/contactInfo';
 
 // Real number only — never a placeholder. Unset until VITE_WHATSAPP_NUMBER is
 // configured, in which case the WhatsApp channel below appears automatically.
@@ -68,6 +70,9 @@ const FAQ = [
 
 export default function SalesBot() {
   const { t } = useLanguage();
+  // Emails / phones / social links: Site Settings (useContactInfo), shared
+  // with the Contact page and footer.
+  const contact = useContactInfo();
   const [state, dispatch] = useReducer(reducer, initialState);
   const stateRef = useRef(state);
   stateRef.current = state;
@@ -141,7 +146,7 @@ export default function SalesBot() {
     label: t(q),
     onClick: () => {
       addUser(t(q));
-      botSay(t(ans), [
+      botSay(withContacts(t(ans), contact), [
         { label: `👍 ${t('Yes, thanks')}`, onClick: () => { addUser(t('Yes, thanks')); botSay(t('Glad that helped! Anything else?'), mainMenu()); } },
         { label: `🙋 ${t('Talk to a human')}`, onClick: () => { addUser(t('Talk to a human')); handoff(); } },
       ]);
@@ -169,7 +174,7 @@ export default function SalesBot() {
     { label: t('Learn about products'), onClick: () => { addUser(t('Learn about products')); productMenu(); } },
     { label: t('Ask a question'), onClick: () => { addUser(t('Ask a question')); showFaq(); } },
     { label: t('Partnership'), onClick: () => { addUser(t('Partnership')); startCapture('partner'); } },
-    { label: t('Careers'), onClick: () => { addUser(t('Careers')); botSay(<>{t("We'd love to hear from you! Send your CV to")} <b>talent@alignbsystems.com</b> {t("with the role in the subject line.")}</>, [{ label: t('Open Careers page'), onClick: () => { window.location.href = '/careers'; } }, { label: t('Back to menu'), onClick: () => botSay(t('What else can I help with?'), mainMenu()) }]); } },
+    { label: t('Careers'), onClick: () => { addUser(t('Careers')); botSay(<>{t("We'd love to hear from you! Send your CV to")} <b>{contact.dept('careers').email}</b> {t("with the role in the subject line.")}</>, [{ label: t('Open Careers page'), onClick: () => { window.location.href = '/careers'; } }, { label: t('Back to menu'), onClick: () => botSay(t('What else can I help with?'), mainMenu()) }]); } },
     { label: t('Talk to a human'), onClick: () => { addUser(t('Talk to a human')); handoff(); } },
   ];
 
@@ -304,7 +309,7 @@ export default function SalesBot() {
                     ))}
                   </div>
                 )}
-                {m.channels && <Channels mailto={mailto} />}
+                {m.channels && <Channels mailto={mailto} contact={contact} />}
               </div>
             ))}
             {state.typing && (
@@ -329,17 +334,36 @@ export default function SalesBot() {
   );
 }
 
-function Channels({ mailto }) {
+/* The built-in FAQ answers quote the built-in addresses / support number;
+   swap in the current Site Settings values (works on the Arabic text too,
+   since the addresses and number are kept verbatim there). */
+function withContacts(text, contact) {
+  let out = text;
+  ['sales', 'support', 'careers'].forEach((key) => {
+    const d = contact.dept(key);
+    const fb = FALLBACK_DEPT[key];
+    if (d.email && d.email !== fb.email) out = out.split(fb.email).join(d.email);
+    const fbPhone = fb.phones[0];
+    const phone = d.phones[0]?.display;
+    if (fbPhone && phone && phone !== fbPhone) out = out.split(fbPhone).join(phone);
+  });
+  return out;
+}
+
+function Channels({ mailto, contact }) {
   const { t } = useLanguage();
+  const sales = contact.dept('sales');
+  const support = contact.dept('support');
+  const careers = contact.dept('careers');
   const items = [
-    [`✉️  ${t('Email Sales')}`, mailto('sales@alignbsystems.com', 'Demo / enquiry — Align')],
-    [`🛟  ${t('Email Support')}`, mailto('support@alignbsystems.com', 'Support request — Align')],
-    [`📞  ${t('Call Sales')} · +92 317 3822206`, 'tel:+923173822206'],
-    [`📞  ${t('Call Support')} · +92 318 6944418`, 'tel:+923186944418'],
+    ...(sales.email ? [[`✉️  ${t('Email Sales')}`, mailto(sales.email, 'Demo / enquiry — Align')]] : []),
+    ...(support.email ? [[`🛟  ${t('Email Support')}`, mailto(support.email, 'Support request — Align')]] : []),
+    ...(sales.phones[0] ? [[`📞  ${t('Call Sales')} · ${sales.phones[0].display}`, sales.phones[0].tel]] : []),
+    ...(support.phones[0] ? [[`📞  ${t('Call Support')} · ${support.phones[0].display}`, support.phones[0].tel]] : []),
     // Only shown once a real number is configured (VITE_WHATSAPP_NUMBER) —
     // never a placeholder pretending to be a working link.
     ...(WHATSAPP_NUMBER ? [[`💬  ${t('Chat on WhatsApp')}`, `https://wa.me/${WHATSAPP_NUMBER}`]] : []),
-    [`💼  ${t('Careers')} · talent@alignbsystems.com`, mailto('talent@alignbsystems.com', 'Application — Align')],
+    ...(careers.email ? [[`💼  ${t('Careers')} · ${careers.email}`, mailto(careers.email, 'Application — Align')]] : []),
   ];
   const linkStyle = { display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', fontSize: '13px', fontWeight: 600, color: SLATE, background: '#fff', border: '1.5px solid #e3e9f3', borderRadius: '12px', padding: '10px 13px' };
   return (
@@ -349,11 +373,11 @@ function Channels({ mailto }) {
           {label}
         </a>
       ))}
-      <div style={{ display: 'flex', gap: '8px', marginTop: '2px' }}>
-        {[['LinkedIn', 'https://www.linkedin.com/'], ['YouTube', 'https://www.youtube.com/'], ['Facebook', 'https://www.facebook.com/']].map(([name, href]) => (
-          <a key={name} href={href} target="_blank" rel="noopener noreferrer" style={{ flex: 1, textAlign: 'center', textDecoration: 'none', fontSize: '11.5px', fontWeight: 600, color: BLUE, background: '#eef4ff', borderRadius: '10px', padding: '8px 6px' }}>{name}</a>
+      {contact.socials.length > 0 && <div style={{ display: 'flex', gap: '8px', marginTop: '2px' }}>
+        {contact.socials.map(({ label: name, url: href }) => (
+          <a key={href} href={href} target="_blank" rel="noopener noreferrer" style={{ flex: 1, textAlign: 'center', textDecoration: 'none', fontSize: '11.5px', fontWeight: 600, color: BLUE, background: '#eef4ff', borderRadius: '10px', padding: '8px 6px' }}>{name}</a>
         ))}
-      </div>
+      </div>}
     </div>
   );
 }

@@ -5,7 +5,7 @@ import SmartLink from '../../components/SmartLink';
 import SEO, { resolveSeo } from '../../components/SEO';
 import { usePage, useAboutPage } from '../../hooks/useCms';
 import { locT, locLines } from '../../lib/loc';
-import { getSanityImageUrl } from '../../lib/sanity';
+import { cmsPic } from '../../lib/cmsImage';
 import { PRODMETA, metaImg } from '../Products/productsData';
 import {
   Icon, STRIP, STRIP_TINTS, MILES, STATS, EXP, TECHSTACK, VALS, NET,
@@ -30,22 +30,28 @@ export default function AboutUs() {
      the whole built-in list when the CMS list is empty; an item's missing
      photo falls back to the built-in photo at the same position). Photos are
      served from the Sanity CDN at ~2x their displayed size. */
-  const { data: cms } = useAboutPage();
+  const aboutQuery = useAboutPage();
+  const cms = aboutQuery.data;
   const tx = (k, fallback) => locT(cms?.[k], lang, t) || t(fallback);
   const lt = (v) => locT(v, lang, t);
-  const pic = (image, width, fallback) => getSanityImageUrl(image, { width }) || fallback || '';
+  // No image source while the CMS answer is pending (avoids loading the
+  // built-in photo and then the Sanity copy); built-in photos only when the
+  // CMS failed or the field is empty — see lib/cmsImage.js.
+  const cmsImg = cmsPic(aboutQuery);
+  const pic = (image, width, fallback) => cmsImg(image, { width }, fallback);
+  const stat = (path) => cmsImg(null, null, path);
   const pick = (k, fallback, fromCms, fromFallback) => (cms?.[k]?.length ? cms[k].map(fromCms) : fallback.map(fromFallback));
 
   const heading = locLines(cms?.heroHeading, lang, t, ['We Build the Systems', 'Businesses Run On']);
   const strip = pick('strip', STRIP,
     (x, i) => ({ caption: lt(x?.caption), src: pic(x?.image, 600, STRIP[i] && ABOUT_IMG(STRIP[i][1])) }),
-    (x) => ({ caption: t(x[0]), src: ABOUT_IMG(x[1]) }));
+    (x) => ({ caption: t(x[0]), src: stat(ABOUT_IMG(x[1])) }));
   const miles = pick('milestones', MILES,
     (x, i) => ({ year: lt(x?.year), title: lt(x?.title), text: lt(x?.text), color: RING[x?.ring] || RING.blue, src: pic(x?.image, 160, MILES[i] && ABOUT_IMG(MILES[i][3])) }),
-    (x) => ({ year: t(x[0]), title: t(x[1]), text: '', color: x[2], src: ABOUT_IMG(x[3]) }));
+    (x) => ({ year: t(x[0]), title: t(x[1]), text: '', color: x[2], src: stat(ABOUT_IMG(x[3])) }));
   const gallery = pick('gallery', GALLERY,
     (x, i) => ({ caption: lt(x?.caption), sub: lt(x?.subcaption), alt: lt(x?.alt) || lt(x?.caption), src: pic(x?.image, i === 0 ? 900 : 640, GALLERY[i] && ABOUT_IMG(GALLERY[i][0])) }),
-    (x) => ({ caption: t(x[1]), sub: x[2] || '', alt: t(x[3] || x[1]), src: ABOUT_IMG(x[0]) }));
+    (x) => ({ caption: t(x[1]), sub: x[2] || '', alt: t(x[3] || x[1]), src: stat(ABOUT_IMG(x[0])) }));
   const [feature, ...tiles] = gallery;
   const stats = pick('stats', STATS,
     (x, i) => ({ value: lt(x?.value), label: lt(x?.label), icon: x?.icon || STATS[i % STATS.length][4], color: STATS[i % STATS.length][2], bg: STATS[i % STATS.length][3] }),
@@ -55,7 +61,7 @@ export default function AboutUs() {
       const m = PRODMETA[i % PRODMETA.length];
       return { name: lt(x?.name), nameEn: locT(x?.name, 'en'), url: x?.url || '', src: pic(x?.image, 1672, PRODMETA[i] && metaImg(PRODMETA[i])), topTitle: lt(x?.topTitle), topSub: lt(x?.topSub), botLabel: lt(x?.botLabel), botValue: x?.botValue || '', botDelta: lt(x?.botDelta), accent: m.accent, tint: m.tint };
     },
-    (m) => ({ name: t(m.name), nameEn: m.name, url: m.url || m.bar, src: metaImg(m), topTitle: t(m.topTitle), topSub: t(m.topSub), botLabel: t(m.botLabel), botValue: m.botValue, botDelta: t(m.botDelta), accent: m.accent, tint: m.tint }));
+    (m) => ({ name: t(m.name), nameEn: m.name, url: m.url || m.bar, src: stat(metaImg(m)), topTitle: t(m.topTitle), topSub: t(m.topSub), botLabel: t(m.botLabel), botValue: m.botValue, botDelta: t(m.botDelta), accent: m.accent, tint: m.tint }));
   const expertise = pick('expertise', EXP,
     (x) => ({ title: lt(x?.title), text: lt(x?.text), icon: x?.icon || 'layers' }),
     (x) => ({ title: t(x[0]), text: t(x[1]), icon: x[2] }));
@@ -68,7 +74,7 @@ export default function AboutUs() {
       const n = NET[i % NET.length];
       return { title: lt(x?.title), tag: lt(x?.tag), text: lt(x?.text), href: x?.href || '/', src: pic(x?.image, 280, NET[i] && ABOUT_IMG(NET[i].img)), accent: n.accent, ink: n.ink, tint: n.tint };
     },
-    (n) => ({ title: t(n.title), tag: t(n.tag), text: t(n.line), href: n.href, src: ABOUT_IMG(n.img), accent: n.accent, ink: n.ink, tint: n.tint }));
+    (n) => ({ title: t(n.title), tag: t(n.tag), text: t(n.line), href: n.href, src: stat(ABOUT_IMG(n.img)), accent: n.accent, ink: n.ink, tint: n.tint }));
   return (
     <main>
       <SEO

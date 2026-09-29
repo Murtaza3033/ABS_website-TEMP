@@ -7,7 +7,7 @@ import IndustryPanel from './IndustryPanel';
 import Convergence from './Convergence';
 import { useIndustries, usePage } from '../../hooks/useCms';
 import { loc } from '../../lib/loc';
-import { getSanityImageUrl } from '../../lib/sanity';
+import { cmsPic, cssUrl } from '../../lib/cmsImage';
 import SEO, { resolveSeo } from '../../components/SEO';
 import { IND } from './industriesData';
 
@@ -33,7 +33,7 @@ const FALLBACK_INDUSTRIES = IND.map((ind, i) => ({
    order) rather than replacing it, keeping IndustryPanel/Convergence untouched.
    `description` isn't used here: it was seeded as one combined string and
    can't be safely split back into the separate head/para the panel renders. */
-function mergeIndustry(doc, i, lang) {
+function mergeIndustry(doc, i, lang, pic) {
   const base = IND[i] || IND[0];
   const img = doc.illustrationPath
     ? doc.illustrationPath.replace(/^.*\//, '').replace(/\.[a-z0-9]+$/i, '')
@@ -42,7 +42,8 @@ function mergeIndustry(doc, i, lang) {
     ...base,
     name: loc(doc.name, lang) || base.name,
     img,
-    imgUrl: getSanityImageUrl(doc.illustration, { width: 1200 }) || `/assets/images/industries/${img}.webp`,
+    // undefined while the CMS list is pending (lib/cmsImage.js)
+    imgUrl: pic(doc.illustration, { width: 1200 }, `/assets/images/industries/${img}.webp`),
   };
 }
 
@@ -50,9 +51,11 @@ export default function Industries() {
   const { t, lang } = useLanguage();
   const { data: cmsPage } = usePage('industries');
   const seo = resolveSeo(cmsPage?.seo, lang);
-  const { data: cmsIndustries } = useIndustries({ fallbackData: FALLBACK_INDUSTRIES });
+  const industriesQuery = useIndustries({ fallbackData: FALLBACK_INDUSTRIES });
+  const cmsIndustries = industriesQuery.data;
+  const pic = cmsPic(industriesQuery);
   const industries = (cmsIndustries && cmsIndustries.length > 0 ? cmsIndustries : FALLBACK_INDUSTRIES)
-    .map((doc, i) => mergeIndustry(doc, i, lang));
+    .map((doc, i) => mergeIndustry(doc, i, lang, pic));
   const [cur, setCur] = useState(0);
   const [play, setPlay] = useState(false);
   const autoRef = useRef(true);
@@ -160,7 +163,7 @@ export default function Industries() {
       <section className="sec" style={{ position: 'relative', background: 'linear-gradient(180deg,var(--tint) 0%,#fff 100%)', padding: '80px 32px 40px', overflow: 'hidden', isolation: 'isolate' }}>
         <div className="indMontage">
           {industries.map((ind, i) => (
-            <span key={ind.short} className={i === cur ? 'on' : ''} style={{ backgroundImage: `url('${ind.imgUrl}')` }} />
+            <span key={ind.short} className={i === cur ? 'on' : ''} style={{ backgroundImage: cssUrl(ind.imgUrl) }} />
           ))}
         </div>
         <div style={{ position: 'absolute', top: '-140px', left: '50%', transform: 'translateX(-50%)', width: '920px', height: '520px', background: 'radial-gradient(ellipse at center,rgba(26,86,219,.08),transparent 62%)', pointerEvents: 'none', zIndex: 0 }} />

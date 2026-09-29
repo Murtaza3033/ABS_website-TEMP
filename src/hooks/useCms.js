@@ -7,6 +7,9 @@ import {
   CLIENTS_PAGE_QUERY,
   TEAM_PAGE_QUERY,
   ABOUT_PAGE_QUERY,
+  EVENTS_PAGE_QUERY,
+  CAREERS_PAGE_QUERY,
+  CONTACT_PAGE_QUERY,
   PAGE_BY_SLUG_QUERY,
   ALL_PRODUCTS_QUERY,
   PRODUCT_BY_SLUG_QUERY,
@@ -56,6 +59,18 @@ export function useTeamPage(options) {
 
 export function useAboutPage(options) {
   return useSanityQuery(['aboutPage'], ABOUT_PAGE_QUERY, {}, options);
+}
+
+export function useEventsPage(options) {
+  return useSanityQuery(['eventsPage'], EVENTS_PAGE_QUERY, {}, options);
+}
+
+export function useCareersPage(options) {
+  return useSanityQuery(['careersPage'], CAREERS_PAGE_QUERY, {}, options);
+}
+
+export function useContactPage(options) {
+  return useSanityQuery(['contactPage'], CONTACT_PAGE_QUERY, {}, options);
 }
 
 export function usePage(slug, options) {

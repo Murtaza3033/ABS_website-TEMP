@@ -6,18 +6,21 @@ import LanguageToggle from './LanguageToggle';
 import { useLanguage } from '../context/LanguageContext';
 import { useNavigation, useSiteSettings } from '../hooks/useCms';
 import { loc } from '../lib/loc';
-import { getSanityImageUrl } from '../lib/sanity';
+import { cmsPic } from '../lib/cmsImage';
 import { buildNavIndex, navLabel, navHref } from '../lib/navAdapters';
 import logo from '../assets/images/logos/logo-1783092411267.png';
 
 export default function Header() {
   const { t, lang } = useLanguage();
   const { data: cmsNav } = useNavigation();
-  const { data: cmsSettings } = useSiteSettings();
+  const settingsQuery = useSiteSettings();
+  const cmsSettings = settingsQuery.data;
   const nav = buildNavIndex(cmsNav);
   const nl = (key, fallbackText) => navLabel(nav, key, lang, t, fallbackText);
   const nh = (key, fallbackHref) => navHref(nav, key, fallbackHref);
-  const logoSrc = getSanityImageUrl(cmsSettings?.logo, { width: 240 }) || logo;
+  // No src until Site Settings answers (lib/cmsImage.js): avoids loading the
+  // built-in logo and then the Sanity copy; width/height keep the box.
+  const logoSrc = cmsPic(settingsQuery)(cmsSettings?.logo, { width: 240 }, logo);
   const logoAlt = loc(cmsSettings?.logo?.alt, lang) || 'Align Business Systems';
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);

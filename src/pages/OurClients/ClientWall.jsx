@@ -3,12 +3,15 @@ import { useLanguage } from '../../context/LanguageContext';
 import { DataReveal } from '../../components/Reveal';
 import { useClients } from '../../hooks/useCms';
 import { getSanityImageUrl } from '../../lib/sanity';
+import { cmsWaiting } from '../../lib/cmsImage';
 import { CLIENTS, SHORT, INDOF, DURS, DELS } from './clientsData';
 
 /* Logo → name-wordmark fallback via state (was the runtime's onerror swap).
    Tries the real Sanity image asset first, then the static public path, then
-   the text wordmark — advancing one step each time the current src 404s. */
-function ClientLogo({ name, logo, file }) {
+   the text wordmark — advancing one step each time the current src 404s.
+   `waiting`: the CMS list hasn't answered yet — render an empty tile of the
+   same height instead of loading the static logo only to swap it. */
+function ClientLogo({ name, logo, file, waiting }) {
   const sanitySrc = getSanityImageUrl(logo, { width: 240 });
   // Tiles render ~228px wide: 240w for 1x screens, 480w for 2x (was a single
   // 400w file, upscaled on retina and oversized on standard screens).
@@ -16,6 +19,7 @@ function ClientLogo({ name, logo, file }) {
   const pathSrc = file ? `/assets/images/clients/${file}.webp` : null;
   const sources = [sanitySrc, pathSrc].filter(Boolean);
   const [srcIndex, setSrcIndex] = useState(0);
+  if (waiting && !sanitySrc) return <span className="clLogo" aria-hidden="true" style={{ display: 'block', width: '100%', height: '82px' }} />;
   const wordmark = { fontSize: '22px', fontWeight: 800, letterSpacing: '-.5px', color: '#0f1729', textAlign: 'center' };
   if (srcIndex >= sources.length) return <span style={wordmark}>{name}</span>;
   return <img className="clLogo" src={sources[srcIndex]} srcSet={srcIndex === 0 && sanitySrc && sanitySrc2x ? `${sanitySrc} 1x, ${sanitySrc2x} 2x` : undefined} loading="lazy" decoding="async" alt={name} onError={() => setSrcIndex((i) => i + 1)} style={{ width: '100%', height: '82px', objectFit: 'contain' }} />;
@@ -50,7 +54,9 @@ export default function ClientWall() {
 
   // CMS clients first; static CLIENTS as placeholder (no loading gap) and as
   // the fallback if the CMS call errors or comes back empty.
-  const { data: cmsClients } = useClients({ fallbackData: FALLBACK_CLIENTS });
+  const clientsQuery = useClients({ fallbackData: FALLBACK_CLIENTS });
+  const cmsClients = clientsQuery.data;
+  const waiting = cmsWaiting(clientsQuery);
   const clients = (cmsClients && cmsClients.length > 0 ? cmsClients : FALLBACK_CLIENTS).map(normalizeClient);
 
   return (
@@ -72,7 +78,7 @@ export default function ClientWall() {
               key={name} className={`clCard${state}`}
               style={{ background: '#fff', border: '1px solid #eef2f8', borderRadius: '20px', boxShadow: '0 16px 40px -28px rgba(15,23,41,.28)', height: '150px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '26px', animation: `floatY ${DURS[i % DURS.length]} ease-in-out ${DELS[i % DELS.length]} infinite` }}
             >
-              <ClientLogo name={name} file={file} logo={logo} />
+              <ClientLogo name={name} file={file} logo={logo} waiting={waiting} />
               <div className="clCap">{name}</div>
             </DataReveal>
           );

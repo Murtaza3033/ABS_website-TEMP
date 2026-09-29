@@ -16,6 +16,12 @@ export const TEAM_PAGE_QUERY = groq`*[_id == "teamPage"][0]`;
 
 export const ABOUT_PAGE_QUERY = groq`*[_id == "aboutPage"][0]`;
 
+export const EVENTS_PAGE_QUERY = groq`*[_id == "eventsPage"][0]`;
+
+export const CAREERS_PAGE_QUERY = groq`*[_id == "careersPage"][0]`;
+
+export const CONTACT_PAGE_QUERY = groq`*[_id == "contactPage"][0]`;
+
 export const PAGE_BY_SLUG_QUERY = groq`*[_type == "page" && slug.current == $slug][0]`;
 
 export const ALL_PRODUCTS_QUERY = groq`*[_type == "product"] | order(order asc)`;

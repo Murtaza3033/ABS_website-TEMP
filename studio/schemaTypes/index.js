@@ -7,6 +7,9 @@ import footer from './documents/footer'
 import clientsPage from './documents/clientsPage'
 import teamPage from './documents/teamPage'
 import aboutPage from './documents/aboutPage'
+import eventsPage from './documents/eventsPage'
+import careersPage from './documents/careersPage'
+import contactPage from './documents/contactPage'
 import page from './documents/page'
 import product from './documents/product'
 import service from './documents/service'
@@ -36,6 +39,9 @@ export const schemaTypes = [
   clientsPage,
   teamPage,
   aboutPage,
+  eventsPage,
+  careersPage,
+  contactPage,
   page,
   product,
   service,

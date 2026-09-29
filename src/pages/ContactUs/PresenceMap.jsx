@@ -1,7 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import Reveal from '../../components/Reveal';
-import { PINS } from './contactData';
 
 /* Presence map — zoom/pan + hover pins. State-driven (zoom/origin/active pin).
    Wheel zoom only with Ctrl/⌘ held (also what trackpad pinch sends), so a
@@ -11,13 +10,18 @@ import { PINS } from './contactData';
 const ANCHOR = { c: 'translate(-50%,-50%)', t: 'translate(-50%,0)', br: 'translate(-100%,-100%)', bl: 'translate(0,-100%)' };
 // Effective map width (px x zoom) below which grouped pins are clustered.
 const CLUSTER_BELOW = 500;
-const GROUPS = PINS.reduce((acc, p) => {
+const groupPins = (pins) => pins.reduce((acc, p) => {
   if (p.group) (acc[p.group] = acc[p.group] || []).push(p);
   return acc;
 }, {});
 const centroid = (ps) => ({ x: ps.reduce((a, p) => a + p.x, 0) / ps.length, y: ps.reduce((a, p) => a + p.y, 0) / ps.length });
-export default function PresenceMap() {
+/* `pins`: [{ city, tag, label, x, y, hit, anchor, group }] with texts
+   already localized (Contact page: CMS pins, else the built-in PINS).
+   `src`: the map image URL, or undefined while the CMS is still answering
+   (the box keeps its size; see lib/cmsImage.js). */
+export default function PresenceMap({ pins, src, alt }) {
   const { t } = useLanguage();
+  const GROUPS = groupPins(pins);
   const vpRef = useRef(null);
   const [map, setMap] = useState({ zoom: 1, ox: 50, oy: 50 });
   const [active, setActive] = useState(null); // hovered/selected pin or null
@@ -75,12 +79,12 @@ export default function PresenceMap() {
     <Reveal style={{ position: 'relative', marginTop: '36px', border: '1px solid #e3e9f3', borderRadius: '22px', background: '#fbfdff', overflow: 'hidden', boxShadow: '0 30px 70px -40px rgba(15,23,41,.28)' }}>
       <div ref={vpRef} style={{ position: 'relative', aspectRatio: '1672 / 941', maxHeight: '560px', overflow: 'hidden', background: '#fbfdff' }}>
         <div style={{ position: 'absolute', inset: 0, transformOrigin: `${map.ox}% ${map.oy}%`, transform: `scale(${map.zoom})`, transition: 'transform .3s cubic-bezier(.2,.7,.3,1)', touchAction: 'none' }}>
-          <img
-            src="/assets/images/contact/worldmap-labeled.webp"
-            alt={t("Align global presence map")}
+          {src && <img
+            src={src}
+            alt={alt}
             onError={(e) => { e.currentTarget.style.display = 'none'; }}
             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'fill' }}
-          />
+          />}
           {/* Tap targets keep a constant on-screen size (hit / zoom inside the
               scaled layer) while the distances between cities grow with zoom. */}
           {clustered && Object.entries(groups).map(([g, ps]) => {
@@ -90,22 +94,22 @@ export default function PresenceMap() {
                 type="button"
                 key={g}
                 className="presence-pin"
-                aria-label={`${ps.map((p) => t(p.city)).join(', ')} — ${t('Zoom in')}`}
+                aria-label={`${ps.map((p) => p.city).join(', ')} — ${t('Zoom in')}`}
                 onClick={() => zoomToGroup(ps)}
                 style={{ position: 'absolute', left: `${c.x}%`, top: `${c.y}%`, width: `${36 / map.zoom}px`, height: `${36 / map.zoom}px`, transform: 'translate(-50%,-50%)', borderRadius: '50%', zIndex: 3, cursor: 'zoom-in' }}
               />
             );
           })}
-          {PINS.filter((p) => !(clustered && p.group)).map((p) => (
+          {pins.filter((p) => !(clustered && p.group)).map((p) => (
             <button
               type="button"
               key={p.city}
               className="presence-pin"
-              aria-label={`${t(p.city)} — ${t(p.tag)}`}
+              aria-label={`${p.city} — ${p.tag}`}
               onMouseEnter={() => setActive(p)}
-              onMouseLeave={() => setActive((cur) => (cur === p ? null : cur))}
+              onMouseLeave={() => setActive((cur) => (cur?.city === p.city ? null : cur))}
               onFocus={() => setActive(p)}
-              onBlur={() => setActive((cur) => (cur === p ? null : cur))}
+              onBlur={() => setActive((cur) => (cur?.city === p.city ? null : cur))}
               onClick={() => focusPin(p)}
               style={{ position: 'absolute', left: `${p.x}%`, top: `${p.y}%`, width: `${p.hit / map.zoom}px`, height: `${p.hit / map.zoom}px`, transform: ANCHOR[p.anchor || 'c'], borderRadius: '50%', zIndex: 3, cursor: 'pointer' }}
             />
@@ -116,10 +120,10 @@ export default function PresenceMap() {
           <div className="presence-tooltip" style={{ position: 'absolute', left: '24px', bottom: '24px', zIndex: 6, background: '#fff', border: '1px solid #e3e9f3', borderRadius: '16px', padding: '16px 20px', boxShadow: '0 26px 54px -20px rgba(15,23,41,.45)', maxWidth: '270px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
               <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: 'var(--blue)', boxShadow: '0 0 0 4px rgba(26,86,219,.18)' }} />
-              <span style={{ fontSize: '15px', fontWeight: 700, color: 'var(--ink)' }}>{t(active.city)}</span>
+              <span style={{ fontSize: '15px', fontWeight: 700, color: 'var(--ink)' }}>{active.city}</span>
             </div>
-            <div style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '1px', color: 'var(--blue)', textTransform: 'uppercase', marginTop: '8px' }}>{t(active.tag)}</div>
-            <div style={{ fontSize: '12.5px', lineHeight: 1.55, color: '#5b6472', marginTop: '6px' }}>{t(active.label)}</div>
+            <div style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '1px', color: 'var(--blue)', textTransform: 'uppercase', marginTop: '8px' }}>{active.tag}</div>
+            <div style={{ fontSize: '12.5px', lineHeight: 1.55, color: '#5b6472', marginTop: '6px' }}>{active.label}</div>
           </div>
         )}
 

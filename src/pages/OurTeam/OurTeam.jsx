@@ -6,7 +6,7 @@ import ParticleCanvas from './ParticleCanvas';
 import LeaderScene from './LeaderScene';
 import { useTeam, useTeamPage, usePage } from '../../hooks/useCms';
 import { locT } from '../../lib/loc';
-import { getSanityImageUrl } from '../../lib/sanity';
+import { cmsPic } from '../../lib/cmsImage';
 import SEO, { resolveSeo } from '../../components/SEO';
 import { Icon, HERO, WAY, PAL, FALLBACK_TEAM } from './teamData';
 
@@ -20,7 +20,7 @@ const groupOf = (doc) => doc.group || FALLBACK_BY_ID[doc._id]?.group || 'team';
    the same seeded person (matched by _id). A leader added in Studio without
    scene extras still gets a full scene (next number, alternating side);
    floating cards without a title are simply not drawn. */
-function toLeader(doc, i, lang, t) {
+function toLeader(doc, i, lang, t, pic) {
   const fb = FALLBACK_BY_ID[doc._id] || {};
   const tx = (v, f) => locT(v, lang, t) || locT(f, lang, t);
   const card = (c, f, keys) => {
@@ -37,7 +37,7 @@ function toLeader(doc, i, lang, t) {
     role: tx(doc.role, fb.role),
     quote: tx(doc.bio, fb.bio),
     caption: tx(doc.caption, fb.caption),
-    photo: getSanityImageUrl(doc.photo, { width: 600 }) || fb.photoPath || '',
+    photo: pic(doc.photo, { width: 600 }, fb.photoPath) || '',
     tags: (doc.tags?.length ? doc.tags : fb.tags || [])
       .map((tg) => ({ label: locT(tg?.label, lang, t), description: locT(tg?.description, lang, t) }))
       .filter((tg) => tg.label),
@@ -48,7 +48,7 @@ function toLeader(doc, i, lang, t) {
 }
 
 /* Senior / team card: localized texts + avatar (photo, else initials). */
-function toCard(doc, lang, t) {
+function toCard(doc, lang, t, pic) {
   const fb = FALLBACK_BY_ID[doc._id] || {};
   const tx = (v, f) => locT(v, lang, t) || locT(f, lang, t);
   const name = tx(doc.name, fb.name);
@@ -58,7 +58,7 @@ function toCard(doc, lang, t) {
     role: tx(doc.role, fb.role),
     blurb: tx(doc.blurb, fb.blurb),
     initials: doc.initials || fb.initials || '',
-    photo: getSanityImageUrl(doc.photo, { width: 160, height: 160 }),
+    photo: pic(doc.photo, { width: 160, height: 160 }),
     alt: locT(doc.photo?.alt, lang, t) || name,
   };
 }
@@ -77,13 +77,17 @@ export default function OurTeam() {
      (leader / senior / team, each sorted by order); page texts come from the
      "Our Team page" singleton. The built-in copy is the fallback for an
      empty/unreachable CMS and for any field left empty. */
-  const { data: cmsTeam } = useTeam({ fallbackData: FALLBACK_TEAM });
+  const teamQuery = useTeam({ fallbackData: FALLBACK_TEAM });
+  const cmsTeam = teamQuery.data;
+  // Portraits: no source until the CMS answers (lib/cmsImage.js), so the
+  // built-in photo is never loaded just to be replaced by the Sanity copy.
+  const pic = cmsPic(teamQuery);
   const { data: cms } = useTeamPage();
   const tx = (k, fallback) => locT(cms?.[k], lang, t) || t(fallback);
   const people = cmsTeam?.length ? cmsTeam : FALLBACK_TEAM;
-  const leaders = people.filter((d) => groupOf(d) === 'leader').map((d, i) => toLeader(d, i, lang, t));
-  const senior = people.filter((d) => groupOf(d) === 'senior').map((d) => toCard(d, lang, t));
-  const members = people.filter((d) => groupOf(d) === 'team').map((d) => toCard(d, lang, t));
+  const leaders = people.filter((d) => groupOf(d) === 'leader').map((d, i) => toLeader(d, i, lang, t, pic));
+  const senior = people.filter((d) => groupOf(d) === 'senior').map((d) => toCard(d, lang, t, pic));
+  const members = people.filter((d) => groupOf(d) === 'team').map((d) => toCard(d, lang, t, pic));
   const heroStats = cms?.heroStats?.length
     ? cms.heroStats.map((h) => [Number.isFinite(h?.value) ? h.value : 0, h?.suffix || '', locT(h?.label, lang, t)])
     : HERO.map((h) => [+h[0], h[1], t(h[2])]);

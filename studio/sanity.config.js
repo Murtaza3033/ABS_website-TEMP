@@ -4,7 +4,7 @@ import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemaTypes'
 
 /* Singletons: the frontend reads these by fixed _id (src/lib/queries.js:
-   *[_id == "siteSettings"|"navigation"|"footer"|"clientsPage"|"teamPage"|"aboutPage"][0]), so Studio pins each to
+   *[_id == "siteSettings"|"navigation"|"footer"|"clientsPage"|"teamPage"|"aboutPage"|"eventsPage"|"careersPage"|"contactPage"][0]), so Studio pins each to
    that exact document instead of a list, removes them from every "Create new"
    menu, and hides delete/duplicate/unpublish — a second copy or a deleted one
    would silently disconnect the live site from what editors are editing. */
@@ -15,6 +15,9 @@ const SINGLETONS = [
   {type: 'clientsPage', id: 'clientsPage', title: 'Our Clients page'},
   {type: 'teamPage', id: 'teamPage', title: 'Our Team page'},
   {type: 'aboutPage', id: 'aboutPage', title: 'About Us page'},
+  {type: 'eventsPage', id: 'eventsPage', title: 'Events page'},
+  {type: 'careersPage', id: 'careersPage', title: 'Careers page'},
+  {type: 'contactPage', id: 'contactPage', title: 'Contact Us page'},
 ]
 const singletonTypes = new Set(SINGLETONS.map((s) => s.type))
 const SINGLETON_ACTIONS = new Set(['publish', 'discardChanges', 'restore'])

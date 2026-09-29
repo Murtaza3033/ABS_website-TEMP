@@ -1599,4 +1599,12 @@ export const AR = {
   "Session must end after it starts": "يجب أن تنتهي الجلسة بعد بدايتها",
   "Enter the consultation fee": "أدخل رسوم الاستشارة",
   "Pick at least one day": "اختر يوماً واحداً على الأقل",
+
+  // Events list + job employment types (CMS phase 1B)
+  "Upcoming": "قادمة",
+  "More events": "فعاليات أخرى",
+  "Where else we've been.": "أين كنّا أيضاً.",
+  "Part-time": "دوام جزئي",
+  "Contract": "عقد",
+  "Internship": "تدريب",
 };

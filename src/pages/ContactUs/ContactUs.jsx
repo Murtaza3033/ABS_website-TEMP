@@ -6,11 +6,15 @@ import PresenceMap from './PresenceMap';
 import Turnstile from '../../components/Turnstile';
 import {
   cc, validPhone, phoneErr,
-  REASON_OPTS, PRODUCT_OPTS, Q_TITLES, chatSteps,
+  REASON_OPTS, PRODUCT_OPTS, Q_TITLES, chatSteps, PINS,
 } from './contactData';
 import { submitContact, validEmail, validName, cleanName, CONTACT_LIMITS } from '../../lib/contactApi';
 import SEO, { resolveSeo } from '../../components/SEO';
-import { usePage } from '../../hooks/useCms';
+import { usePage, useContactPage } from '../../hooks/useCms';
+import { useContactInfo } from '../../hooks/useContactInfo';
+import { locT } from '../../lib/loc';
+import { cmsPic, cssUrl } from '../../lib/cmsImage';
+import SocialIcon from '../../components/SocialIcon';
 
 const initialState = {
   view: 'choice', // choice | chat | classic | done
@@ -76,12 +80,11 @@ const infoLink = { display: 'inline-flex', alignItems: 'center', gap: '7px', fon
 const ldot = { width: '5px', height: '5px', borderRadius: '50%', background: '#c9d8f5', transition: 'background .2s' };
 
 function ContactCard({ icon, title, email, phones }) {
-  const { t } = useLanguage();
   return (
     <Reveal className="cCard" style={{ position: 'relative', overflow: 'hidden', background: '#fff', border: '1px solid #eaeef5', borderRadius: '18px', padding: '24px', boxShadow: '0 16px 42px -30px rgba(15,23,41,.24)' }}>
       <div style={{ position: 'absolute', top: '-46px', right: '-46px', width: '150px', height: '150px', borderRadius: '50%', background: 'radial-gradient(circle,rgba(26,86,219,.12),transparent 70%)', pointerEvents: 'none' }} />
       <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#eef4ff', color: 'var(--blue)', display: 'grid', placeItems: 'center' }}>{icon}</div>
-      <div style={{ fontSize: '16px', fontWeight: 700, marginTop: '16px' }}>{t(title)}</div>
+      <div style={{ fontSize: '16px', fontWeight: 700, marginTop: '16px' }}>{title}</div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '7px', marginTop: '12px' }}>
         <span style={{ display: 'inline-flex', alignItems: 'center', gap: '7px' }}>
           <a className="cInfoLink" href={`mailto:${email}`} style={infoLink}><span className="cInfoLdot" style={ldot} />{email}</a>
@@ -120,6 +123,20 @@ export default function ContactUs() {
   const { t, lang } = useLanguage();
   const { data: cmsPage } = usePage('contact-us');
   const seo = resolveSeo(cmsPage?.seo, lang);
+  /* Page texts, photos and map pins: "Contact Us page" singleton; emails,
+     phones, address, response time and social links: Site Settings (shared
+     with the footer and chat assistant). Built-in copy for anything empty. */
+  const pageQuery = useContactPage();
+  const cms = pageQuery.data;
+  const pic = cmsPic(pageQuery);
+  const tx = (k, fallback) => locT(cms?.[k], lang, t) || t(fallback);
+  const contact = useContactInfo();
+  const pins = cms?.pins?.length
+    ? cms.pins.filter((p) => Number.isFinite(p?.x) && Number.isFinite(p?.y)).map((p) => ({
+      city: locT(p.city, lang, t), tag: locT(p.tag, lang, t), label: locT(p.label, lang, t),
+      x: p.x, y: p.y, hit: Math.max(32, p.hit || 32), anchor: p.anchor || 'c', group: p.group || undefined,
+    }))
+    : PINS.map((p) => ({ ...p, city: t(p.city), tag: t(p.tag), label: t(p.label) }));
   const [state, dispatch] = useReducer(reducer, initialState);
   const [classicErr, setClassicErr] = useState({});
   const turnstileRef = useRef(null);
@@ -135,7 +152,7 @@ export default function ContactUs() {
     const s = state;
     const subject = `Website enquiry — ${s.name || ''}`;
     const body = `Name: ${s.name}\nCompany: ${s.company}\nReason: ${s.reason}\nProduct: ${s.product}\nEmail: ${s.email}\nPhone: ${s.phone ? `${cc(s.country).dial} ${s.phone}` : ''}\n\n${s.message}`;
-    return `mailto:sales@alignbsystems.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    return `mailto:${contact.dept('sales').email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   };
 
   const doSubmit = async () => {
@@ -219,11 +236,11 @@ export default function ContactUs() {
       />
       {/* HERO */}
       <section style={{ position: 'relative', overflow: 'hidden', background: 'linear-gradient(180deg,var(--tint) 0%,#fff 100%)', padding: '90px 32px 30px', textAlign: 'center' }}>
-        <div style={{ position: 'absolute', inset: 0, backgroundImage: "url('/assets/images/about/meeting.webp')", backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.07, pointerEvents: 'none', WebkitMaskImage: 'linear-gradient(180deg,#000 0%,transparent 88%)', maskImage: 'linear-gradient(180deg,#000 0%,transparent 88%)' }} />
+        <div style={{ position: 'absolute', inset: 0, backgroundImage: cssUrl(pic(cms?.heroImage, { width: 1254 }, '/assets/images/about/meeting.webp')), backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.07, pointerEvents: 'none', WebkitMaskImage: 'linear-gradient(180deg,#000 0%,transparent 88%)', maskImage: 'linear-gradient(180deg,#000 0%,transparent 88%)' }} />
         <div className="cReveal cin" style={{ position: 'relative', maxWidth: '720px', margin: '0 auto' }}>
-          <span className="hero-eyebrow">{t("Contact Us")}</span>
-          <h1 style={{ fontSize: 'clamp(38px,6vw,56px)', lineHeight: 1.05, letterSpacing: '-1.6px', fontWeight: 800, margin: '14px 0 0', color: 'var(--ink)' }}>{t("Let's")} <span style={{ fontFamily: 'var(--font-hand)', fontWeight: 700, color: 'var(--blue)', fontSize: '1.18em' }}>{t("start the conversation.")}</span></h1>
-          <p style={{ fontSize: '18px', lineHeight: 1.6, color: '#4b5565', margin: '20px auto 0', maxWidth: '540px' }}>{t("Tell us what you're working with today and we'll show you what Align can do for your operations — however you prefer to reach us.")}</p>
+          <span className="hero-eyebrow">{tx('heroEyebrow', "Contact Us")}</span>
+          <h1 style={{ fontSize: 'clamp(38px,6vw,56px)', lineHeight: 1.05, letterSpacing: '-1.6px', fontWeight: 800, margin: '14px 0 0', color: 'var(--ink)' }}>{tx('heroTitle', "Let's")} <span style={{ fontFamily: 'var(--font-hand)', fontWeight: 700, color: 'var(--blue)', fontSize: '1.18em' }}>{tx('heroHighlight', "start the conversation.")}</span></h1>
+          <p style={{ fontSize: '18px', lineHeight: 1.6, color: '#4b5565', margin: '20px auto 0', maxWidth: '540px' }}>{tx('heroText', "Tell us what you're working with today and we'll show you what Align can do for your operations — however you prefer to reach us.")}</p>
         </div>
       </section>
 
@@ -406,11 +423,11 @@ export default function ContactUs() {
       <section id="our-presence" style={{ background: 'linear-gradient(180deg,var(--tint),#fff)', padding: '90px 32px', borderTop: '1px solid var(--line)' }}>
         <div style={{ maxWidth: '1180px', margin: '0 auto' }}>
           <Reveal style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto' }}>
-            <span className="hero-eyebrow">{t("Our Presence")}</span>
-            <h2 style={{ fontSize: 'clamp(28px,4vw,38px)', lineHeight: 1.1, letterSpacing: '-1px', fontWeight: 800, margin: '14px 0 0' }}>{t("The markets we serve — and grow into.")}</h2>
-            <p style={{ fontSize: '15.5px', lineHeight: 1.65, color: '#4b5565', margin: '14px 0 0' }}>{t("Headquartered in Karachi, with a growing regional presence across the Gulf and beyond.")}</p>
+            <span className="hero-eyebrow">{tx('mapEyebrow', "Our Presence")}</span>
+            <h2 style={{ fontSize: 'clamp(28px,4vw,38px)', lineHeight: 1.1, letterSpacing: '-1px', fontWeight: 800, margin: '14px 0 0' }}>{tx('mapHeading', "The markets we serve — and grow into.")}</h2>
+            <p style={{ fontSize: '15.5px', lineHeight: 1.65, color: '#4b5565', margin: '14px 0 0' }}>{tx('mapText', "Headquartered in Karachi, with a growing regional presence across the Gulf and beyond.")}</p>
           </Reveal>
-          <PresenceMap />
+          <PresenceMap pins={pins} src={pic(cms?.mapImage, { width: 1672 }, '/assets/images/contact/worldmap-labeled.webp')} alt={locT(cms?.mapImage?.alt, lang, t) || t("Align global presence map")} />
         </div>
       </section>
 
@@ -418,17 +435,17 @@ export default function ContactUs() {
       <section style={{ background: '#fff', padding: '80px 32px' }}>
         <div style={{ maxWidth: '1180px', margin: '0 auto' }}>
           <div className="cContactGrid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '18px' }}>
-            <ContactCard icon={ICONS.mail} title="Sales" email="sales@alignbsystems.com" phones={[{ tel: '+923173822206', display: '+92 317 3822206' }, { tel: '+923173822207', display: '+92 317 3822207' }]} />
-            <ContactCard icon={ICONS.support} title="Support" email="support@alignbsystems.com" phones={[{ tel: '+923186944418', display: '+92 318 6944418' }]} />
-            <ContactCard icon={ICONS.careers} title="Careers" email="talent@alignbsystems.com" phones={[]} />
+            {contact.departments.filter((d) => d.email || d.phones.length).map((d) => (
+              <ContactCard key={d.key} icon={ICONS[d.icon] || ICONS.mail} title={d.name} email={d.email} phones={d.phones} />
+            ))}
 
             {/* Head office (dark) */}
             <Reveal className="cCard cInfoDark" style={{ position: 'relative', overflow: 'hidden', background: 'var(--ink)', color: '#eaf0fb', border: '1px solid var(--ink)', borderRadius: '18px', padding: '24px' }}>
               <div style={{ position: 'absolute', inset: 0, opacity: 0.5, background: 'radial-gradient(circle at 85% 0%,rgba(26,86,219,.4),transparent 55%)', pointerEvents: 'none' }} />
               <div style={{ position: 'relative', width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(75,139,255,.18)', color: '#7aa7ff', display: 'grid', placeItems: 'center' }}><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg></div>
-              <div style={{ position: 'relative', fontSize: '16px', fontWeight: 700, marginTop: '16px', color: '#fff' }}>{t("Head Office")}</div>
-              <div style={{ position: 'relative', fontSize: '13px', lineHeight: 1.6, color: '#96a2ba', marginTop: '10px' }}>Suite #404, Imperial Trade Tower 68-C, 7th Street Jami Commercial, Main Street 11, D.H.A. Phase 7, Karachi, 75500</div>
-              <a href="#our-presence" className="cInfoGo" style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', gap: '6px', marginTop: '14px', fontSize: '13px', fontWeight: 700, color: '#7aa7ff', textDecoration: 'none' }}>{t("View on map")} <span className="cArrow" style={{ display: 'inline-block' }}>→</span></a>
+              <div style={{ position: 'relative', fontSize: '16px', fontWeight: 700, marginTop: '16px', color: '#fff' }}>{tx('headOfficeTitle', "Head Office")}</div>
+              <div style={{ position: 'relative', fontSize: '13px', lineHeight: 1.6, color: '#96a2ba', marginTop: '10px' }}>{contact.headOfficeAddress}</div>
+              <a href="#our-presence" className="cInfoGo" style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', gap: '6px', marginTop: '14px', fontSize: '13px', fontWeight: 700, color: '#7aa7ff', textDecoration: 'none' }}>{tx('viewOnMap', "View on map")} <span className="cArrow" style={{ display: 'inline-block' }}>→</span></a>
             </Reveal>
           </div>
 
@@ -436,16 +453,12 @@ export default function ContactUs() {
           <Reveal style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '20px', flexWrap: 'wrap', marginTop: '36px', padding: '22px 26px', background: 'var(--tint)', border: '1px solid var(--line)', borderRadius: '18px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <span style={{ width: '38px', height: '38px', borderRadius: '50%', background: '#e6f5ec', color: '#157d44', display: 'grid', placeItems: 'center' }}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg></span>
-              <span style={{ fontSize: '14.5px', color: '#39404d' }}>{t("We typically reply within")} <b>{t("one business day")}</b>. <span style={{ color: '#657085', fontSize: '12px' }}>{t("(response time — pending confirmation)")}</span></span>
+              <span style={{ fontSize: '14.5px', color: '#39404d' }}>{contact.responseTimeLead} <b>{contact.responseTime}</b>.{contact.responseTimeNote && <> <span style={{ color: '#657085', fontSize: '12px' }}>{contact.responseTimeNote}</span></>}</span>
             </div>
             <div style={{ display: 'flex', gap: '10px' }}>
-              {[
-                { href: 'https://www.linkedin.com/company/align-business-systems', label: 'LinkedIn', path: <path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2.06 3.77-2.06 4 0 4.75 2.65 4.75 6.1V21H20v-5.4c0-1.3 0-2.95-1.8-2.95s-2.08 1.4-2.08 2.85V21H9z" /> },
-                { href: 'https://facebook.com', label: 'Facebook', path: <path d="M14 9h3V5h-3c-2.2 0-4 1.8-4 4v2H7v4h3v6h4v-6h3l1-4h-4V9c0-.6.4-1 1-1z" /> },
-                { href: 'https://youtube.com', label: 'YouTube', path: <><path d="M23 12s0-3.4-.4-5a2.8 2.8 0 0 0-2-2C18.8 4.5 12 4.5 12 4.5s-6.8 0-8.6.5a2.8 2.8 0 0 0-2 2C1 8.6 1 12 1 12s0 3.4.4 5a2.8 2.8 0 0 0 2 2c1.8.5 8.6.5 8.6.5s6.8 0 8.6-.5a2.8 2.8 0 0 0 2-2c.4-1.6.4-5 .4-5z" /><path d="M10 15.5 15 12l-5-3.5z" fill="#fff" /></> },
-              ].map((s) => (
-                <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label} style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#fff', border: '1px solid #e3e9f3', color: 'var(--blue)', display: 'grid', placeItems: 'center' }}>
-                  <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">{s.path}</svg>
+              {contact.socials.map((l) => (
+                <a key={l.platform + l.url} href={l.url} target="_blank" rel="noopener noreferrer" aria-label={l.label} style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#fff', border: '1px solid #e3e9f3', color: 'var(--blue)', display: 'grid', placeItems: 'center' }}>
+                  <SocialIcon platform={l.platform} />
                 </a>
               ))}
             </div>
