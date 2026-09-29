@@ -4,6 +4,7 @@ import {
   SITE_SETTINGS_QUERY,
   NAVIGATION_QUERY,
   FOOTER_QUERY,
+  CHATBOT_QUERY,
   HOME_PAGE_QUERY,
   CLIENTS_PAGE_QUERY,
   PARTNERS_PAGE_QUERY,
@@ -14,7 +15,6 @@ import {
   EVENTS_PAGE_QUERY,
   CAREERS_PAGE_QUERY,
   CONTACT_PAGE_QUERY,
-  PAGE_BY_SLUG_QUERY,
   ALL_PRODUCTS_QUERY,
   PRODUCT_BY_SLUG_QUERY,
   ALL_CLIENTS_QUERY,
@@ -56,6 +56,10 @@ export function useFooterContent(options) {
   return useSanityQuery(['footer'], FOOTER_QUERY, {}, options);
 }
 
+export function useChatbot(options) {
+  return useSanityQuery(['chatbot'], CHATBOT_QUERY, {}, options);
+}
+
 export function useHomePage(options) {
   return useSanityQuery(['homePage'], HOME_PAGE_QUERY, {}, options);
 }
@@ -94,13 +98,6 @@ export function useCareersPage(options) {
 
 export function useContactPage(options) {
   return useSanityQuery(['contactPage'], CONTACT_PAGE_QUERY, {}, options);
-}
-
-export function usePage(slug, options) {
-  return useSanityQuery(['page', slug], PAGE_BY_SLUG_QUERY, { slug }, {
-    enabled: Boolean(slug),
-    ...options,
-  });
 }
 
 export function useProducts(options) {

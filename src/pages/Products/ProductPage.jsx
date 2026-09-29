@@ -46,7 +46,7 @@ export default function ProductPage() {
   // A CMS doc without features keeps the static placeholder list (if any).
   const cmsFeatures = validFeatures(doc.features);
   const features = cmsFeatures.length > 0 || !isKnownSlug ? cmsFeatures : validFeatures(fallbackDoc.features);
-  const seo = resolveSeo(doc.seo, lang);
+  const seo = resolveSeo(doc.seo, lang, t);
 
   return (
     <main>

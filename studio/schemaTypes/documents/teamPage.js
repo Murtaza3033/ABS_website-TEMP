@@ -1,4 +1,5 @@
 import {defineField, defineType, defineArrayMember} from 'sanity'
+import {pageSeoField} from '../objects/pageSeoField'
 
 /* Our Team page (/our-team) — singleton, fixed _id "teamPage" (see
    sanity.config.js). Page texts only; the people themselves are
@@ -92,6 +93,7 @@ export default defineType({
     ls('ctaHighlight', 'Heading highlight (handwriting, blue)', 'cta', 'e.g. "the future."'),
     ls('ctaPrimary', 'Primary button label', 'cta', 'Links to the contact page.'),
     ls('ctaSecondary', 'Secondary button label', 'cta', 'Links to the contact page.'),
+    pageSeoField(),
   ],
   preview: {
     prepare: () => ({title: 'Our Team page'}),

@@ -10,7 +10,7 @@ import {
 } from './contactData';
 import { submitContact, validEmail, validName, cleanName, CONTACT_LIMITS } from '../../lib/contactApi';
 import SEO, { resolveSeo } from '../../components/SEO';
-import { usePage, useContactPage } from '../../hooks/useCms';
+import { useContactPage } from '../../hooks/useCms';
 import { useContactInfo } from '../../hooks/useContactInfo';
 import { locT } from '../../lib/loc';
 import { cmsPic, cssUrl } from '../../lib/cmsImage';
@@ -121,8 +121,8 @@ const ICONS = {
 
 export default function ContactUs() {
   const { t, lang } = useLanguage();
-  const { data: cmsPage } = usePage('contact-us');
-  const seo = resolveSeo(cmsPage?.seo, lang);
+  // <head> title/description: this page's singleton → SEO block, else the built-in copy below.
+  const seo = resolveSeo(useContactPage().data?.seo, lang, t);
   /* Page texts, photos and map pins: "Contact Us page" singleton; emails,
      phones, address, response time and social links: Site Settings (shared
      with the footer and chat assistant). Built-in copy for anything empty. */

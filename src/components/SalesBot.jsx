@@ -1,9 +1,11 @@
-import { useReducer, useRef, useEffect } from 'react';
+import { Fragment, useReducer, useRef, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { submitContact, validEmail, validName } from '../lib/contactApi';
 import Turnstile from './Turnstile';
 import { useContactInfo } from '../hooks/useContactInfo';
 import { FALLBACK_DEPT } from '../lib/contactInfo';
+import { useChatbot } from '../hooks/useCms';
+import { locT } from '../lib/loc';
 
 // Real number only — never a placeholder. Unset until VITE_WHATSAPP_NUMBER is
 // configured, in which case the WhatsApp channel below appears automatically.
@@ -55,6 +57,8 @@ function reducer(s, a) {
   }
 }
 
+/* Built-in FAQ: the fallback for the Sanity "FAQ" documents (shown in their
+   "Sort order"). */
 const FAQ = [
   ['What does Align Business Systems do?', 'We build enterprise software — Businessflo (ERP), PeopleNest (HR & workforce), Field Force (field operations) and HMSflo (hospital management) — plus custom web, mobile, and SaaS development. We help businesses run their operations on one connected system.'],
   ['What products do you offer?', 'Four main products: Businessflo for ERP (finance, inventory, procurement, reporting), PeopleNest for HR and workforce management, Field Force for field-team operations, and HMSflo for hospital management. Want details on any?'],
@@ -68,8 +72,23 @@ const FAQ = [
   ['What technology do you use?', 'Our stack includes React, ASP.NET, TypeScript, SQL Server, and Crystal Reports.'],
 ];
 
+/* "{email}" in a CMS text -> the email in bold (JSX). */
+function withBoldEmail(text, email) {
+  const parts = text.split('{email}');
+  return parts.map((part, i) => (i === 0 ? part : <Fragment key={i}><b>{email}</b>{part}</Fragment>));
+}
+
 export default function SalesBot() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+  // Texts: Sanity → Chat assistant; questions: the FAQ documents. Built-in
+  // copy for anything empty or while the CMS is unreachable.
+  const { data: cms } = useChatbot();
+  const bot = cms?.bot;
+  const c = (field, fallback) => locT(bot?.[field], lang, t) || t(fallback);
+  const cmsFaqs = (cms?.faqs || [])
+    .map((f) => [locT(f.question, lang, t), locT(f.answer, lang, t)])
+    .filter(([q, ans]) => q && ans);
+  const faqList = cmsFaqs.length ? cmsFaqs : FAQ.map(([q, ans]) => [t(q), t(ans)]);
   // Emails / phones / social links: Site Settings (useContactInfo), shared
   // with the Contact page and footer.
   const contact = useContactInfo();
@@ -138,17 +157,30 @@ export default function SalesBot() {
   const botSayNow = (content, opts = null, extra = {}) => dispatch({ type: 'ADD', msg: { who: 'bot', content, opts, ...extra } });
 
   // Fills {name}-style placeholders after translating (t() is identity in English).
-  const tf = (text, vars) => t(text).replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? '');
+  const fill = (text, vars) => text.replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? '');
+  const tf = (text, vars) => fill(t(text), vars);
+  const cf = (field, fallback, vars) => fill(c(field, fallback), vars);
+  const L = {
+    demo: c('menuDemo', 'Book a demo'),
+    products: c('menuProducts', 'Learn about products'),
+    question: c('menuQuestion', 'Ask a question'),
+    partner: c('menuPartnership', 'Partnership'),
+    careers: c('menuCareers', 'Careers'),
+    human: c('menuHuman', 'Talk to a human'),
+    back: c('backToMenu', 'Back to menu'),
+    helpful: c('faqHelpful', 'Yes, thanks'),
+  };
+  const menuAgain = () => botSay(c('menuAgain', 'What else can I help with?'), mainMenu());
 
-  const handoff = () => botSay(t("Here's how you can reach a real person on our team — pick whatever's easiest:"), null, { channels: true });
+  const handoff = () => botSay(c('handoff', "Here's how you can reach a real person on our team — pick whatever's easiest:"), null, { channels: true });
 
-  const showFaq = () => botSay(t('Sure — tap a question:'), FAQ.map(([q, ans]) => ({
-    label: t(q),
+  const showFaq = () => botSay(c('faqIntro', 'Sure — tap a question:'), faqList.map(([q, ans]) => ({
+    label: q,
     onClick: () => {
-      addUser(t(q));
-      botSay(withContacts(t(ans), contact), [
-        { label: `👍 ${t('Yes, thanks')}`, onClick: () => { addUser(t('Yes, thanks')); botSay(t('Glad that helped! Anything else?'), mainMenu()); } },
-        { label: `🙋 ${t('Talk to a human')}`, onClick: () => { addUser(t('Talk to a human')); handoff(); } },
+      addUser(q);
+      botSay(withContacts(ans, contact), [
+        { label: `👍 ${L.helpful}`, onClick: () => { addUser(L.helpful); botSay(c('faqThanks', 'Glad that helped! Anything else?'), mainMenu()); } },
+        { label: `🙋 ${L.human}`, onClick: () => { addUser(L.human); handoff(); } },
       ]);
     },
   })));
@@ -157,12 +189,12 @@ export default function SalesBot() {
     addUser(name);
     dispatch({ type: 'PRODUCT', product: name });
     botSay(<><b>{name}</b> — {t(desc)}</>, [
-      { label: t('Book a demo'), onClick: () => { addUser(t('Book a demo')); startCapture('demo'); } },
-      { label: t('Ask a question'), onClick: () => { addUser(t('Ask a question')); showFaq(); } },
-      { label: t('Back to menu'), onClick: () => botSay(t('What else can I help with?'), mainMenu()) },
+      { label: L.demo, onClick: () => { addUser(L.demo); startCapture('demo'); } },
+      { label: L.question, onClick: () => { addUser(L.question); showFaq(); } },
+      { label: L.back, onClick: menuAgain },
     ]);
   };
-  const productMenu = () => botSay(t('Which one would you like to hear about?'), [
+  const productMenu = () => botSay(c('productsIntro', 'Which one would you like to hear about?'), [
     { label: 'Businessflo', onClick: () => prod('Businessflo', 'Our ERP — finance, inventory, procurement and reporting in one connected flow.') },
     { label: 'PeopleNest', onClick: () => prod('PeopleNest', 'HR & workforce — attendance, leave, payroll and people analytics in one place.') },
     { label: 'Field Force', onClick: () => prod('Field Force', 'Field operations — visits, routes and live KPIs for teams on the ground.') },
@@ -170,12 +202,12 @@ export default function SalesBot() {
   ]);
 
   const mainMenu = () => [
-    { label: t('Book a demo'), onClick: () => { addUser(t('Book a demo')); startCapture('demo'); } },
-    { label: t('Learn about products'), onClick: () => { addUser(t('Learn about products')); productMenu(); } },
-    { label: t('Ask a question'), onClick: () => { addUser(t('Ask a question')); showFaq(); } },
-    { label: t('Partnership'), onClick: () => { addUser(t('Partnership')); startCapture('partner'); } },
-    { label: t('Careers'), onClick: () => { addUser(t('Careers')); botSay(<>{t("We'd love to hear from you! Send your CV to")} <b>{contact.dept('careers').email}</b> {t("with the role in the subject line.")}</>, [{ label: t('Open Careers page'), onClick: () => { window.location.href = '/careers'; } }, { label: t('Back to menu'), onClick: () => botSay(t('What else can I help with?'), mainMenu()) }]); } },
-    { label: t('Talk to a human'), onClick: () => { addUser(t('Talk to a human')); handoff(); } },
+    { label: L.demo, onClick: () => { addUser(L.demo); startCapture('demo'); } },
+    { label: L.products, onClick: () => { addUser(L.products); productMenu(); } },
+    { label: L.question, onClick: () => { addUser(L.question); showFaq(); } },
+    { label: L.partner, onClick: () => { addUser(L.partner); startCapture('partner'); } },
+    { label: L.careers, onClick: () => { addUser(L.careers); botSay(<>{withBoldEmail(c('careersReply', '') || `${t("We'd love to hear from you! Send your CV to")} {email} ${t('with the role in the subject line.')}`, contact.dept('careers').email)}</>, [{ label: t('Open Careers page'), onClick: () => { window.location.href = '/careers'; } }, { label: L.back, onClick: menuAgain }]); } },
+    { label: L.human, onClick: () => { addUser(L.human); handoff(); } },
   ];
 
   const finishCapture = async (path) => {
@@ -205,12 +237,12 @@ export default function SalesBot() {
 
     if (result.ok) {
       if (path === 'partner') {
-        botSay(tf("Thanks, {name}! Align partners with companies across the ecosystem — I've passed your details to the team. Here's how to reach us directly too:", { name: d.name }), null, { channels: true });
+        botSay(cf('thanksPartner', "Thanks, {name}! Align partners with companies across the ecosystem — I've passed your details to the team. Here's how to reach us directly too:", { name: d.name }), null, { channels: true });
       } else {
-        botSay(tf("Perfect, {name}! Our team will set up a demo of {product} — I've sent your details over. Here's how to reach us directly too:", { name: d.name, product: product || t('the Align platform') }), null, { channels: true });
+        botSay(cf('thanksDemo', "Perfect, {name}! Our team will set up a demo of {product} — I've sent your details over. Here's how to reach us directly too:", { name: d.name, product: product || t('the Align platform') }), null, { channels: true });
       }
     } else {
-      botSay(t("Hmm, I couldn't send that through just now — but your details are saved, and here's how to reach our team directly:"), null, { channels: true });
+      botSay(c('sendError', "Hmm, I couldn't send that through just now — but your details are saved, and here's how to reach our team directly:"), null, { channels: true });
     }
   };
   const setSize = (sz) => { addUser(sz); dispatch({ type: 'MERGE_DATA', data: { size: sz } }); setTimeout(() => finishCapture('demo'), 0); };
@@ -243,12 +275,12 @@ export default function SalesBot() {
       if (awaiting === 'email') { dispatch({ type: 'MERGE_DATA', data: { email: v } }); dispatch({ type: 'AWAITING', value: null }); setTimeout(askSizeOrFinish, 0); return; }
     }
     addUser(v);
-    botSay(t('I want to make sure you get the right answer — let me connect you with our team.'), null, { channels: true });
+    botSay(c('fallback', 'I want to make sure you get the right answer — let me connect you with our team.'), null, { channels: true });
   };
 
   const openBot = () => {
     dispatch({ type: 'OPEN' });
-    if (!greetedRef.current) { greetedRef.current = true; dispatch({ type: 'GREETED' }); botSay(t("Hi! I'm the Align Assistant 👋 How can I help you today?"), mainMenu()); }
+    if (!greetedRef.current) { greetedRef.current = true; dispatch({ type: 'GREETED' }); botSay(c('greeting', "Hi! I'm the Align Assistant 👋 How can I help you today?"), mainMenu()); }
   };
   const send = () => {
     const v = inputRef.current?.value || '';
@@ -279,7 +311,7 @@ export default function SalesBot() {
 
       {state.tipVisible && !state.open && (
         <div className="ab-tip" onClick={openBot} style={{ position: 'fixed', right: '96px', bottom: '104px', zIndex: 939, background: '#fff', color: SLATE, fontSize: '13px', fontWeight: 600, padding: '10px 14px', borderRadius: '14px', boxShadow: '0 16px 40px -18px rgba(15,23,41,.4)', border: '1px solid #eef1f6', maxWidth: '200px', cursor: 'pointer' }}>
-          {t("Need help? Chat with us")} <span style={{ color: '#657085', marginLeft: '6px' }} onClick={(e) => { e.stopPropagation(); dispatch({ type: 'DISMISS_TIP' }); }}>×</span>
+          {c('tip', 'Need help? Chat with us')} <span style={{ color: '#657085', marginLeft: '6px' }} onClick={(e) => { e.stopPropagation(); dispatch({ type: 'DISMISS_TIP' }); }}>×</span>
         </div>
       )}
 
@@ -288,8 +320,8 @@ export default function SalesBot() {
           <div style={{ background: BLUE, color: '#fff', padding: '16px 18px', display: 'flex', alignItems: 'center', gap: '12px' }}>
             <div style={{ width: '38px', height: '38px', borderRadius: '11px', background: 'rgba(255,255,255,.16)', display: 'grid', placeItems: 'center', fontWeight: 800, fontSize: '16px' }}>A</div>
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: '15px', fontWeight: 700, lineHeight: 1.1 }}>{t('Align Assistant')}</div>
-              <div style={{ fontSize: '11.5px', color: '#cfdcff', display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}><span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#4ade80', display: 'inline-block' }} />{t('Online now')}</div>
+              <div style={{ fontSize: '15px', fontWeight: 700, lineHeight: 1.1 }}>{c('name', 'Align Assistant')}</div>
+              <div style={{ fontSize: '11.5px', color: '#cfdcff', display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}><span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#4ade80', display: 'inline-block' }} />{c('status', 'Online now')}</div>
             </div>
             <button aria-label={t('Close')} onClick={() => dispatch({ type: 'CLOSE' })} style={{ width: '30px', height: '30px', borderRadius: '8px', border: 'none', background: 'rgba(255,255,255,.16)', color: '#fff', cursor: 'pointer', fontSize: '18px', lineHeight: 1 }}>×</button>
           </div>
@@ -322,7 +354,7 @@ export default function SalesBot() {
           </div>
 
           <div style={{ padding: '10px 12px', borderTop: '1px solid #eef1f6', background: '#fff', display: 'flex', gap: '8px', alignItems: 'center' }}>
-            <input ref={inputRef} type="text" maxLength={state.awaiting === 'name' ? 100 : state.awaiting === 'company' ? 150 : 200} aria-label={t('Type a message…')} placeholder={t('Type a message…')} onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); send(); } }}
+            <input ref={inputRef} type="text" maxLength={state.awaiting === 'name' ? 100 : state.awaiting === 'company' ? 150 : 200} aria-label={c('placeholder', 'Type a message…')} placeholder={c('placeholder', 'Type a message…')} onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); send(); } }}
               style={{ flex: 1, fontFamily: 'Outfit,sans-serif', fontSize: '14px', border: '1.5px solid #e3e9f3', borderRadius: '12px', padding: '11px 13px', outline: 'none', color: SLATE }} />
             <button aria-label={t('Send message')} onClick={send} style={{ width: '42px', height: '42px', flexShrink: 0, borderRadius: '12px', border: 'none', background: BLUE, color: '#fff', cursor: 'pointer', display: 'grid', placeItems: 'center' }}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m22 2-7 20-4-9-9-4Z" /><path d="M22 2 11 13" /></svg>

@@ -4,7 +4,7 @@ import SmartLink from '../../components/SmartLink';
 import CountUp from '../../components/CountUp';
 import ParticleCanvas from './ParticleCanvas';
 import LeaderScene from './LeaderScene';
-import { useTeam, useTeamPage, usePage } from '../../hooks/useCms';
+import { useTeam, useTeamPage } from '../../hooks/useCms';
 import { locT } from '../../lib/loc';
 import { cmsPic } from '../../lib/cmsImage';
 import SEO, { resolveSeo } from '../../components/SEO';
@@ -71,8 +71,8 @@ function Avatar({ p }) {
 
 export default function OurTeam() {
   const { t, lang } = useLanguage();
-  const { data: cmsPage } = usePage('our-team');
-  const seo = resolveSeo(cmsPage?.seo, lang);
+  // <head> title/description: this page's singleton → SEO block, else the built-in copy below.
+  const seo = resolveSeo(useTeamPage().data?.seo, lang, t);
   /* People are Sanity "Team Member" docs grouped by their Section field
      (leader / senior / team, each sorted by order); page texts come from the
      "Our Team page" singleton. The built-in copy is the fallback for an

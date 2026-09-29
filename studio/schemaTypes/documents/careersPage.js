@@ -1,4 +1,5 @@
 import {defineField, defineType, defineArrayMember} from 'sanity'
+import {pageSeoField} from '../objects/pageSeoField'
 
 /* Careers page (/careers) — singleton, fixed _id "careersPage" (see
    sanity.config.js). Page texts only; the openings are "Job Opening"
@@ -97,6 +98,7 @@ export default defineType({
     ls('ctaHeading', 'Heading', 'cta'),
     lt('ctaText', 'Text', 'cta', '"{email}" becomes the careers email (highlighted).'),
     ls('ctaButton', 'Button label', 'cta', 'Opens an email to the careers address.'),
+    pageSeoField(),
   ],
   preview: {
     prepare: () => ({title: 'Careers page'}),

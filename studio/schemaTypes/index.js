@@ -14,6 +14,7 @@ import aboutPage from './documents/aboutPage'
 import eventsPage from './documents/eventsPage'
 import careersPage from './documents/careersPage'
 import contactPage from './documents/contactPage'
+import chatbot from './documents/chatbot'
 import page from './documents/page'
 import product from './documents/product'
 import service from './documents/service'
@@ -50,6 +51,7 @@ export const schemaTypes = [
   eventsPage,
   careersPage,
   contactPage,
+  chatbot,
   page,
   product,
   service,

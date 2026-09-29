@@ -1,4 +1,5 @@
 import {defineField, defineType, defineArrayMember} from 'sanity'
+import {pageSeoField} from '../objects/pageSeoField'
 
 /* Our Clients page (/our-clients) — singleton, fixed _id "clientsPage" (see
    sanity.config.js). The frontend reads *[_id == "clientsPage"][0] and falls
@@ -206,6 +207,7 @@ export default defineType({
     ls('ctaHeading', 'Heading', 'cta'),
     ls('ctaPrimary', 'Primary button', 'cta', 'Opens the Contact page'),
     ls('ctaSecondary', 'Secondary button', 'cta', 'Opens the Contact page'),
+    pageSeoField(),
   ],
   preview: {
     prepare: () => ({title: 'Our Clients page'}),

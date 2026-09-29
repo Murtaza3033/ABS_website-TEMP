@@ -1,4 +1,5 @@
 import {defineField, defineType, defineArrayMember} from 'sanity'
+import {pageSeoField} from '../objects/pageSeoField'
 
 /* Events page (/events) — singleton, fixed _id "eventsPage" (see
    sanity.config.js). Page texts and photos only; the events themselves are
@@ -92,6 +93,7 @@ export default defineType({
     lt('ctaHeading', 'Heading', 'cta'),
     ls('ctaPrimary', 'Primary button label', 'cta', 'Links to the contact page.'),
     ls('ctaSecondary', 'Secondary button label', 'cta', 'Links to the contact page.'),
+    pageSeoField(),
   ],
   preview: {
     prepare: () => ({title: 'Events page'}),

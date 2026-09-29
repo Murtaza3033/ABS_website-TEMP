@@ -1,4 +1,5 @@
 import {defineField, defineType, defineArrayMember} from 'sanity'
+import {pageSeoField} from '../objects/pageSeoField'
 
 /* About Us page (/about-us) — singleton, fixed _id "aboutPage" (see
    sanity.config.js). The frontend falls back to the built-in copy/photo for
@@ -159,6 +160,7 @@ export default defineType({
     lt('ctaHeading', 'Heading', 'cta'),
     ls('ctaPrimary', 'Primary button label', 'cta', 'Links to the contact page.'),
     ls('ctaSecondary', 'Secondary button label', 'cta', 'Links to the contact page.'),
+    pageSeoField(),
   ],
   preview: {
     prepare: () => ({title: 'About Us page'}),

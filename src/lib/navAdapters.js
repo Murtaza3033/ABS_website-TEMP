@@ -1,12 +1,10 @@
-/* Adapters for the CMS `navigation` and `footer` singletons. Both schemas only
-   model label/href (+ children for nav, + heading for footer columns) — the
-   real Header/Footer markup also has icons, descriptions and "Spotlight"
-   blocks with no CMS equivalent, so these build a flat `_key -> item` lookup
-   that individual components merge onto their existing static shell, instead
-   of a full data-driven re-render (same pattern as the OurTeam/Industries
-   page adapters). */
+/* Adapters for the CMS `navigation` and `footer` singletons. The built-in
+   Header/Footer items keep their icons and places in the layout, so these
+   build a flat `_key -> item` lookup that the components merge onto their
+   built-in shell (label, link, description, spotlight…), and list the CMS
+   items the shell doesn't know (`cmsExtras`) so those render too. */
 
-import { loc } from './loc';
+import { loc, locT } from './loc';
 
 /* The `navigation`/`footer` docs were seeded (Phase 2) before the product
    pages existed (Phase 5) and before their links were pointed internal
@@ -41,6 +39,31 @@ function resolveHref(href, fallback) {
   const safe = safeHref(href);
   if (!safe) return fallback;
   return STALE_PRODUCT_HREF_MAP[safe] || safe;
+}
+
+/* A CMS href made safe (see safeHref), else `fallback`. */
+export const cmsHref = resolveHref;
+
+/* A link that goes nowhere yet: empty, "#" or unsafe. */
+export const isDeadHref = (href) => {
+  const safe = safeHref(href);
+  return !safe || safe === '#';
+};
+
+/* A localized CMS text field (bilingual object or plain string), else the
+   built-in English text through the dictionary. */
+export function cmsText(value, lang, t, fallbackText) {
+  return locT(value, lang, t) || (fallbackText ? t(fallbackText) : '');
+}
+
+/* CMS items (nav items / sub-items, footer links) whose `_key` the layout
+   doesn't already place: [{ key, label, href, item }], only those with a
+   label and a safe link (or, for nav menus, sub-items). */
+export function cmsExtras(list, knownKeys, lang, t) {
+  return (list || [])
+    .filter((item) => item?._key && !knownKeys.has(item._key))
+    .map((item) => ({ key: item._key, label: cmsLabel(item.label, lang, t), href: resolveHref(item.href, null), item }))
+    .filter((x) => x.label && (x.href || x.item.children?.length));
 }
 
 /* A CMS label is normally bilingual ({en, ar}); a plain string (not schema

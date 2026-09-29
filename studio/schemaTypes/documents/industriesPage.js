@@ -1,4 +1,5 @@
 import {defineField, defineType, defineArrayMember} from 'sanity'
+import {pageSeoField} from '../objects/pageSeoField'
 import {INDUSTRY_ICONS} from './industry'
 
 /* Industries page (/industries) — singleton, fixed _id "industriesPage" (see
@@ -82,6 +83,7 @@ export default defineType({
     ls('ctaHeading', 'Heading', 'cta'),
     ls('ctaPrimary', 'Primary button', 'cta', 'Opens the Contact page'),
     ls('ctaSecondary', 'Secondary button', 'cta', 'Opens the Contact page'),
+    pageSeoField(),
   ],
   preview: {
     prepare: () => ({title: 'Industries page'}),

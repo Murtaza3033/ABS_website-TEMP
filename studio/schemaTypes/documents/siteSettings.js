@@ -5,8 +5,25 @@ export default defineType({
   title: 'Site Settings',
   type: 'document',
   fields: [
-    defineField({name: 'siteTitle', title: 'Site title', type: 'localeString'}),
-    defineField({name: 'siteDescription', title: 'Site description', type: 'localeText'}),
+    defineField({
+      name: 'siteTitle',
+      title: 'Site title',
+      description: 'Added to every browser-tab title ("About Us | Align Business Systems") and used as the site name in link previews.',
+      type: 'localeString',
+    }),
+    defineField({
+      name: 'siteDescription',
+      title: 'Site description',
+      description: 'The footer intro text, and the search/link-preview description of any page without its own.',
+      type: 'localeText',
+    }),
+    defineField({
+      name: 'defaultOgImage',
+      title: 'Default share image',
+      description: 'Shown when a page without its own share image is posted on LinkedIn, WhatsApp, X… Use 1200 × 630.',
+      type: 'image',
+      options: {hotspot: true},
+    }),
     defineField({
       name: 'logo',
       title: 'Logo',
@@ -14,7 +31,12 @@ export default defineType({
       options: {hotspot: true},
       fields: [defineField({name: 'alt', title: 'Alt text', type: 'localeString'})],
     }),
-    defineField({name: 'favicon', title: 'Favicon', type: 'image'}),
+    defineField({
+      name: 'favicon',
+      title: 'Favicon',
+      description: 'The small icon in the browser tab. Upload a square PNG (512 × 512). Removing it keeps the built-in icon.',
+      type: 'image',
+    }),
     defineField({
       name: 'email',
       title: 'Contact email',

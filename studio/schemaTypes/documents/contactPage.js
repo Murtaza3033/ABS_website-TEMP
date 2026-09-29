@@ -1,4 +1,5 @@
 import {defineField, defineType, defineArrayMember} from 'sanity'
+import {pageSeoField} from '../objects/pageSeoField'
 
 /* Contact Us page (/contact-us) — singleton, fixed _id "contactPage" (see
    sanity.config.js). Page texts, photos and the presence map only. Emails,
@@ -76,6 +77,7 @@ export default defineType({
 
     ls('headOfficeTitle', 'Head office card — title', 'cards', 'The address itself is in Site Settings.'),
     ls('viewOnMap', 'Head office card — map link label', 'cards'),
+    pageSeoField(),
   ],
   preview: {
     prepare: () => ({title: 'Contact Us page'}),

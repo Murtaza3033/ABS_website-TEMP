@@ -10,6 +10,12 @@ export const NAVIGATION_QUERY = groq`*[_id == "navigation"][0]`;
 
 export const FOOTER_QUERY = groq`*[_id == "footer"][0]`;
 
+// Chat assistant texts + its FAQ list in one request (the widget is on every page).
+export const CHATBOT_QUERY = groq`{
+  "bot": *[_id == "chatbot"][0],
+  "faqs": *[_type == "faq" && defined(question)] | order(order asc){_id, question, answer}
+}`;
+
 // Product cards may link a Product: its name/tagline fill empty card fields.
 export const HOME_PAGE_QUERY = groq`*[_id == "homePage"][0]{
   ...,
@@ -40,8 +46,6 @@ export const EVENTS_PAGE_QUERY = groq`*[_id == "eventsPage"][0]`;
 export const CAREERS_PAGE_QUERY = groq`*[_id == "careersPage"][0]`;
 
 export const CONTACT_PAGE_QUERY = groq`*[_id == "contactPage"][0]`;
-
-export const PAGE_BY_SLUG_QUERY = groq`*[_type == "page" && slug.current == $slug][0]`;
 
 export const ALL_PRODUCTS_QUERY = groq`*[_type == "product"] | order(order asc)`;
 

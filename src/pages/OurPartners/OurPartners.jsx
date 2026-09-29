@@ -5,7 +5,7 @@ import SmartLink from '../../components/SmartLink';
 import ConstellationCanvas from './ConstellationCanvas';
 import BenefitsCarousel from './BenefitsCarousel';
 import SEO, { resolveSeo } from '../../components/SEO';
-import { usePage, usePartnersPage, usePartners } from '../../hooks/useCms';
+import { usePartnersPage, usePartners } from '../../hooks/useCms';
 import { locT } from '../../lib/loc';
 import { cmsPic } from '../../lib/cmsImage';
 import { headWords, splitHighlight } from '../../lib/headWords';
@@ -47,8 +47,8 @@ const PartnerName = ({ p }) => (p.website
 
 export default function OurPartners() {
   const { t, lang } = useLanguage();
-  const { data: cmsPage } = usePage('our-partners');
-  const seo = resolveSeo(cmsPage?.seo, lang);
+  // <head> title/description: this page's singleton → SEO block, else the built-in copy below.
+  const seo = resolveSeo(usePartnersPage().data?.seo, lang, t);
   /* Page texts + hero photo: "Our Partners page" singleton. Partners: every
      Partner document (featured = ticked "Featured", else the first by sort
      order; the rest are listed under it). Built-in copy while loading / if

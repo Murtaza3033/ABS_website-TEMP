@@ -1,4 +1,5 @@
 import {defineField, defineType, defineArrayMember} from 'sanity'
+import {pageSeoField} from '../objects/pageSeoField'
 
 /* Home page (/) — singleton, fixed _id "homePage" (see sanity.config.js).
    Texts and images of every section below the hero (the hero itself is
@@ -118,6 +119,7 @@ export default defineType({
     ls('ctaHeading', 'Heading', 'cta'),
     lt('ctaText', 'Text', 'cta'),
     ls('ctaButton', 'Button label', 'cta', 'Links to the contact page.'),
+    pageSeoField(),
   ],
   preview: {
     prepare: () => ({title: 'Home page'}),

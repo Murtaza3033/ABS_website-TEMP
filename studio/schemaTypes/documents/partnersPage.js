@@ -1,4 +1,5 @@
 import {defineField, defineType, defineArrayMember} from 'sanity'
+import {pageSeoField} from '../objects/pageSeoField'
 
 /* Our Partners page (/our-partners) — singleton, fixed _id "partnersPage"
    (see sanity.config.js). Page texts and the hero photo only; the partners
@@ -88,6 +89,7 @@ export default defineType({
     ls('ctaHeading', 'Heading', 'cta'),
     ls('ctaPrimary', 'Primary button', 'cta', 'Opens the Contact page'),
     ls('ctaSecondary', 'Secondary button', 'cta', 'Opens the Contact page'),
+    pageSeoField(),
   ],
   preview: {
     prepare: () => ({title: 'Our Partners page'}),

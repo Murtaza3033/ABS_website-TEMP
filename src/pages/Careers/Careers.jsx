@@ -4,7 +4,7 @@ import { DataReveal } from '../../components/Reveal';
 import RolesAccordion, { useRoleDocs } from './RolesAccordion';
 import { Icon, CULTURE, STEPS } from './careersData';
 import SEO, { resolveSeo } from '../../components/SEO';
-import { usePage, useCareersPage } from '../../hooks/useCms';
+import { useCareersPage } from '../../hooks/useCms';
 import { useContactInfo } from '../../hooks/useContactInfo';
 import { locT } from '../../lib/loc';
 import { cmsPic } from '../../lib/cmsImage';
@@ -25,8 +25,8 @@ const withEmail = (s, email) => s.split('{email}').join(email).split(BUILTIN_EMA
 
 export default function Careers() {
   const { t, lang } = useLanguage();
-  const { data: cmsPage } = usePage('careers');
-  const seo = resolveSeo(cmsPage?.seo, lang);
+  // <head> title/description: this page's singleton → SEO block, else the built-in copy below.
+  const seo = resolveSeo(useCareersPage().data?.seo, lang, t);
   const rolesRef = useRef(null);
   const openRoles = useRoleDocs().length;
   /* Page texts + hero photo: "Careers page" singleton (built-in copy for

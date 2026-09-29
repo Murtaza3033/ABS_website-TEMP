@@ -6,7 +6,7 @@ import { Icon, AREAS, PILLARS, FALLBACK_ADVISORS } from './advisorsData';
 import AreaCard from './AreaCard';
 import Timeline from './Timeline';
 import SEO, { resolveSeo } from '../../components/SEO';
-import { usePage, useAdvisorsPage, useAdvisors } from '../../hooks/useCms';
+import { useAdvisorsPage, useAdvisors } from '../../hooks/useCms';
 import { locT } from '../../lib/loc';
 import { cmsPic } from '../../lib/cmsImage';
 
@@ -111,8 +111,8 @@ function Profile({ a, tx, first }) {
 
 export default function OurAdvisors() {
   const { t, lang } = useLanguage();
-  const { data: cmsPage } = usePage('our-advisors');
-  const seo = resolveSeo(cmsPage?.seo, lang);
+  // <head> title/description: this page's singleton → SEO block, else the built-in copy below.
+  const seo = resolveSeo(useAdvisorsPage().data?.seo, lang, t);
   /* Page texts: "Our Advisors page" singleton. Advisors: every Advisor
      document in sort order (profile card each; timelines in the Background
      section). Built-in copy while loading / if the CMS is empty or unreachable. */

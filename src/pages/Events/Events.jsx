@@ -3,7 +3,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { DataReveal } from '../../components/Reveal';
 import SmartLink from '../../components/SmartLink';
 import Gallery from './Gallery';
-import { useEvents, useEventsPage, usePage } from '../../hooks/useCms';
+import { useEvents, useEventsPage } from '../../hooks/useCms';
 import { useContactInfo } from '../../hooks/useContactInfo';
 import { locT } from '../../lib/loc';
 import { cmsPic, cssUrl } from '../../lib/cmsImage';
@@ -25,8 +25,8 @@ function headWords(heading, highlight) {
 
 export default function Events() {
   const { t, lang } = useLanguage();
-  const { data: cmsPage } = usePage('events');
-  const seo = resolveSeo(cmsPage?.seo, lang);
+  // <head> title/description: this page's singleton → SEO block, else the built-in copy below.
+  const seo = resolveSeo(useEventsPage().data?.seo, lang, t);
   /* Page texts/photos: "Events page" singleton. Events: every Event document
      (featured = ticked "Featured", else the newest); the built-in ITCN Asia
      2023 event while loading / if the CMS is empty or unreachable. Photos

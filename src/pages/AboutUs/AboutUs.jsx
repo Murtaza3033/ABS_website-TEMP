@@ -3,7 +3,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { DataReveal } from '../../components/Reveal';
 import SmartLink from '../../components/SmartLink';
 import SEO, { resolveSeo } from '../../components/SEO';
-import { usePage, useAboutPage } from '../../hooks/useCms';
+import { useAboutPage } from '../../hooks/useCms';
 import { locT, locLines } from '../../lib/loc';
 import { cmsPic } from '../../lib/cmsImage';
 import { PRODMETA, metaImg } from '../Products/productsData';
@@ -23,8 +23,8 @@ const GALLERY = [
 
 export default function AboutUs() {
   const { t, lang } = useLanguage();
-  const { data: cmsPage } = usePage('about-us');
-  const seo = resolveSeo(cmsPage?.seo, lang);
+  // <head> title/description: this page's singleton → SEO block, else the built-in copy below.
+  const seo = resolveSeo(useAboutPage().data?.seo, lang, t);
   /* Every text and photo below is editable in Sanity ("About Us page"
      singleton). Anything empty falls back to the built-in copy/photo (lists:
      the whole built-in list when the CMS list is empty; an item's missing

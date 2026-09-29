@@ -9,16 +9,16 @@ import ServicesSection from './sections/ServicesSection';
 import IndustriesSection from './sections/IndustriesSection';
 import CtaSection from './sections/CtaSection';
 import { useLanguage } from '../../context/LanguageContext';
-import { usePage } from '../../hooks/useCms';
+import { useHomePage } from '../../hooks/useCms';
 import SEO, { resolveSeo } from '../../components/SEO';
 
 /* Idiomatic Home — real JSX sections driven by HomeProvider's reducer.
    The animated hero itself (HeroSection) is untouched — SEO only adds <head>
    metadata above it. */
 export default function Home() {
-  const { lang } = useLanguage();
-  const { data: cmsPage } = usePage('home');
-  const seo = resolveSeo(cmsPage?.seo, lang);
+  const { lang, t } = useLanguage();
+  // <head>: Home page singleton → SEO block, else the site name + default description.
+  const seo = resolveSeo(useHomePage().data?.seo, lang, t);
 
   // Adds .js-revealed the first time each [data-reveal]/.hm-stagger element
   // scrolls into view — same one-shot IntersectionObserver approach

@@ -7,7 +7,7 @@ import ClientWall from './ClientWall';
 import Sectors from './Sectors';
 import TrackRecord from './TrackRecord';
 import SEO, { resolveSeo } from '../../components/SEO';
-import { usePage, useClientsPage } from '../../hooks/useCms';
+import { useClientsPage } from '../../hooks/useCms';
 import { locT } from '../../lib/loc';
 import { headWords, splitHighlight } from '../../lib/headWords';
 import { TRUSTLINE } from './clientsData';
@@ -16,8 +16,8 @@ const HEAD = ['The', 'businesses', "we're", 'proud', 'to', 'work', 'with.'];
 
 export default function OurClients() {
   const { t, lang } = useLanguage();
-  const { data: cmsPage } = usePage('our-clients');
-  const seo = resolveSeo(cmsPage?.seo, lang);
+  // <head> title/description: this page's singleton → SEO block, else the built-in copy below.
+  const seo = resolveSeo(useClientsPage().data?.seo, lang, t);
   /* Trust line, track record and industry cards are editable in Sanity
      ("Our Clients page" singleton); the built-in copy is the fallback. */
   const { data: cms } = useClientsPage();

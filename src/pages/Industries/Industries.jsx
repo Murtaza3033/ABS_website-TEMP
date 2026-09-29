@@ -5,7 +5,7 @@ import SmartLink from '../../components/SmartLink';
 import CountUp from '../../components/CountUp';
 import IndustryPanel from './IndustryPanel';
 import Convergence from './Convergence';
-import { useIndustries, useIndustriesPage, usePage } from '../../hooks/useCms';
+import { useIndustries, useIndustriesPage } from '../../hooks/useCms';
 import { locT } from '../../lib/loc';
 import { cmsPic, cssUrl } from '../../lib/cmsImage';
 import { headWords, splitHighlight } from '../../lib/headWords';
@@ -61,8 +61,8 @@ function toIndustry(doc, { lang, t, pic }) {
 
 export default function Industries() {
   const { t, lang } = useLanguage();
-  const { data: cmsPage } = usePage('industries');
-  const seo = resolveSeo(cmsPage?.seo, lang);
+  // <head> title/description: this page's singleton → SEO block, else the built-in copy below.
+  const seo = resolveSeo(useIndustriesPage().data?.seo, lang, t);
   /* Page texts: "Industries page" singleton. Tabs + panels: the Industry
      documents (sorted by order). Built-in copy while loading / if the CMS is
      empty or unreachable. */
