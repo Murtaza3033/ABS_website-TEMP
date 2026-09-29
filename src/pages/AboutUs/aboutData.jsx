@@ -1,4 +1,5 @@
-/* About Us — data + icon helper. */
+/* About Us — built-in copy + icon helper. Every text/photo here is the
+   fallback for the Sanity "About Us page" singleton (see AboutUs.jsx). */
 
 const ICON_PATHS = {
   layers: <><path d="M12 2 2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" /></>,

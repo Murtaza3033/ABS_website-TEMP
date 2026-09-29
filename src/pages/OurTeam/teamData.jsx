@@ -1,4 +1,6 @@
-/* Our Team — data + icon helper. */
+/* Our Team — built-in copy + icon helper. Everything here is the fallback
+   for Sanity: page texts live in the "Our Team page" singleton, people in
+   "Team Member" documents (see FALLBACK_TEAM below). */
 
 const ICON_PATHS = {
   spark: <><path d="M12 3v4" /><path d="M12 17v4" /><path d="M3 12h4" /><path d="M17 12h4" /><path d="M5.6 5.6l2.8 2.8" /><path d="M15.6 15.6l2.8 2.8" /><path d="M18.4 5.6l-2.8 2.8" /><path d="M8.4 15.6l-2.8 2.8" /></>,
@@ -10,7 +12,7 @@ export function Icon({ name, size = 24 }) {
   return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">{ICON_PATHS[name]}</svg>;
 }
 
-export const HERO = [['12', '+', 'Years of Excellence'], ['150', '+', 'Enterprise Clients'], ['250', '+', 'Team Members'], ['20', '+', 'Products & Solutions']];
+export const HERO = [['12', '+', 'Years of Excellence'], ['50', '+', 'Enterprise Clients'], ['250', '+', 'Team Members'], ['20', '+', 'Products & Solutions']];
 
 export const DESC = {
   Strategy: 'Setting direction and the bets worth making.', Vision: 'Where Align is headed next.',
@@ -24,7 +26,7 @@ export const DESC = {
 };
 
 export const LEADERS = [
-  { num: '01', role: 'Chief Executive Officer', name: 'Muhammad Shamsheer', photo: 'p-5818', caption: 'Reviewing company strategy from the executive floor, where direction for the whole Align platform comes together.', quote: "We don't ship software — we hand businesses the way they'll run for the next decade.", tags: ['Strategy', 'Vision', 'Leadership', 'Growth'], c1: ['Company Overview', 'Active Clients', 150, ['40%', '58%', '48%', '74%', '66%', '90%']], c2: ['Solutions', 'LIVE', 'Deployed', 20], c3: ['Revenue growth', '↑ steady climb'] },
+  { num: '01', role: 'Chief Executive Officer', name: 'Muhammad Shamsheer', photo: 'p-5818', caption: 'Reviewing company strategy from the executive floor, where direction for the whole Align platform comes together.', quote: "We don't ship software — we hand businesses the way they'll run for the next decade.", tags: ['Strategy', 'Vision', 'Leadership', 'Growth'], c1: ['Company Overview', 'Active Clients', 50, ['40%', '58%', '48%', '74%', '66%', '90%']], c2: ['Solutions', 'LIVE', 'Deployed', 20], c3: ['Revenue growth', '↑ steady climb'] },
   { num: '02', role: 'Director Technical', name: 'Ebad ur Rehman', photo: 'p-5733', caption: 'Mid production fix — laptop in hand, pointing at a live API issue while the monitors run debugging in the background.', quote: "If it isn't rock-solid at 2 AM, it isn't done.", tags: ['.NET', 'React', 'DevOps', 'Cloud', 'SQL'], c1: ['Build Health', 'Uptime', 99, ['70%', '84%', '60%', '92%', '78%', '96%']], c2: ['Issue Detected', 'FIXING', 'Live API errors', 3], c3: ['Latency (ms)', '↓ trending down'] },
   { num: '03', role: 'Manager, Innovation & Strategy', name: 'Hadi Shamsheer', photo: 'p-5850', caption: "Sketching a strategy flow on the glass board, with Align's connected ecosystem — finance, people, field ops, reporting — mapped around the workflow.", quote: 'Every great feature begins as a simple question: what would make this effortless?', tags: ['Innovation', 'AI', 'Strategy', 'Product'], c1: ['Ideas in Progress', 'This month', 12, ['44%', '56%', '66%', '72%', '84%', '92%']], c2: ['Alignment', 'ON TRACK', 'Cross-functional', 82], c3: ['Projects in motion', '↑ +25% this month'] },
   { num: '04', role: 'Implementation Manager', name: 'Sadiq', photo: 'p-5649', caption: 'Walking a client through go-live — configuration and deployment boards mid-update, checklist ticking off as modules come online.', quote: "Go-live isn't the finish line — it's the day we start earning your trust.", tags: ['Implementation', 'Project Management', 'ERP', 'Client Success'], c1: ['Go-Live Board', 'Modules live', 18, ['50%', '62%', '74%', '80%', '88%', '100%']], c2: ['Deployment', 'SUCCESS', 'Completion', 100], c3: ['Rollout pace', '↑ on schedule'] },
@@ -47,3 +49,31 @@ export const SEN = [
 
 export const ROLES = ['Engineer', 'Consultant', 'QA', 'Designer', 'Support', 'Sales', 'Analyst', 'DevOps', 'PM', 'Onboarding', 'SQL Admin', 'Ops'];
 export const PAL = [['#eef4ff', '#1a56db'], ['#0f1729', '#9fc0ff'], ['#e8effc', '#1a56db'], ['#dbe6ff', '#1a56db']];
+
+/* Every person above reshaped like the Sanity `teamMember` documents they
+   were seeded as (same _ids): instant placeholderData, the fallback when the
+   CMS is empty/unreachable, and per-field fallback for a seeded doc whose
+   field is later cleared. Plain English strings — locT() translates them. */
+const LEADER_IDS = ['teamMember-muhammad-shamsheer', 'teamMember-ebad-ur-rehman', 'teamMember-hadi-shamsheer', 'teamMember-sadiq'];
+export const FALLBACK_TEAM = [
+  ...LEADERS.map((L, i) => ({
+    _id: LEADER_IDS[i],
+    group: 'leader',
+    order: i + 1,
+    name: L.name,
+    role: L.role,
+    bio: L.quote,
+    photoPath: `/assets/images/team/${L.photo}.webp`,
+    caption: L.caption,
+    tags: L.tags.map((tg) => ({ _key: tg, label: tg, description: DESC[tg] })),
+    card1: { title: L.c1[0], label: L.c1[1], value: L.c1[2], bars: L.c1[3].map((h) => parseFloat(h)) },
+    card2: { title: L.c2[0], status: L.c2[1], label: L.c2[2], value: L.c2[3] },
+    card3: { title: L.c3[0], trend: L.c3[1] },
+  })),
+  ...SEN.map(([initials, role, blurb], i) => ({
+    _id: `teamMember-senior-${i + 1}`, group: 'senior', order: LEADERS.length + 1 + i, name: 'NAME TBD', role, blurb, initials,
+  })),
+  ...ROLES.map((role, i) => ({
+    _id: `teamMember-team-${String(i + 1).padStart(2, '0')}`, group: 'team', order: LEADERS.length + SEN.length + 1 + i, name: 'NAME TBD', role, initials: '—',
+  })),
+];

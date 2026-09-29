@@ -5,6 +5,8 @@ import {
   NAVIGATION_QUERY,
   FOOTER_QUERY,
   CLIENTS_PAGE_QUERY,
+  TEAM_PAGE_QUERY,
+  ABOUT_PAGE_QUERY,
   PAGE_BY_SLUG_QUERY,
   ALL_PRODUCTS_QUERY,
   PRODUCT_BY_SLUG_QUERY,
@@ -46,6 +48,14 @@ export function useFooterContent(options) {
 
 export function useClientsPage(options) {
   return useSanityQuery(['clientsPage'], CLIENTS_PAGE_QUERY, {}, options);
+}
+
+export function useTeamPage(options) {
+  return useSanityQuery(['teamPage'], TEAM_PAGE_QUERY, {}, options);
+}
+
+export function useAboutPage(options) {
+  return useSanityQuery(['aboutPage'], ABOUT_PAGE_QUERY, {}, options);
 }
 
 export function usePage(slug, options) {
