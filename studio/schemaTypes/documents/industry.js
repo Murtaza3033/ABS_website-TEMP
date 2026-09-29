@@ -18,6 +18,12 @@ export default defineType({
       options: {source: 'name.en', maxLength: 96},
       validation: (Rule) => Rule.required(),
     }),
+    defineField({
+      name: 'summary',
+      title: 'Short description (home page)',
+      description: 'One short sentence shown under the industry tabs on the home page. Empty = the Description is used.',
+      type: 'localeString',
+    }),
     defineField({name: 'description', title: 'Description', type: 'localeText'}),
     defineField({
       name: 'illustration',

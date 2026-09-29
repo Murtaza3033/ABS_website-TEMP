@@ -322,13 +322,8 @@
 [data-screen-label="Products"][data-active-pg="hos"] [data-pg="hos"]{display:block !important;}
 
 [data-screen-label="Industries"] [data-indp]{opacity:0 !important;transform:translateY(20px) !important;pointer-events:none !important;transition:opacity .5s ease,transform .5s ease;}
-[data-screen-label="Industries"][data-active-ind="0"] [data-indp="0"],
-[data-screen-label="Industries"][data-active-ind="1"] [data-indp="1"],
-[data-screen-label="Industries"][data-active-ind="2"] [data-indp="2"],
-[data-screen-label="Industries"][data-active-ind="3"] [data-indp="3"],
-[data-screen-label="Industries"][data-active-ind="4"] [data-indp="4"],
-[data-screen-label="Industries"][data-active-ind="5"] [data-indp="5"],
-[data-screen-label="Industries"][data-active-ind="6"] [data-indp="6"]{opacity:1 !important;transform:none !important;pointer-events:auto !important;}
+/* one panel per CMS industry: React marks the active one with data-on */
+[data-screen-label="Industries"] [data-indp][data-on]{opacity:1 !important;transform:none !important;pointer-events:auto !important;}
 
 /* clients mosaic logo fade-in (replays on each rotation via React key) */
 @keyframes logoFade{from{opacity:0;}to{opacity:1;}}
@@ -388,15 +383,9 @@
 [data-screen-label="Products"][data-active-pg="fie"] [data-act="setProd2"],
 [data-screen-label="Products"][data-active-pg="hos"] [data-act="setProd3"]{background:#ffffff !important;border-color:#1a56db !important;box-shadow:0 20px 44px -22px rgba(26,86,219,.4) !important;}
 
-/* industries tabs (data-active-ind 0..6 <-> setInd0..6) */
+/* industries tabs (one per CMS industry; the active one has data-on) */
 [data-screen-label="Industries"] [data-act^="setInd"]{background:#ffffff !important;color:#5b6472 !important;border-color:#e4eaf3 !important;}
-[data-screen-label="Industries"][data-active-ind="0"] [data-act="setInd0"],
-[data-screen-label="Industries"][data-active-ind="1"] [data-act="setInd1"],
-[data-screen-label="Industries"][data-active-ind="2"] [data-act="setInd2"],
-[data-screen-label="Industries"][data-active-ind="3"] [data-act="setInd3"],
-[data-screen-label="Industries"][data-active-ind="4"] [data-act="setInd4"],
-[data-screen-label="Industries"][data-active-ind="5"] [data-act="setInd5"],
-[data-screen-label="Industries"][data-active-ind="6"] [data-act="setInd6"]{background:#1a56db !important;color:#ffffff !important;border-color:#1a56db !important;}
+[data-screen-label="Industries"] [data-act^="setInd"][data-on]{background:#1a56db !important;color:#ffffff !important;border-color:#1a56db !important;}
 
 /* ---- services orbit visuals (state.orbitStep -> data-orbit -> CSS) ----
    Replaces the runtime's renderOrbit() imperative card/bars styling. */

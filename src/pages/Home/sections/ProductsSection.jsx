@@ -1,41 +1,55 @@
 import { useHome, pressable } from '../HomeContext';
-import { useLanguage } from '../../../context/LanguageContext';
+import { useHomeCopy } from '../useHomeCopy';
+import { HOME } from '../homeContent';
 
+/* Product cards: four fixed slots, each driving its own mock dashboard on the
+   right (fin / pen / fie / hos — decorative, kept in code). Card copy comes
+   from the "Home page" singleton; an empty label/text falls back to the
+   linked Product's name/tagline, then to the built-in copy. */
 export default function ProductsSection() {
   const { act, state } = useHome();
-  const { t } = useLanguage();
+  const { t, tx, txt, cms } = useHomeCopy();
+  const cards = HOME.productCards.map(([label, title, text], i) => {
+    const row = cms?.productCards?.[i];
+    const product = row?.product;
+    return {
+      label: txt(row?.label) || txt(product?.name) || t(label),
+      title: txt(row?.title) || t(title),
+      text: txt(row?.text) || txt(product?.tagline) || t(text),
+    };
+  });
   return (
     <>
       <section data-screen-label="Products" className="ag" data-active-pg={['fin', 'pen', 'fie', 'hos'][state.prodTab]} style={{background: 'linear-gradient(115deg,#eef3fb 0%,#f7faff 46%,#e9f0fd 100%)', borderTop: '1px solid #eef1f6'}}>
           <div style={{maxWidth: '1240px', margin: '0 auto', padding: '100px 32px'}}>
             <div data-reveal="0" style={{opacity: '0', transform: 'translateY(24px)', transition: 'all .7s cubic-bezier(.2,.7,.3,1)', maxWidth: '760px', margin: '0 auto', textAlign: 'center'}}>
-              <div style={{display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '12.5px', fontWeight: '700', color: '#1a56db', letterSpacing: '1.4px', textTransform: 'uppercase'}}>{t("One platform")}</div>
-              <h2 style={{fontSize: '46px', fontWeight: '800', letterSpacing: '-1.8px', margin: '20px 0 0', lineHeight: '1.06', textWrap: 'pretty'}}>{t("Every part of your business.")}<br /><span style={{background: 'linear-gradient(100deg,#1a56db 0%,#4b8bff 100%)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent'}}>{t("One aligned way of working.")}</span></h2>
-              <p style={{fontSize: '17px', lineHeight: '1.65', color: '#4b5565', margin: '18px 0 0'}}>{t("One login. One source of truth. Everything your teams do — finance, people, field operations, patient care — runs on a single Align platform instead of scattered across disconnected tools. We design, build and support all of it in-house, as one connected way of working.")}</p>
+              <div style={{display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '12.5px', fontWeight: '700', color: '#1a56db', letterSpacing: '1.4px', textTransform: 'uppercase'}}>{tx('productsEyebrow')}</div>
+              <h2 style={{fontSize: '46px', fontWeight: '800', letterSpacing: '-1.8px', margin: '20px 0 0', lineHeight: '1.06', textWrap: 'pretty'}}>{tx('productsHeading')}<br /><span style={{background: 'linear-gradient(100deg,#1a56db 0%,#4b8bff 100%)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent'}}>{tx('productsHighlight')}</span></h2>
+              <p style={{fontSize: '17px', lineHeight: '1.65', color: '#4b5565', margin: '18px 0 0'}}>{tx('productsText')}</p>
             </div>
       
             <div className="hm-stack" style={{display: 'grid', gridTemplateColumns: '0.8fr 1.2fr', gap: '44px', alignItems: 'center', marginTop: '52px'}}>
               
               <div className="hm-stagger" style={{display: 'flex', flexDirection: 'column', gap: '14px', position: 'relative', zIndex: '20'}}>
       <div data-act="setProd0" {...pressable(() => act('setProd0'))} style={{cursor: 'pointer', background: '#ffffff', border: '1px solid #1a56db', borderRadius: '22px', padding: '24px 26px', transition: 'background .3s ease,border-color .3s ease,box-shadow .3s ease,transform .3s ease', boxShadow: '0 20px 44px -22px rgba(26,86,219,.4)', backdropFilter: 'blur(10px) saturate(1.2)', WebkitBackdropFilter: 'blur(10px) saturate(1.2)'}} data-hv="hv-10">
-                <div style={{fontSize: '11.5px', fontWeight: '700', color: '#1a56db', letterSpacing: '1px', textTransform: 'uppercase'}}>{t("Finance & Operations")}</div>
-                <div style={{fontSize: '19px', fontWeight: '700', color: '#0f1729', marginTop: '5px'}}>{t("Run the whole operation")}</div>
-                <p style={{fontSize: '13.5px', lineHeight: '1.55', color: '#5b6472', margin: '7px 0 0'}}>{t("Finance, inventory, procurement and approvals — the whole operation in one connected flow.")}</p>
+                <div style={{fontSize: '11.5px', fontWeight: '700', color: '#1a56db', letterSpacing: '1px', textTransform: 'uppercase'}}>{cards[0].label}</div>
+                <div style={{fontSize: '19px', fontWeight: '700', color: '#0f1729', marginTop: '5px'}}>{cards[0].title}</div>
+                <p style={{fontSize: '13.5px', lineHeight: '1.55', color: '#5b6472', margin: '7px 0 0'}}>{cards[0].text}</p>
               </div>
       <div data-act="setProd1" {...pressable(() => act('setProd1'))} style={{cursor: 'pointer', background: 'rgba(255,255,255,.55)', border: '1px solid #e7ecf5', borderRadius: '22px', padding: '24px 26px', transition: 'background .3s ease,border-color .3s ease,box-shadow .3s ease,transform .3s ease', boxShadow: 'none', backdropFilter: 'blur(10px) saturate(1.2)', WebkitBackdropFilter: 'blur(10px) saturate(1.2)'}} data-hv="hv-10">
-                <div style={{fontSize: '11.5px', fontWeight: '700', color: '#1a56db', letterSpacing: '1px', textTransform: 'uppercase'}}>{t("People & Payroll")}</div>
-                <div style={{fontSize: '19px', fontWeight: '700', color: '#0f1729', marginTop: '5px'}}>{t("Manage every employee")}</div>
-                <p style={{fontSize: '13.5px', lineHeight: '1.55', color: '#5b6472', margin: '7px 0 0'}}>{t("Attendance, leave, payroll and people analytics — one place for managers and every employee.")}</p>
+                <div style={{fontSize: '11.5px', fontWeight: '700', color: '#1a56db', letterSpacing: '1px', textTransform: 'uppercase'}}>{cards[1].label}</div>
+                <div style={{fontSize: '19px', fontWeight: '700', color: '#0f1729', marginTop: '5px'}}>{cards[1].title}</div>
+                <p style={{fontSize: '13.5px', lineHeight: '1.55', color: '#5b6472', margin: '7px 0 0'}}>{cards[1].text}</p>
               </div>
       <div data-act="setProd2" {...pressable(() => act('setProd2'))} style={{cursor: 'pointer', background: 'rgba(255,255,255,.55)', border: '1px solid #e7ecf5', borderRadius: '22px', padding: '24px 26px', transition: 'background .3s ease,border-color .3s ease,box-shadow .3s ease,transform .3s ease', boxShadow: 'none', backdropFilter: 'blur(10px) saturate(1.2)', WebkitBackdropFilter: 'blur(10px) saturate(1.2)'}} data-hv="hv-10">
-                <div style={{fontSize: '11.5px', fontWeight: '700', color: '#1a56db', letterSpacing: '1px', textTransform: 'uppercase'}}>{t("Field & Sales")}</div>
-                <div style={{fontSize: '19px', fontWeight: '700', color: '#0f1729', marginTop: '5px'}}>{t("See the field in real time")}</div>
-                <p style={{fontSize: '13.5px', lineHeight: '1.55', color: '#5b6472', margin: '7px 0 0'}}>{t("Field visits, samples, routes and live KPIs — full visibility over teams on the ground.")}</p>
+                <div style={{fontSize: '11.5px', fontWeight: '700', color: '#1a56db', letterSpacing: '1px', textTransform: 'uppercase'}}>{cards[2].label}</div>
+                <div style={{fontSize: '19px', fontWeight: '700', color: '#0f1729', marginTop: '5px'}}>{cards[2].title}</div>
+                <p style={{fontSize: '13.5px', lineHeight: '1.55', color: '#5b6472', margin: '7px 0 0'}}>{cards[2].text}</p>
               </div>
       <div data-act="setProd3" {...pressable(() => act('setProd3'))} style={{cursor: 'pointer', background: 'rgba(255,255,255,.55)', border: '1px solid #e7ecf5', borderRadius: '22px', padding: '24px 26px', transition: 'background .3s ease,border-color .3s ease,box-shadow .3s ease,transform .3s ease', boxShadow: 'none', backdropFilter: 'blur(10px) saturate(1.2)', WebkitBackdropFilter: 'blur(10px) saturate(1.2)'}} data-hv="hv-10">
-                <div style={{fontSize: '11.5px', fontWeight: '700', color: '#1a56db', letterSpacing: '1px', textTransform: 'uppercase'}}>{t("Hospital & Care")}</div>
-                <div style={{fontSize: '19px', fontWeight: '700', color: '#0f1729', marginTop: '5px'}}>{t("Run the whole hospital")}</div>
-                <p style={{fontSize: '13.5px', lineHeight: '1.55', color: '#5b6472', margin: '7px 0 0'}}>{t("OPD, admissions, beds, pharmacy, lab and billing — every patient tracked in one hospital system.")}</p>
+                <div style={{fontSize: '11.5px', fontWeight: '700', color: '#1a56db', letterSpacing: '1px', textTransform: 'uppercase'}}>{cards[3].label}</div>
+                <div style={{fontSize: '19px', fontWeight: '700', color: '#0f1729', marginTop: '5px'}}>{cards[3].title}</div>
+                <p style={{fontSize: '13.5px', lineHeight: '1.55', color: '#5b6472', margin: '7px 0 0'}}>{cards[3].text}</p>
               </div>
               </div>
       

@@ -1,10 +1,12 @@
 import { useHome, useScrollRegionProps } from '../HomeContext';
-import { useLanguage } from '../../../context/LanguageContext';
+import { useHomeCopy } from '../useHomeCopy';
 import SmartLink from '../../../components/SmartLink';
 
 export default function ProblemsSection() {
-  const { b, act, state } = useHome();
-  const { t } = useLanguage();
+  const { act, state } = useHome();
+  const { t, tx, rows } = useHomeCopy();
+  // Four cards pinned to fixed points along the journey line.
+  const journey = rows('journey', ['title', 'onText', 'offText'], 4);
   const scrollRegion = useScrollRegionProps(t('Scrollable preview'));
   const on = state.probOn;
   // CSS vars drive the whole ON/OFF wipe + toggle (was setProb()'s setProperty calls)
@@ -20,14 +22,14 @@ export default function ProblemsSection() {
       <section data-screen-label="Problems We Solve" className="ag" style={{background: '#ffffff', overflow: 'hidden', ...wVars}}>
           <div style={{maxWidth: '1240px', margin: '0 auto', padding: '100px 32px'}}>
             <div data-reveal="0" style={{opacity: '0', transform: 'translateY(24px)', transition: 'all .7s cubic-bezier(.2,.7,.3,1)', maxWidth: '720px', margin: '0 auto', textAlign: 'center'}}>
-              <h2 style={{fontSize: '46px', fontWeight: '800', letterSpacing: '-1.8px', margin: '0', lineHeight: '1.06', textWrap: 'pretty'}}>{t("One straight line from")}<br /><span style={{background: 'linear-gradient(100deg,#1a56db 0%,#4b8bff 100%)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent'}}>{t("chaos to aligned.")}</span></h2>
-              <p style={{fontSize: '17px', lineHeight: '1.65', color: '#4b5565', margin: '18px 0 0'}}>{t("Approvals, payroll, field visits, mismatched tools — the daily friction of a growing business. Watch what happens to that journey with Align, and without it.")}</p>
+              <h2 style={{fontSize: '46px', fontWeight: '800', letterSpacing: '-1.8px', margin: '0', lineHeight: '1.06', textWrap: 'pretty'}}>{tx('problemsHeading')}<br /><span style={{background: 'linear-gradient(100deg,#1a56db 0%,#4b8bff 100%)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent'}}>{tx('problemsHighlight')}</span></h2>
+              <p style={{fontSize: '17px', lineHeight: '1.65', color: '#4b5565', margin: '18px 0 0'}}>{tx('problemsText')}</p>
             </div>
       
             <div data-reveal="1" style={{opacity: '0', transform: 'translateY(24px)', transition: 'all .7s cubic-bezier(.2,.7,.3,1)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '20px', flexWrap: 'wrap', marginTop: '44px'}}>
               <div style={{position: 'relative', height: '30px', minWidth: '340px', flex: '1'}}>
-                <div style={{position: 'absolute', inset: '0', display: 'flex', alignItems: 'center', fontSize: '16px', fontWeight: '700', color: '#1a56db', opacity: 'var(--wOn,1)', transition: 'opacity .4s ease'}}>{t("A single, tracked path — every problem resolved in days.")}</div>
-                <div style={{position: 'absolute', inset: '0', display: 'flex', alignItems: 'center', fontSize: '16px', fontWeight: '700', color: '#e5484d', opacity: 'var(--wOff,0)', transition: 'opacity .4s ease'}}>{t("Loops, dead-ends and manual rework — weeks lost, every week.")}</div>
+                <div style={{position: 'absolute', inset: '0', display: 'flex', alignItems: 'center', fontSize: '16px', fontWeight: '700', color: '#1a56db', opacity: 'var(--wOn,1)', transition: 'opacity .4s ease'}}>{tx('problemsOnLine')}</div>
+                <div style={{position: 'absolute', inset: '0', display: 'flex', alignItems: 'center', fontSize: '16px', fontWeight: '700', color: '#e5484d', opacity: 'var(--wOff,0)', transition: 'opacity .4s ease'}}>{tx('problemsOffLine')}</div>
               </div>
               <div style={{display: 'inline-flex', alignItems: 'center', gap: '13px', flexShrink: '0'}}>
                 <span style={{display: 'inline-flex', alignItems: 'center', gap: '1px'}}>
@@ -35,7 +37,7 @@ export default function ProblemsSection() {
                   <svg width="13" height="17" viewBox="0 0 13 17" fill="none" style={{animation: 'nudgeR 1.4s ease-in-out .15s infinite'}}><path d="M2 3.5 L8.5 8.5 L2 13.5" stroke="#1a56db" strokeWidth="2.6" fill="none" strokeLinecap="round" strokeLinejoin="round"/></svg>
                   <svg width="15" height="19" viewBox="0 0 15 19" fill="none" style={{animation: 'nudgeR 1.4s ease-in-out .3s infinite'}}><path d="M2 4 L10 9.5 L2 15" stroke="#1a56db" strokeWidth="2.8" fill="none" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </span>
-                <span style={{fontSize: '14.5px', fontWeight: '700', color: 'var(--wLabel,#1a56db)', transition: 'color .35s ease'}}><span>{t(b('togLabel'))}</span></span>
+                <span style={{fontSize: '14.5px', fontWeight: '700', color: 'var(--wLabel,#1a56db)', transition: 'color .35s ease'}}><span>{on ? tx('toggleOnLabel') : tx('toggleOffLabel')}</span></span>
                 <button onClick={() => act('toggleAbs')} aria-label={t('Toggle Align on or off')} style={{position: 'relative', width: '62px', height: '33px', border: 'none', borderRadius: '99px', background: 'var(--wTrack,#1a56db)', cursor: 'pointer', transition: 'background .35s ease', padding: '0'}}>
                   <span style={{position: 'absolute', top: '4px', insetInlineStart: '4px', width: '25px', height: '25px', borderRadius: '50%', background: '#ffffff', transform: 'var(--wKnob,translateX(29px))', transition: 'transform .35s cubic-bezier(.5,1.6,.4,1)', boxShadow: '0 2px 7px rgba(15,23,41,.3)'}}></span>
                 </button>
@@ -51,7 +53,7 @@ export default function ProblemsSection() {
                 {/* End-point labels are shifted to hang off their node toward the panel's
                     inside (centred on nodes at 3.5% / 95%, the panel edge clipped
                     them: "four business", "ourishin"). Layout box unchanged. */}
-                <div style={{fontSize: '11px', fontWeight: '700', color: '#5b6472', marginTop: '8px', whiteSpace: 'nowrap', transform: 'translateX(calc(50% - 8px))'}}>{t("Your business")}</div>
+                <div style={{fontSize: '11px', fontWeight: '700', color: '#5b6472', marginTop: '8px', whiteSpace: 'nowrap', transform: 'translateX(calc(50% - 8px))'}}>{tx('startLabel')}</div>
               </div>
               
               <div style={{position: 'absolute', insetInlineStart: '95%', top: '50%', transform: 'translate(-50%,calc(-100% - 36px))', zIndex: 3, textAlign: 'center', pointerEvents: 'none'}}>
@@ -60,8 +62,8 @@ export default function ProblemsSection() {
                   <span style={{position: 'absolute', top: '-14px', insetInlineStart: '-12px', width: '20px', height: '20px', opacity: 'var(--wOn,1)', transition: 'opacity .4s ease'}}><svg viewBox="0 0 24 24" style={{width: '100%', height: '100%'}}><path d="M12 2 L13 6 M12 2 L11 6" stroke="#1a9d55" strokeWidth="1.8" strokeLinecap="round"/><path d="M4 6 L6 8 M20 6 L18 8" stroke="#f5b40a" strokeWidth="1.8" strokeLinecap="round"/></svg></span>
                   <span style={{position: 'absolute', inset: '0', opacity: 'var(--wOff,0)', transition: 'opacity .4s ease'}}><svg viewBox="0 0 36 36" style={{width: '60px', height: '60px', display: 'block'}}><circle cx="18" cy="18" r="16" fill="#fdeaea" stroke="#e5484d" strokeWidth="1.6"/><path d="M18 10.5 L18 19" stroke="#e5484d" strokeWidth="2.6" strokeLinecap="round"/><circle cx="18" cy="23.5" r="1.7" fill="#e5484d"/></svg></span>
                 </div>
-                <div style={{fontSize: '11.5px', fontWeight: '700', color: '#157d44', marginTop: '9px', whiteSpace: 'nowrap', transform: 'translateX(calc(-50% + 30px))', opacity: 'var(--wOn,1)', transition: 'opacity .4s'}}>{t("Aligned & flourishing")}</div>
-                <div style={{fontSize: '11.5px', fontWeight: '700', color: '#e5484d', marginTop: '9px', whiteSpace: 'nowrap', position: 'absolute', insetInlineStart: '50%', transform: 'translateX(calc(-100% + 30px))', opacity: 'var(--wOff,0)', transition: 'opacity .4s'}}>{t("Stuck & frustrated")}</div>
+                <div style={{fontSize: '11.5px', fontWeight: '700', color: '#157d44', marginTop: '9px', whiteSpace: 'nowrap', transform: 'translateX(calc(-50% + 30px))', opacity: 'var(--wOn,1)', transition: 'opacity .4s'}}>{tx('endOnLabel')}</div>
+                <div style={{fontSize: '11.5px', fontWeight: '700', color: '#e5484d', marginTop: '9px', whiteSpace: 'nowrap', position: 'absolute', insetInlineStart: '50%', transform: 'translateX(calc(-100% + 30px))', opacity: 'var(--wOff,0)', transition: 'opacity .4s'}}>{tx('endOffLabel')}</div>
               </div>
               
               <svg viewBox="0 0 1000 380" preserveAspectRatio="none" style={{position: 'absolute', inset: '0', width: '100%', height: '100%'}}>
@@ -87,11 +89,11 @@ export default function ProblemsSection() {
                     <span style={{position: 'absolute', inset: '0', opacity: 'var(--wOn,1)', transition: 'opacity .4s ease'}}><svg viewBox="0 0 36 36" style={{width: '34px', height: '34px', display: 'block'}}><circle cx="18" cy="18" r="16" fill="#e3f6ec" stroke="#1a9d55" strokeWidth="1.6"/><path d="M11.5 18.5 L16 22.5 L25 13.5" fill="none" stroke="#1a9d55" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"/></svg></span>
                     <span style={{position: 'absolute', inset: '0', opacity: 'var(--wOff,0)', transition: 'opacity .4s ease'}}><svg viewBox="0 0 36 36" style={{width: '34px', height: '34px', display: 'block'}}><circle cx="18" cy="18" r="16" fill="#fdeaea" stroke="#e5484d" strokeWidth="1.6"/><path d="M18 10.5 L18 19" stroke="#e5484d" strokeWidth="2.6" strokeLinecap="round"/><circle cx="18" cy="23.5" r="1.7" fill="#e5484d"/></svg></span>
                   </div>
-                  <div style={{fontSize: '14px', fontWeight: '700', color: '#0f1729', lineHeight: '1.2'}}>{t("Approvals")}</div>
+                  <div style={{fontSize: '14px', fontWeight: '700', color: '#0f1729', lineHeight: '1.2'}}>{journey[0].title}</div>
                 </div>
                 <div style={{position: 'relative', height: '20px', marginTop: '9px'}}>
-                  <span style={{position: 'absolute', inset: '0', display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', fontWeight: '700', color: '#157d44', opacity: 'var(--wOn,1)', transition: 'opacity .4s ease'}}><span style={{width: '15px', height: '15px', borderRadius: '50%', background: '#e3f6ec', display: 'grid', placeItems: 'center', fontSize: '9px'}}>✓</span>{t("One-tap approved")}</span>
-                  <span style={{position: 'absolute', inset: '0', display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', fontWeight: '700', color: '#e5484d', opacity: 'var(--wOff,0)', transition: 'opacity .4s ease'}}><span style={{width: '15px', height: '15px', borderRadius: '50%', background: '#fdeaea', display: 'grid', placeItems: 'center', fontSize: '9px'}}>!</span>{t("Stuck for days")}</span>
+                  <span style={{position: 'absolute', inset: '0', display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', fontWeight: '700', color: '#157d44', opacity: 'var(--wOn,1)', transition: 'opacity .4s ease'}}><span style={{width: '15px', height: '15px', borderRadius: '50%', background: '#e3f6ec', display: 'grid', placeItems: 'center', fontSize: '9px'}}>✓</span>{journey[0].onText}</span>
+                  <span style={{position: 'absolute', inset: '0', display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', fontWeight: '700', color: '#e5484d', opacity: 'var(--wOff,0)', transition: 'opacity .4s ease'}}><span style={{width: '15px', height: '15px', borderRadius: '50%', background: '#fdeaea', display: 'grid', placeItems: 'center', fontSize: '9px'}}>!</span>{journey[0].offText}</span>
                 </div>
               </div>
               <div style={{position: 'absolute', insetInlineStart: '50%', transform: 'translateX(-50%)', bottom: '50%', height: '7%', width: '2px', background: '#dce7fb'}}></div>
@@ -107,11 +109,11 @@ export default function ProblemsSection() {
                     <span style={{position: 'absolute', inset: '0', opacity: 'var(--wOn,1)', transition: 'opacity .4s ease'}}><svg viewBox="0 0 36 36" style={{width: '34px', height: '34px', display: 'block'}}><circle cx="18" cy="18" r="16" fill="#e3f6ec" stroke="#1a9d55" strokeWidth="1.6"/><path d="M11.5 18.5 L16 22.5 L25 13.5" fill="none" stroke="#1a9d55" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"/></svg></span>
                     <span style={{position: 'absolute', inset: '0', opacity: 'var(--wOff,0)', transition: 'opacity .4s ease'}}><svg viewBox="0 0 36 36" style={{width: '34px', height: '34px', display: 'block'}}><circle cx="18" cy="18" r="16" fill="#fdeaea" stroke="#e5484d" strokeWidth="1.6"/><path d="M18 10.5 L18 19" stroke="#e5484d" strokeWidth="2.6" strokeLinecap="round"/><circle cx="18" cy="23.5" r="1.7" fill="#e5484d"/></svg></span>
                   </div>
-                  <div style={{fontSize: '14px', fontWeight: '700', color: '#0f1729', lineHeight: '1.2'}}>{t("Payroll")}</div>
+                  <div style={{fontSize: '14px', fontWeight: '700', color: '#0f1729', lineHeight: '1.2'}}>{journey[1].title}</div>
                 </div>
                 <div style={{position: 'relative', height: '20px', marginTop: '9px'}}>
-                  <span style={{position: 'absolute', inset: '0', display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', fontWeight: '700', color: '#157d44', opacity: 'var(--wOn,1)', transition: 'opacity .4s ease'}}><span style={{width: '15px', height: '15px', borderRadius: '50%', background: '#e3f6ec', display: 'grid', placeItems: 'center', fontSize: '9px'}}>✓</span>{t("Runs in hours")}</span>
-                  <span style={{position: 'absolute', inset: '0', display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', fontWeight: '700', color: '#e5484d', opacity: 'var(--wOff,0)', transition: 'opacity .4s ease'}}><span style={{width: '15px', height: '15px', borderRadius: '50%', background: '#fdeaea', display: 'grid', placeItems: 'center', fontSize: '9px'}}>!</span>{t("Weeks by hand")}</span>
+                  <span style={{position: 'absolute', inset: '0', display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', fontWeight: '700', color: '#157d44', opacity: 'var(--wOn,1)', transition: 'opacity .4s ease'}}><span style={{width: '15px', height: '15px', borderRadius: '50%', background: '#e3f6ec', display: 'grid', placeItems: 'center', fontSize: '9px'}}>✓</span>{journey[1].onText}</span>
+                  <span style={{position: 'absolute', inset: '0', display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', fontWeight: '700', color: '#e5484d', opacity: 'var(--wOff,0)', transition: 'opacity .4s ease'}}><span style={{width: '15px', height: '15px', borderRadius: '50%', background: '#fdeaea', display: 'grid', placeItems: 'center', fontSize: '9px'}}>!</span>{journey[1].offText}</span>
                 </div>
               </div>
               <div style={{position: 'absolute', insetInlineStart: '50%', transform: 'translateX(-50%)', top: '50%', height: '7%', width: '2px', background: '#dce7fb'}}></div>
@@ -127,11 +129,11 @@ export default function ProblemsSection() {
                     <span style={{position: 'absolute', inset: '0', opacity: 'var(--wOn,1)', transition: 'opacity .4s ease'}}><svg viewBox="0 0 36 36" style={{width: '34px', height: '34px', display: 'block'}}><circle cx="18" cy="18" r="16" fill="#e3f6ec" stroke="#1a9d55" strokeWidth="1.6"/><path d="M11.5 18.5 L16 22.5 L25 13.5" fill="none" stroke="#1a9d55" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"/></svg></span>
                     <span style={{position: 'absolute', inset: '0', opacity: 'var(--wOff,0)', transition: 'opacity .4s ease'}}><svg viewBox="0 0 36 36" style={{width: '34px', height: '34px', display: 'block'}}><circle cx="18" cy="18" r="16" fill="#fdeaea" stroke="#e5484d" strokeWidth="1.6"/><path d="M18 10.5 L18 19" stroke="#e5484d" strokeWidth="2.6" strokeLinecap="round"/><circle cx="18" cy="23.5" r="1.7" fill="#e5484d"/></svg></span>
                   </div>
-                  <div style={{fontSize: '14px', fontWeight: '700', color: '#0f1729', lineHeight: '1.2'}}>{t("Reporting")}</div>
+                  <div style={{fontSize: '14px', fontWeight: '700', color: '#0f1729', lineHeight: '1.2'}}>{journey[2].title}</div>
                 </div>
                 <div style={{position: 'relative', height: '20px', marginTop: '9px'}}>
-                  <span style={{position: 'absolute', inset: '0', display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', fontWeight: '700', color: '#157d44', opacity: 'var(--wOn,1)', transition: 'opacity .4s ease'}}><span style={{width: '15px', height: '15px', borderRadius: '50%', background: '#e3f6ec', display: 'grid', placeItems: 'center', fontSize: '9px'}}>✓</span>{t("Live visibility")}</span>
-                  <span style={{position: 'absolute', inset: '0', display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', fontWeight: '700', color: '#e5484d', opacity: 'var(--wOff,0)', transition: 'opacity .4s ease'}}><span style={{width: '15px', height: '15px', borderRadius: '50%', background: '#fdeaea', display: 'grid', placeItems: 'center', fontSize: '9px'}}>!</span>{t("Flying blind")}</span>
+                  <span style={{position: 'absolute', inset: '0', display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', fontWeight: '700', color: '#157d44', opacity: 'var(--wOn,1)', transition: 'opacity .4s ease'}}><span style={{width: '15px', height: '15px', borderRadius: '50%', background: '#e3f6ec', display: 'grid', placeItems: 'center', fontSize: '9px'}}>✓</span>{journey[2].onText}</span>
+                  <span style={{position: 'absolute', inset: '0', display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', fontWeight: '700', color: '#e5484d', opacity: 'var(--wOff,0)', transition: 'opacity .4s ease'}}><span style={{width: '15px', height: '15px', borderRadius: '50%', background: '#fdeaea', display: 'grid', placeItems: 'center', fontSize: '9px'}}>!</span>{journey[2].offText}</span>
                 </div>
               </div>
               <div style={{position: 'absolute', insetInlineStart: '50%', transform: 'translateX(-50%)', bottom: '50%', height: '7%', width: '2px', background: '#dce7fb'}}></div>
@@ -147,11 +149,11 @@ export default function ProblemsSection() {
                     <span style={{position: 'absolute', inset: '0', opacity: 'var(--wOn,1)', transition: 'opacity .4s ease'}}><svg viewBox="0 0 36 36" style={{width: '34px', height: '34px', display: 'block'}}><circle cx="18" cy="18" r="16" fill="#e3f6ec" stroke="#1a9d55" strokeWidth="1.6"/><path d="M11.5 18.5 L16 22.5 L25 13.5" fill="none" stroke="#1a9d55" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"/></svg></span>
                     <span style={{position: 'absolute', inset: '0', opacity: 'var(--wOff,0)', transition: 'opacity .4s ease'}}><svg viewBox="0 0 36 36" style={{width: '34px', height: '34px', display: 'block'}}><circle cx="18" cy="18" r="16" fill="#fdeaea" stroke="#e5484d" strokeWidth="1.6"/><path d="M18 10.5 L18 19" stroke="#e5484d" strokeWidth="2.6" strokeLinecap="round"/><circle cx="18" cy="23.5" r="1.7" fill="#e5484d"/></svg></span>
                   </div>
-                  <div style={{fontSize: '14px', fontWeight: '700', color: '#0f1729', lineHeight: '1.2'}}>{t("Custom software")}</div>
+                  <div style={{fontSize: '14px', fontWeight: '700', color: '#0f1729', lineHeight: '1.2'}}>{journey[3].title}</div>
                 </div>
                 <div style={{position: 'relative', height: '20px', marginTop: '9px'}}>
-                  <span style={{position: 'absolute', inset: '0', display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', fontWeight: '700', color: '#157d44', opacity: 'var(--wOn,1)', transition: 'opacity .4s ease'}}><span style={{width: '15px', height: '15px', borderRadius: '50%', background: '#e3f6ec', display: 'grid', placeItems: 'center', fontSize: '9px'}}>✓</span>{t("Built to fit")}</span>
-                  <span style={{position: 'absolute', inset: '0', display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', fontWeight: '700', color: '#e5484d', opacity: 'var(--wOff,0)', transition: 'opacity .4s ease'}}><span style={{width: '15px', height: '15px', borderRadius: '50%', background: '#fdeaea', display: 'grid', placeItems: 'center', fontSize: '9px'}}>!</span>{t("Fighting the tool")}</span>
+                  <span style={{position: 'absolute', inset: '0', display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', fontWeight: '700', color: '#157d44', opacity: 'var(--wOn,1)', transition: 'opacity .4s ease'}}><span style={{width: '15px', height: '15px', borderRadius: '50%', background: '#e3f6ec', display: 'grid', placeItems: 'center', fontSize: '9px'}}>✓</span>{journey[3].onText}</span>
+                  <span style={{position: 'absolute', inset: '0', display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', fontWeight: '700', color: '#e5484d', opacity: 'var(--wOff,0)', transition: 'opacity .4s ease'}}><span style={{width: '15px', height: '15px', borderRadius: '50%', background: '#fdeaea', display: 'grid', placeItems: 'center', fontSize: '9px'}}>!</span>{journey[3].offText}</span>
                 </div>
               </div>
               <div style={{position: 'absolute', insetInlineStart: '50%', transform: 'translateX(-50%)', top: '50%', height: '7%', width: '2px', background: '#dce7fb'}}></div>
@@ -163,8 +165,8 @@ export default function ProblemsSection() {
             </div>
             </div>
             <div data-reveal="1" style={{opacity: '0', transform: 'translateY(24px)', transition: 'all .7s cubic-bezier(.2,.7,.3,1)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '18px', marginTop: '34px', flexWrap: 'wrap'}}>
-              <p style={{fontSize: '16px', lineHeight: '1.6', color: '#4b5565', margin: '0', maxWidth: '520px', textAlign: 'center'}}>{t("Every product we ship began as one of these knots inside a real client's business — and we straightened it.")}</p>
-              <SmartLink href="/contact-us.html" style={{flexShrink: '0', textDecoration: 'none', background: '#1a56db', color: '#ffffff', fontSize: '15px', fontWeight: '600', padding: '13px 26px', borderRadius: '12px', boxShadow: '0 12px 28px -10px rgba(26,86,219,.5)', transition: 'transform .25s ease'}} data-hv="hv-9">{t("Untangle your operations →")}</SmartLink>
+              <p style={{fontSize: '16px', lineHeight: '1.6', color: '#4b5565', margin: '0', maxWidth: '520px', textAlign: 'center'}}>{tx('problemsFootnote')}</p>
+              <SmartLink href="/contact-us.html" style={{flexShrink: '0', textDecoration: 'none', background: '#1a56db', color: '#ffffff', fontSize: '15px', fontWeight: '600', padding: '13px 26px', borderRadius: '12px', boxShadow: '0 12px 28px -10px rgba(26,86,219,.5)', transition: 'transform .25s ease'}} data-hv="hv-9">{tx('problemsButton')}</SmartLink>
             </div>
           </div>
         </section>

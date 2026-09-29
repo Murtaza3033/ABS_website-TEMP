@@ -4,6 +4,7 @@ import {
   SITE_SETTINGS_QUERY,
   NAVIGATION_QUERY,
   FOOTER_QUERY,
+  HOME_PAGE_QUERY,
   CLIENTS_PAGE_QUERY,
   TEAM_PAGE_QUERY,
   ABOUT_PAGE_QUERY,
@@ -14,6 +15,7 @@ import {
   ALL_PRODUCTS_QUERY,
   PRODUCT_BY_SLUG_QUERY,
   ALL_CLIENTS_QUERY,
+  ALL_SERVICES_QUERY,
   ALL_TEAM_QUERY,
   ALL_INDUSTRIES_QUERY,
   ALL_EVENTS_QUERY,
@@ -47,6 +49,10 @@ export function useNavigation(options) {
 
 export function useFooterContent(options) {
   return useSanityQuery(['footer'], FOOTER_QUERY, {}, options);
+}
+
+export function useHomePage(options) {
+  return useSanityQuery(['homePage'], HOME_PAGE_QUERY, {}, options);
 }
 
 export function useClientsPage(options) {
@@ -93,6 +99,10 @@ export function useProduct(slug, options) {
 
 export function useClients(options) {
   return useSanityQuery(['clients'], ALL_CLIENTS_QUERY, {}, options);
+}
+
+export function useServices(options) {
+  return useSanityQuery(['services'], ALL_SERVICES_QUERY, {}, options);
 }
 
 export function useTeam(options) {

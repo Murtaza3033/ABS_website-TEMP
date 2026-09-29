@@ -20,21 +20,14 @@ const CHATS = {
   openC4: ['Mehwish Anwar', 'MA'],
 };
 
+/* Services orbit: the five step positions' arrows (step copy + images come
+   from the "Home page" CMS singleton — see ServicesSection). */
 export const ORBIT = [
-  { name: 'Discovery', arrow: 'M300,228 L300,150' },
-  { name: 'Engineering', arrow: 'M356,262 L442,214' },
-  { name: 'Implementation', arrow: 'M346,346 L398,392' },
-  { name: 'Support', arrow: 'M254,346 L202,392' },
-  { name: 'Insight', arrow: 'M244,262 L162,214' },
-];
-
-export const SVC = [
-  { img: 'web', tag: 'Web Development', title: 'Web Development', desc: 'Fast, scalable web applications built around your real workflows.', feats: ['Responsive', 'Scalable', 'Secure'] },
-  { img: 'mobile', tag: 'Mobile Apps', title: 'Mobile App Development', desc: 'Native-quality iOS and Android apps for teams on the move.', feats: ['iOS', 'Android', 'Offline-ready'] },
-  { img: 'saas', tag: 'SaaS', title: 'SaaS Development', desc: 'Multi-tenant products engineered to scale securely.', feats: ['Multi-tenant', 'Cloud', 'APIs'] },
-  { img: 'custom', tag: 'Custom Software', title: 'Custom Software', desc: 'Bespoke systems for the problems off-the-shelf tools cannot solve.', feats: ['Bespoke', 'Integrated', 'In-house'] },
-  { img: 'consulting', tag: 'Consulting', title: 'Technology Consulting', desc: 'We map your process, gaps and goals before building anything.', feats: ['Architecture', 'Strategy', 'Roadmap'] },
-  { img: 'transform', tag: 'Digital Transformation', title: 'Digital Transformation', desc: 'Modernize operations end-to-end with one connected platform.', feats: ['Legacy to modern', 'End-to-end', 'Measurable'] },
+  { arrow: 'M300,228 L300,150' },
+  { arrow: 'M356,262 L442,214' },
+  { arrow: 'M346,346 L398,392' },
+  { arrow: 'M254,346 L202,392' },
+  { arrow: 'M244,262 L162,214' },
 ];
 
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -56,11 +49,11 @@ const initialState = {
   tour: true,
   // §2-7
   prodTab: 0,              // 0..3  (products filter)
-  indTab: 0,               // 0..6  (industries panel)
+  indTab: 0,               // industries panel (one per CMS industry)
   probOn: true,            // problems Align on/off
   orbitStep: 0,            // 0..4  (services orbit)
   orbitPlaying: true,
-  svcModal: null,          // 0..5 | null (service modal)
+  svcModal: null,          // service index | null (service modal)
 };
 
 function reducer(s, a) {
@@ -203,7 +196,6 @@ export function HomeProvider({ children }) {
       case 'rowDone1': return state.rows[1] !== 'open';
       case 'rowOpen2': return state.rows[2] === 'open';
       case 'rowDone2': return state.rows[2] !== 'open';
-      case 'svcOpenOn': return state.svcModal != null;
       default: return false;
     }
   }
@@ -231,12 +223,7 @@ export function HomeProvider({ children }) {
       case 'pendingCount': return String(counts.p);
       case 'rejectedCount': return String(counts.r);
       case 'pauseIcon': return state.playing ? '❙❙' : '▶';
-      case 'togLabel': return state.probOn ? 'Align ON' : 'Align OFF';
       case 'svcNum': return `0${state.orbitStep + 1}`;
-      case 'svcName': return ORBIT[state.orbitStep].name;
-      case 'svcOpenTag': return state.svcModal != null ? SVC[state.svcModal].tag : '';
-      case 'svcOpenTitle': return state.svcModal != null ? SVC[state.svcModal].title : '';
-      case 'svcOpenDesc': return state.svcModal != null ? SVC[state.svcModal].desc : '';
       default: return '';
     }
   }
@@ -276,12 +263,8 @@ export function HomeProvider({ children }) {
     // §2-7
     const pm = /^setProd(\d)$/.exec(name);
     if (pm) return dispatch({ type: 'PROD_TAB', n: +pm[1] });
-    const im = /^setInd(\d)$/.exec(name);
-    if (im) return dispatch({ type: 'IND_TAB', n: +im[1] });
     if (name === 'toggleAbs') return dispatch({ type: 'TOGGLE_PROB' });
     if (name === 'toggleAuto') return dispatch({ type: 'TOGGLE_ORBIT' });
-    const so = /^svcOpen(\d)$/.exec(name);
-    if (so) return dispatch({ type: 'SVC_OPEN', n: +so[1] });
     if (name === 'closeSvc') return dispatch({ type: 'SVC_CLOSE' });
     // svcNext / svcPrev / svcStop are handled locally in ServicesSection (carousel ref).
     return undefined;

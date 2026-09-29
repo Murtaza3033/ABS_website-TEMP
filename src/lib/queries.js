@@ -10,6 +10,12 @@ export const NAVIGATION_QUERY = groq`*[_id == "navigation"][0]`;
 
 export const FOOTER_QUERY = groq`*[_id == "footer"][0]`;
 
+// Product cards may link a Product: its name/tagline fill empty card fields.
+export const HOME_PAGE_QUERY = groq`*[_id == "homePage"][0]{
+  ...,
+  productCards[]{..., "product": product->{name, tagline, "slug": slug.current}}
+}`;
+
 export const CLIENTS_PAGE_QUERY = groq`*[_id == "clientsPage"][0]`;
 
 export const TEAM_PAGE_QUERY = groq`*[_id == "teamPage"][0]`;
@@ -34,6 +40,8 @@ export const ALL_CLIENTS_QUERY = groq`*[_type == "client"] | order(order asc){
   ...,
   "industry": industry->{_id, name, "slug": slug.current}
 }`;
+
+export const ALL_SERVICES_QUERY = groq`*[_type == "service" && defined(name)] | order(order asc)`;
 
 export const ALL_TEAM_QUERY = groq`*[_type == "teamMember"] | order(order asc)`;
 

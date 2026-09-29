@@ -4,6 +4,7 @@ import seo from './objects/seo'
 import siteSettings from './documents/siteSettings'
 import navigation from './documents/navigation'
 import footer from './documents/footer'
+import homePage from './documents/homePage'
 import clientsPage from './documents/clientsPage'
 import teamPage from './documents/teamPage'
 import aboutPage from './documents/aboutPage'
@@ -36,6 +37,7 @@ export const schemaTypes = [
   siteSettings,
   navigation,
   footer,
+  homePage,
   clientsPage,
   teamPage,
   aboutPage,

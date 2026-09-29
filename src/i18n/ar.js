@@ -100,6 +100,7 @@ export const AR = {
   "Product + Services": "منتج + خدمات",
   "one company": "شركة واحدة",
   "7 industries": "٧ قطاعات",
+  "{count} industries": "{count} قطاعات",
   "served today": "نخدمها اليوم",
   "every product": "كل منتج",
   "When off-the-shelf isn't enough": "عندما لا تكفي الحلول الجاهزة",
