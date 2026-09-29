@@ -6,6 +6,9 @@ import {
   FOOTER_QUERY,
   HOME_PAGE_QUERY,
   CLIENTS_PAGE_QUERY,
+  PARTNERS_PAGE_QUERY,
+  ADVISORS_PAGE_QUERY,
+  INDUSTRIES_PAGE_QUERY,
   TEAM_PAGE_QUERY,
   ABOUT_PAGE_QUERY,
   EVENTS_PAGE_QUERY,
@@ -18,6 +21,8 @@ import {
   ALL_SERVICES_QUERY,
   ALL_TEAM_QUERY,
   ALL_INDUSTRIES_QUERY,
+  ALL_PARTNERS_QUERY,
+  ALL_ADVISORS_QUERY,
   ALL_EVENTS_QUERY,
   EVENT_BY_SLUG_QUERY,
   ALL_JOBS_QUERY,
@@ -57,6 +62,18 @@ export function useHomePage(options) {
 
 export function useClientsPage(options) {
   return useSanityQuery(['clientsPage'], CLIENTS_PAGE_QUERY, {}, options);
+}
+
+export function usePartnersPage(options) {
+  return useSanityQuery(['partnersPage'], PARTNERS_PAGE_QUERY, {}, options);
+}
+
+export function useAdvisorsPage(options) {
+  return useSanityQuery(['advisorsPage'], ADVISORS_PAGE_QUERY, {}, options);
+}
+
+export function useIndustriesPage(options) {
+  return useSanityQuery(['industriesPage'], INDUSTRIES_PAGE_QUERY, {}, options);
 }
 
 export function useTeamPage(options) {
@@ -111,6 +128,14 @@ export function useTeam(options) {
 
 export function useIndustries(options) {
   return useSanityQuery(['industries'], ALL_INDUSTRIES_QUERY, {}, options);
+}
+
+export function usePartners(options) {
+  return useSanityQuery(['partners'], ALL_PARTNERS_QUERY, {}, options);
+}
+
+export function useAdvisors(options) {
+  return useSanityQuery(['advisors'], ALL_ADVISORS_QUERY, {}, options);
 }
 
 export function useEvents(options) {

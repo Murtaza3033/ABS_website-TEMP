@@ -1,8 +1,10 @@
 import { useLanguage } from '../../context/LanguageContext';
 import { DataReveal } from '../../components/Reveal';
 import CountUp from '../../components/CountUp';
+import { useClients } from '../../hooks/useCms';
 import { locT } from '../../lib/loc';
-import { CLIENTS, SECTORS, NUMBERS, Icon } from './clientsData';
+import { cmsPic } from '../../lib/cmsImage';
+import { FALLBACK_CLIENTS, SECTORS, NUMBERS, Icon } from './clientsData';
 
 /* "Trust, by the numbers." — three stat cards, each with a small decorative
    visual (aria-hidden; the number + label carry the meaning), a cursor-follow
@@ -10,8 +12,7 @@ import { CLIENTS, SECTORS, NUMBERS, Icon } from './clientsData';
    off the card's reveal `.in` class so it plays when scrolled into view; the
    base styles are the end state, so reduced motion shows everything static. */
 
-const LOGOS = CLIENTS.filter((c) => c[1]);
-const STACK = LOGOS.slice(0, 4);
+const STACK_N = 4;
 const RING_R = 42; // orbit radius (px) for the six industry icons
 const PROG_C = 2 * Math.PI * 40; // progress-ring circumference
 
@@ -23,17 +24,21 @@ function track(e) {
   el.style.setProperty('--my', `${((e.clientY - r.top) / r.height) * 100}%`);
 }
 
-function LogoStack({ total }) {
-  const more = `+${Math.max(0, total - STACK.length)}`; // 4 chips + "+46" = the 50+ headline
-  const mid = STACK.length / 2; // 5 chips incl. the "+N" one → offsets -2 … 2
+/* `logos`: [{ key, src, src2x }] — every client with a logo (CMS Client
+   documents, else the built-in list); src is undefined while the CMS list is
+   pending, so the chip / tile stays empty instead of loading a file twice. */
+function LogoStack({ total, logos }) {
+  const stack = logos.slice(0, STACK_N);
+  const more = `+${Math.max(0, total - stack.length)}`; // 4 chips + "+46" = the 50+ headline
+  const mid = stack.length / 2; // 5 chips incl. the "+N" one → offsets -2 … 2
   return (
     <div className="trStack">
-      {STACK.map(([name, file], k) => (
-        <span key={name} className="trChip" style={{ '--k': k, '--o': k - mid, zIndex: STACK.length - k + 1 }}>
-          <img src={`/assets/images/clients/${file}.webp`} alt="" loading="lazy" decoding="async" />
+      {stack.map((l, k) => (
+        <span key={l.key} className="trChip" style={{ '--k': k, '--o': k - mid, zIndex: stack.length - k + 1 }}>
+          {l.chip ? <img src={l.chip} alt="" loading="lazy" decoding="async" /> : null}
         </span>
       ))}
-      <span className="trChip trMore" style={{ '--k': STACK.length, '--o': mid, zIndex: 1 }}>{more}</span>
+      <span className="trChip trMore" style={{ '--k': stack.length, '--o': mid, zIndex: 1 }}>{more}</span>
     </div>
   );
 }
@@ -79,9 +84,19 @@ function ProgressRing() {
 const VISUALS = [LogoStack, IndustryRing, ProgressRing];
 
 /* Stats come from Sanity ("Our Clients page" → Stats) when set, else NUMBERS.
-   Each card's visual stays tied to its position. */
-export default function TrackRecord({ cms }) {
+   Each card's visual stays tied to its position. Logos (stack + marquee):
+   the Client documents that have a logo, in sort order. */
+export default function TrackRecord({ cms, caption }) {
   const { t, lang } = useLanguage();
+  const clientsQuery = useClients({ fallbackData: FALLBACK_CLIENTS });
+  const pic = cmsPic(clientsQuery);
+  const docs = clientsQuery.data?.length ? clientsQuery.data : FALLBACK_CLIENTS;
+  const logos = docs.filter((d) => d.logo?.asset || d.logoPath).map((d) => ({
+    key: d._id || d.name,
+    // chip image box ~44px, marquee ~96px wide: 2x for retina
+    chip: pic(d.logo, { width: 96 }, d.logoPath),
+    src: pic(d.logo, { width: 192 }, d.logoPath),
+  }));
   const stats = Array.isArray(cms) && cms.length
     ? cms.slice(0, VISUALS.length).map((s, i) => [
       Number.isFinite(s?.value) ? s.value : (NUMBERS[i]?.[0] ?? 0),
@@ -97,7 +112,7 @@ export default function TrackRecord({ cms }) {
           return (
             <DataReveal key={i} className="trCard" style={{ transitionDelay: `${i * 90}ms` }} onPointerMove={track}>
               <span className="trSpot" aria-hidden="true" />
-              <div className="trVis" aria-hidden="true"><Visual total={n[0]} /></div>
+              <div className="trVis" aria-hidden="true"><Visual total={n[0]} logos={logos} /></div>
               <div className="trNum"><CountUp end={n[0]} suffix={n[1]} duration={1500} /></div>
               <div className="trLbl">{n[2]}</div>
             </DataReveal>
@@ -106,12 +121,12 @@ export default function TrackRecord({ cms }) {
       </div>
 
       <DataReveal className="trMarqueeWrap" aria-hidden="true">
-        <div className="trMarqueeCap">{t("A few of the names behind the number")}</div>
+        <div className="trMarqueeCap">{caption || t('A few of the names behind the number')}</div>
         <div className="trMarquee">
           <div className="trTrack">
-            {[...LOGOS, ...LOGOS].map(([name, file], k) => (
-              <span key={`${name}-${k}`} className="trLogo">
-                <img src={`/assets/images/clients/${file}.webp`} alt="" loading="lazy" decoding="async" />
+            {[...logos, ...logos].map((l, k) => (
+              <span key={`${l.key}-${k}`} className="trLogo">
+                {l.src ? <img src={l.src} alt="" loading="lazy" decoding="async" /> : null}
               </span>
             ))}
           </div>

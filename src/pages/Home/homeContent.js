@@ -114,7 +114,7 @@ export const INDUSTRIES = [
   { slug: 'lighting-electrical', name: 'Lighting & Electrical', summary: 'Powering the businesses that light rooms.', img: 'manufacturing' },
   { slug: 'construction-building-real-estate', name: 'Construction, Building & Real Estate', summary: 'Structure for the businesses that build.', img: 'enterprise' },
   { slug: 'energy-solar', name: 'Energy & Solar', summary: 'Systems for a cleaner grid.', img: 'distribution' },
-  { slug: 'technology-mobility', name: 'Technology & Mobility', summary: 'Built for the businesses building tomorrow.', img: 'services' },
+  { slug: 'technology-mobility', name: 'Technology, Trading & Mobility', summary: 'Built for the businesses building tomorrow.', img: 'services' },
 ];
 
 /* Client logo mosaic fallback: [name, public/assets/images/clients/<file>.webp]. */

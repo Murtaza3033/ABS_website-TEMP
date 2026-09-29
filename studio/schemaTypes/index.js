@@ -6,6 +6,9 @@ import navigation from './documents/navigation'
 import footer from './documents/footer'
 import homePage from './documents/homePage'
 import clientsPage from './documents/clientsPage'
+import partnersPage from './documents/partnersPage'
+import advisorsPage from './documents/advisorsPage'
+import industriesPage from './documents/industriesPage'
 import teamPage from './documents/teamPage'
 import aboutPage from './documents/aboutPage'
 import eventsPage from './documents/eventsPage'
@@ -39,6 +42,9 @@ export const schemaTypes = [
   footer,
   homePage,
   clientsPage,
+  partnersPage,
+  advisorsPage,
+  industriesPage,
   teamPage,
   aboutPage,
   eventsPage,

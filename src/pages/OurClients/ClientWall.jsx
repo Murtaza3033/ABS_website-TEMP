@@ -4,7 +4,8 @@ import { DataReveal } from '../../components/Reveal';
 import { useClients } from '../../hooks/useCms';
 import { getSanityImageUrl } from '../../lib/sanity';
 import { cmsWaiting } from '../../lib/cmsImage';
-import { CLIENTS, SHORT, INDOF, DURS, DELS } from './clientsData';
+import { locT } from '../../lib/loc';
+import { FALLBACK_CLIENTS, FALLBACK_FILTERS, DURS, DELS } from './clientsData';
 
 /* Logo → name-wordmark fallback via state (was the runtime's onerror swap).
    Tries the real Sanity image asset first, then the static public path, then
@@ -25,16 +26,6 @@ function ClientLogo({ name, logo, file, waiting }) {
   return <img className="clLogo" src={sources[srcIndex]} srcSet={srcIndex === 0 && sanitySrc && sanitySrc2x ? `${sanitySrc} 1x, ${sanitySrc2x} 2x` : undefined} loading="lazy" decoding="async" alt={name} onError={() => setSrcIndex((i) => i + 1)} style={{ width: '100%', height: '82px', objectFit: 'contain' }} />;
 }
 
-/* Static CLIENTS reshaped to look like a Sanity `client` document list, so it
-   can serve as both React Query's placeholderData (shown instantly, no
-   loading gap) and the safe fallback if the CMS is unreachable or empty. */
-const FALLBACK_CLIENTS = CLIENTS.map(([name, file], i) => ({
-  _id: `fallback-${i}`,
-  name,
-  logoPath: file ? `/assets/images/clients/${file}.webp` : undefined,
-  order: i + 1,
-}));
-
 /* Adapter: Sanity `client` doc (or a FALLBACK_CLIENTS entry, same shape) ->
    the { name, file } pair ClientLogo / the wall markup already expect.
    `file` stays a bare stem (no path/extension) so ClientLogo is untouched. */
@@ -42,15 +33,21 @@ function normalizeClient(doc) {
   const file = doc.logoPath
     ? doc.logoPath.replace(/^.*\//, '').replace(/\.[a-z0-9]+$/i, '')
     : null;
-  return { name: doc.name, file, logo: doc.logo };
+  return { name: doc.name, file, logo: doc.logo, industry: doc.industry?._id || null };
 }
 
-/* Client wall + industry-highlight filter. Filter is state; each card gets
-   .match / .ghost from the active filter vs its industry (was classList toggles). */
-export default function ClientWall() {
-  const { t } = useLanguage();
-  const [filter, setFilter] = useState(-1); // -1 = all
-  const labels = ['All Clients', ...SHORT];
+/* Client wall + industry-highlight filter. Filter is state (an Industry
+   document id, null = all); each card gets .match / .ghost from the active
+   filter vs the client's own Industry reference (was classList toggles).
+   `cms`: the "Our Clients page" document (button labels, hint). */
+export default function ClientWall({ cms }) {
+  const { t, lang } = useLanguage();
+  const [filter, setFilter] = useState(null);
+  const filterDocs = cms?.filters?.filter((f) => f?.industry?._id).length ? cms.filters.filter((f) => f?.industry?._id) : FALLBACK_FILTERS;
+  const buttons = [
+    { id: null, label: locT(cms?.filterAll, lang, t) || t('All Clients') },
+    ...filterDocs.map((f) => ({ id: f.industry._id, label: locT(f.label, lang, t) || locT(f.industry.short, lang, t) || locT(f.industry.name, lang, t) })),
+  ];
 
   // CMS clients first; static CLIENTS as placeholder (no loading gap) and as
   // the fallback if the CMS call errors or comes back empty.
@@ -62,17 +59,16 @@ export default function ClientWall() {
   return (
     <>
       <DataReveal className="filtbar">
-        {labels.map((l, i) => (
-          <button key={l} className={`filt${filter === i - 1 ? ' on' : ''}`} onClick={() => setFilter(i - 1)}>
-            <span className="fdot" />{t(l)}
+        {buttons.map((b) => (
+          <button key={b.id || 'all'} className={`filt${filter === b.id ? ' on' : ''}`} onClick={() => setFilter(b.id)}>
+            <span className="fdot" />{b.label}
           </button>
         ))}
       </DataReveal>
 
       <div className="wall">
-        {clients.map(({ name, file, logo }, i) => {
-          const ind = name in INDOF ? INDOF[name] : -1;
-          const state = filter < 0 ? '' : (ind === filter ? ' match' : ' ghost');
+        {clients.map(({ name, file, logo, industry }, i) => {
+          const state = filter === null ? '' : (industry === filter ? ' match' : ' ghost');
           return (
             <DataReveal
               key={name} className={`clCard${state}`}
@@ -85,7 +81,7 @@ export default function ClientWall() {
         })}
       </div>
 
-      <DataReveal as="p" style={{ textAlign: 'center', fontSize: '11.5px', color: '#657085', margin: '30px 0 0' }}>{t("Filter by industry, or hover a logo to bring it to life")}</DataReveal>
+      <DataReveal as="p" style={{ textAlign: 'center', fontSize: '11.5px', color: '#657085', margin: '30px 0 0' }}>{locT(cms?.wallHint, lang, t) || t('Filter by industry, or hover a logo to bring it to life')}</DataReveal>
     </>
   );
 }

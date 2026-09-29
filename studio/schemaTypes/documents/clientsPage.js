@@ -40,16 +40,28 @@ const ICONS = [
   ['chip', 'Chip'],
 ].map(([value, title]) => ({value, title}))
 
+const ls = (name, title, fieldset, description) =>
+  defineField({name, title, type: 'localeString', fieldset, description})
+const lt = (name, title, fieldset, description) =>
+  defineField({name, title, type: 'localeText', fieldset, description})
+
 export default defineType({
   name: 'clientsPage',
   title: 'Our Clients page',
   type: 'document',
   fieldsets: [
+    {name: 'hero', title: 'Hero', options: {collapsible: true, collapsed: false}},
     {
       name: 'trustline',
       title: 'Trust line (under the page intro)',
-      description: 'Reads: "Trusted by 50+ businesses • across 6 industries • 100% in-house". Numbers are shown in bold.',
+      description: 'Reads: "Trusted by 50+ businesses • across 6 industries • 100% in-house". Numbers are shown in bold. The business count is also used on the Industries page.',
       options: {collapsible: true, collapsed: false},
+    },
+    {
+      name: 'wall',
+      title: 'Client wall + industry filter',
+      description: 'The logos are the Client documents; a client shows under a filter button when its Industry matches.',
+      options: {collapsible: true, collapsed: true},
     },
     {
       name: 'track',
@@ -61,8 +73,13 @@ export default defineType({
       title: 'Industry cards',
       options: {collapsible: true, collapsed: false},
     },
+    {name: 'cta', title: 'Closing call to action', options: {collapsible: true, collapsed: true}},
   ],
   fields: [
+    ls('heroHeading', 'Heading', 'hero', `e.g. "The businesses we're proud to work with."`),
+    ls('heroHighlight', 'Heading highlight (handwriting, blue)', 'hero', 'e.g. "proud". Must appear in the heading exactly as typed.'),
+    lt('heroText', 'Intro paragraph', 'hero'),
+
     defineField({
       name: 'trustline',
       title: 'Trust line',
@@ -79,6 +96,26 @@ export default defineType({
         defineField({name: 'inhouseAfter', title: '3 · Text after the value', description: 'e.g. "in-house"', type: 'localeString'}),
       ],
     }),
+    ls('filterAll', '"All" button', 'wall', 'e.g. "All Clients"'),
+    defineField({
+      name: 'filters',
+      title: 'Industry filter buttons',
+      description: 'One button per industry, in this order. Empty = the built-in six buttons.',
+      type: 'array',
+      fieldset: 'wall',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          name: 'clientsFilter',
+          fields: [
+            defineField({name: 'industry', title: 'Industry', type: 'reference', to: [{type: 'industry'}], validation: (Rule) => Rule.required()}),
+            defineField({name: 'label', title: 'Button label', description: 'e.g. "Food & FMCG". Empty = the industry name.', type: 'localeString'}),
+          ],
+          preview: {select: {title: 'label.en', subtitle: 'industry.name.en'}},
+        }),
+      ],
+    }),
+    ls('wallHint', 'Hint under the wall', 'wall', 'e.g. "Filter by industry, or hover a logo to bring it to life"'),
     defineField({
       name: 'trackEyebrow',
       title: 'Eyebrow',
@@ -116,6 +153,11 @@ export default defineType({
         }),
       ],
     }),
+    ls('trackMarqueeCaption', 'Caption above the logo strip', 'track', 'e.g. "A few of the names behind the number". The strip shows every Client with a logo.'),
+    ls('sectorsEyebrow', 'Eyebrow', 'industries', 'e.g. "Across every sector"'),
+    ls('sectorsHeading', 'Heading', 'industries', 'e.g. "One system. Six industries."'),
+    ls('sectorsHighlight', 'Heading highlight (handwriting, blue)', 'industries', 'e.g. "Six"'),
+    lt('sectorsText', 'Paragraph', 'industries'),
     defineField({
       name: 'sectors',
       title: 'Industries',
@@ -160,6 +202,10 @@ export default defineType({
         }),
       ],
     }),
+    ls('ctaKicker', 'Handwritten line', 'cta'),
+    ls('ctaHeading', 'Heading', 'cta'),
+    ls('ctaPrimary', 'Primary button', 'cta', 'Opens the Contact page'),
+    ls('ctaSecondary', 'Secondary button', 'cta', 'Opens the Contact page'),
   ],
   preview: {
     prepare: () => ({title: 'Our Clients page'}),

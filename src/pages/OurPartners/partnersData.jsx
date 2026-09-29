@@ -20,3 +20,17 @@ export const BENEFITS = [
   ['05', 'Joint Business Development', 'Collaborate on business development, joint proposals and strategic planning — leverage our expertise to accelerate growth.', 'trending'],
   ['06', 'Enhanced Competitive Advantage', 'Stand out with a complete suite of solutions backed by Align’s reputation as a leading ERP provider — and win more projects.', 'shield'],
 ];
+
+/* Built-in partner list, shaped like Sanity `partner` documents: the
+   placeholder while the CMS loads and the fallback if it is empty or
+   unreachable (editable in Studio → Partner). */
+export const FALLBACK_PARTNERS = [
+  {
+    _id: 'fallback-xpedite',
+    name: 'Xpedite Technology Solutions',
+    logoPath: '/assets/images/clients/xpedite-logo.webp',
+    description: { en: "At Xpedite Technology Solutions, we're a team of experts delivering fast, satisfactory solutions to resolve clients' issues. We solve complex business problems with the most relevant technology — expertise across Microsoft Dynamics, Power Platform, 365, BI, Data Warehousing and custom mobile & web app development, plus infrastructure and security solutions." },
+    featured: true,
+    order: 1,
+  },
+];

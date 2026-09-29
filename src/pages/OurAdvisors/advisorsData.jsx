@@ -37,3 +37,19 @@ export const TL = [
   ['Year TBD', 'Advisory work', 'Placeholder — advising companies and founders, the experience Align now draws on.', '#1a9d55', 'compass'],
   ['Today', 'Advising Align', 'Placeholder — the perspective and guidance brought to Align Business Systems today.', '#0f1729', 'shield'],
 ];
+
+/* Built-in advisor, shaped like a Sanity `advisor` document: the placeholder
+   while the CMS loads and the fallback if it is empty or unreachable
+   (editable in Studio → Advisor). */
+export const FALLBACK_ADVISORS = [
+  {
+    _id: 'fallback-advisor',
+    name: { en: 'Name pending' },
+    label: { en: 'Strategic Advisor' },
+    role: { en: 'Role / title to be confirmed' },
+    badge: { en: 'Advising since day one' },
+    bio: { en: "Placeholder for the advisor's background — the experience across enterprise software, scaling teams and go-to-market that informs the guidance they bring to Align. Real bio to be added once confirmed." },
+    quote: { en: "\"Advisor quote pending — a short line capturing their perspective on Align's mission.\"" },
+    timeline: TL.map(([year, title, text, color, icon]) => ({ year: { en: year }, title: { en: title }, text: { en: text }, color, icon })),
+  },
+];

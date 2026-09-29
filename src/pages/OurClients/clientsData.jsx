@@ -73,6 +73,25 @@ export const SHORT =['Food & FMCG', 'Pharma & Health', 'Lighting', 'Construction
 export const INDOF = {};
 SECTORS.forEach((s, si) => { s[2].forEach((m) => { INDOF[m] = si; }); });
 
+/* The Industry documents' ids, index-aligned with SECTORS / SHORT. Only used
+   by the built-in copy below; with the CMS up, each Client's own Industry
+   reference decides where it filters. */
+const IND_IDS = ['industry-food-beverage-fmcg', 'industry-pharmaceutical-healthcare', 'industry-lighting-electrical', 'industry-construction-building-real-estate', 'industry-energy-solar', 'industry-technology-mobility'];
+
+/* Static CLIENTS reshaped to look like a Sanity `client` document list, so it
+   can serve as both React Query's placeholderData (shown instantly, no
+   loading gap) and the safe fallback if the CMS is unreachable or empty. */
+export const FALLBACK_CLIENTS = CLIENTS.map(([name, file], i) => ({
+  _id: `fallback-${i}`,
+  name,
+  logoPath: file ? `/assets/images/clients/${file}.webp` : undefined,
+  industry: name in INDOF ? { _id: IND_IDS[INDOF[name]] } : null,
+  order: i + 1,
+}));
+
+/* Built-in filter buttons (Our Clients page -> Industry filter buttons). */
+export const FALLBACK_FILTERS = SHORT.map((label, i) => ({ label: { en: label }, industry: { _id: IND_IDS[i] } }));
+
 export const NUMBERS = [[50, '+', 'Businesses served'], [6, '+', 'Industries served'], [100, '%', 'Built & supported in-house']];
 
 /* Hero trust line — built-in copy; editable in Sanity ("Our Clients page"
